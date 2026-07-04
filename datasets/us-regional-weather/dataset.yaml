@@ -1,0 +1,31 @@
+metadata:
+  slug: us-regional-weather
+  title: US Regional Weather & Climate Trends
+  category: environment
+  license: "NOAA public domain"
+  update_frequency: daily
+  attribution: "NOAA NCEI Climate Data Online (GHCND)"
+
+schema:
+  - { name: region,           dtype: str }
+  - { name: date,             dtype: date }
+  - { name: temp_mean_c,      dtype: float, unit: "C" }
+  - { name: temp_anomaly_c,   dtype: float, unit: "C", nullable: true, description: "vs series baseline" }
+  - { name: precip_mm,        dtype: float, unit: "mm", nullable: true }
+  - { name: temp_roll7_c,     dtype: float, unit: "C", nullable: true, description: "7-day rolling mean" }
+  - { name: precip_temp_corr, dtype: float, nullable: true, description: "rolling precip-temp correlation" }
+
+sources:
+  - type: ncei-climate
+    dataset: GHCND
+    stations: [USW00094728]
+    metrics: [TMAX, TMIN, PRCP]
+    lookback_days: 400
+
+processing:
+  - normalize
+  - aggregate: { by: [region, date], metrics: { temp_mean_c: mean, precip_mm: sum } }
+  - derive:    { column: temp_anomaly_c,   expr: "anomaly(temp_mean_c, baseline=climatology)" }
+  - derive:    { column: temp_roll7_c,     expr: "rolling_avg(temp_mean_c, window=7)" }
+  - derive:    { column: precip_temp_corr, expr: "rolling_corr(precip_mm, temp_mean_c, window=30)" }
+  - validate

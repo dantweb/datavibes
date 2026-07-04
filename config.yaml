@@ -1,0 +1,21 @@
+# datavibes app-level configuration (NON-secret).
+#
+# Secrets NEVER live here — they belong in .env / the process environment only.
+# String values support ${VAR} and ${VAR:-default} interpolation from the
+# environment (real env vars win over .env). This file is optional: delete it
+# and every value below falls back to the built-in default.
+
+paths:
+  datasets_root: datasets      # where dataset folders live
+  output_root: output          # dataset snapshots (overridden by $DATAVIBES_OUTPUT_DIR)
+  store_root: store            # raw snapshots (store/raw/<slug>/<ts>.jsonl)
+
+http:
+  timeout_seconds: 30
+  max_retries: 3
+  backoff_seconds: 0.5
+  user_agent: "${DATAVIBES_USER_AGENT:-datavibes/0.1 (+https://vbwd.cc)}"
+
+defaults:
+  units: metric
+  format: csv
