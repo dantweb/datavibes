@@ -1,10 +1,13 @@
 .venv/
 .env
-output/
-store/
+# Runtime output trees at the repo root only — NOT the datavibes/store/ package
+# (an unanchored `store/` here is what swallowed datavibes/store/filestore.py
+# out of the initial commit).
+/output/
+/store/
+/data_out/
 *.egg-info/
 __pycache__/
 *.pyc
 .pytest_cache/
-data_out/
 .DS_Store

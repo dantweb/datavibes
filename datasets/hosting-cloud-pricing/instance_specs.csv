@@ -1,0 +1,5 @@
+sku,vcpu,memory_gib
+Standard_D2s_v5,2,8
+Standard_D4s_v5,4,16
+Standard_D8s_v5,8,32
+Standard_F2s_v2,2,4

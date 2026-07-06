@@ -1,0 +1,34 @@
+metadata:
+  slug: hosting-cloud-pricing
+  title: Hosting & Cloud Compute Pricing — Price/Performance Matrix
+  category: infrastructure
+  license: "Public vendor price lists (informational)"
+  update_frequency: daily
+  attribution: "AWS Price List; Azure Retail Prices API"
+
+schema:
+  - { name: provider,        dtype: str }
+  - { name: region,          dtype: str }
+  - { name: instance_type,   dtype: str }
+  - { name: vcpu,            dtype: float, unit: "count" }
+  - { name: memory_gib,      dtype: float, unit: "GiB" }
+  - { name: usd_per_hour,    dtype: float, unit: "USD/hr" }
+  - { name: usd_per_vcpu_hr, dtype: float, unit: "USD/hr", nullable: true }
+  - { name: usd_per_gib_hr,  dtype: float, unit: "USD/hr", nullable: true }
+  - { name: priceperf_index, dtype: float, nullable: true, description: "0-1 min-max price/perf (higher = cheaper per vCPU)" }
+
+sources:
+  - type: cloud-price-list
+    specs_file: instance_specs.csv
+    providers:
+      - { name: aws,   service: AmazonEC2, region: us-east-1 }
+      - { name: azure, service: "Virtual Machines", region: eastus }
+
+processing:
+  - normalize
+  - dedupe:  { keys: [provider, region, instance_type] }
+  - sort:    { by: [provider, instance_type] }
+  - derive:  { column: usd_per_vcpu_hr, expr: "ratio(usd_per_hour, vcpu)" }
+  - derive:  { column: usd_per_gib_hr,  expr: "ratio(usd_per_hour, memory_gib)" }
+  - derive:  { column: priceperf_index, expr: "minmax_normalize(usd_per_vcpu_hr, invert=true)" }
+  - validate

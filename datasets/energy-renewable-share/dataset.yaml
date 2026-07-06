@@ -1,0 +1,33 @@
+metadata:
+  slug: energy-renewable-share
+  title: Energy Mix — Renewable Share & Transition Speed
+  category: energy
+  license: "World Bank Open Data CC-BY-4.0"
+  update_frequency: daily
+  attribution: "World Bank Open Data (EG.ELC.RNEW.ZS, EG.FEC.RNEW.ZS)"
+
+schema:
+  - { name: country,            dtype: str }
+  - { name: iso3,               dtype: str }
+  - { name: year,               dtype: int }
+  - { name: renewable_elec_pct, dtype: float, unit: "%", nullable: true, description: "renewable electricity output share" }
+  - { name: renewable_fec_pct,  dtype: float, unit: "%", nullable: true, description: "renewable % of final energy consumption" }
+  - { name: renewable_cagr_5y,  dtype: float, unit: "%", nullable: true, description: "5y CAGR of renewable electricity share" }
+  - { name: transition_score,   dtype: float, nullable: true, description: "0-100 composite transition index" }
+
+sources:
+  - type: worldbank-indicator
+    indicators:
+      EG.ELC.RNEW.ZS: renewable_elec_pct
+      EG.FEC.RNEW.ZS: renewable_fec_pct
+    date_range: "2000:2024"
+
+processing:
+  - normalize
+  - join:    { "on": [iso3, year] }
+  - derive:  { column: renewable_cagr_5y, expr: "cagr(renewable_elec_pct, years=5)", by: [iso3] }
+  - score:
+      column: transition_score
+      weights: { renewable_elec_pct: 0.5, renewable_cagr_5y: 0.3, renewable_fec_pct: 0.2 }
+      scale: 100
+  - validate

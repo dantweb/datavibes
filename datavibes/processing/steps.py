@@ -24,6 +24,14 @@ DERIVE_FUNCTIONS: dict[str, Callable] = {
     "rolling_avg": functions.rolling_avg,
     "anomaly": functions.anomaly,
     "rolling_corr": functions.rolling_corr,
+    # S07 primitive library
+    "ratio": functions.ratio,
+    "share": functions.share,
+    "penetration": functions.penetration,
+    "cagr": functions.cagr,
+    "corr": functions.corr,
+    "minmax_normalize": functions.minmax_normalize,
+    "volatility": functions.volatility,
 }
 
 
@@ -68,14 +76,20 @@ class DedupeStep(ProcessingStep):
 
 @register_step("derive")
 class DeriveStep(ProcessingStep):
-    """Add a computed column from a named pure helper over the row series."""
+    """Add a computed column from a named pure helper over the row series.
 
-    def __init__(self, column: str, expr: str):
+    With ``by`` the helper is applied **within each group** (preserving row
+    order) so windowed/growth/correlation helpers respect entity boundaries —
+    e.g. a 5-year CAGR per country never spans two countries.
+    """
+
+    def __init__(self, column: str, expr: str, by: list[str] | None = None):
         if not column:
             raise ConfigError("derive requires a 'column'")
         if not expr:
             raise ConfigError("derive requires an 'expr'")
         self.column = column
+        self.by = by or []
         self.func_name, self.positional, self.keywords = _parse_expr(expr)
 
     def apply(self, rows: list[dict], ctx: RunContext) -> list[dict]:
@@ -85,14 +99,29 @@ class DeriveStep(ProcessingStep):
                 f"derive: unknown helper '{self.func_name}' "
                 f"(known: {', '.join(sorted(DERIVE_FUNCTIONS))})"
             )
-        series_list = [
-            [row.get(column_name) for row in rows] for column_name in self.positional
-        ]
-        values = helper(*series_list, **self.keywords)
         result = [dict(row) for row in rows]
-        for row, value in zip(result, values):
-            row[self.column] = value
+        for indices in self._groups(rows):
+            series_list = [
+                [rows[i].get(column_name) for i in indices]
+                for column_name in self.positional
+            ]
+            values = helper(*series_list, **self.keywords)
+            for position, value in zip(indices, values):
+                result[position][self.column] = value
         return result
+
+    def _groups(self, rows: list[dict]) -> list[list[int]]:
+        if not self.by:
+            return [list(range(len(rows)))]
+        order: list[tuple] = []
+        buckets: dict[tuple, list[int]] = {}
+        for index, row in enumerate(rows):
+            key = tuple(row.get(name) for name in self.by)
+            if key not in buckets:
+                buckets[key] = []
+                order.append(key)
+            buckets[key].append(index)
+        return [buckets[key] for key in order]
 
 
 @register_step("aggregate")
@@ -147,6 +176,107 @@ class AggregateStep(ProcessingStep):
                     # sum of nothing is 0; other reducers are undefined → None.
                     aggregated[column] = 0.0 if reducer_name == "sum" else None
             result.append(aggregated)
+        return result
+
+
+@register_step("sort")
+class SortStep(ProcessingStep):
+    """Stable-sort rows by ``by`` columns (nulls last) for deterministic output.
+
+    Needed before windowed derives (``cagr``/``rolling_*``/``volatility``) so a
+    per-entity series is time-ordered, and for byte-stable snapshots.
+    """
+
+    def __init__(self, by: list[str] | None = None):
+        if not by:
+            raise ConfigError("sort requires 'by'")
+        self.by = by
+
+    def apply(self, rows: list[dict], ctx: RunContext) -> list[dict]:
+        return sorted(
+            rows, key=lambda row: _sort_key(tuple(row.get(name) for name in self.by))
+        )
+
+
+@register_step("join")
+class JoinStep(ProcessingStep):
+    """Coalesce rows that share the ``on`` keys into one row per key.
+
+    Sources land as separate rows carrying different columns for the same
+    entity (e.g. World Bank indicator A and indicator B, both keyed by
+    ``iso3``/``year``). ``join`` merges them: one output row per key with every
+    non-null column unioned. Output is sorted by key for byte-stable snapshots.
+    Later non-null values win on conflict.
+    """
+
+    def __init__(self, on: list[str] | None = None, how: str = "outer"):
+        if not on:
+            raise ConfigError("join requires 'on'")
+        if how != "outer":
+            raise ConfigError("join only supports how='outer'")
+        self.on = on
+        self.how = how
+
+    def apply(self, rows: list[dict], ctx: RunContext) -> list[dict]:
+        columns: list[str] = []
+        for row in rows:
+            for column in row:
+                if column not in columns:
+                    columns.append(column)
+        merged: dict[tuple, dict] = {}
+        for row in rows:
+            key = tuple(row.get(name) for name in self.on)
+            target = merged.setdefault(key, {column: None for column in columns})
+            for name in self.on:
+                target[name] = row.get(name)
+            for column, value in row.items():
+                if value is not None:
+                    target[column] = value
+        return [merged[key] for key in sorted(merged, key=_sort_key)]
+
+
+@register_step("score")
+class ScoreStep(ProcessingStep):
+    """Weighted composite index from ``weights`` columns into ``column``.
+
+    Each input column is min-max normalized across all rows (so mixed units
+    combine), multiplied by its weight, summed, and scaled. Weights of absent
+    (null) components are dropped and the remainder re-normalized, so a row with
+    partial inputs still scores; a row with no inputs scores ``None``.
+    """
+
+    def __init__(
+        self,
+        column: str,
+        weights: dict | None = None,
+        scale: float = 1.0,
+    ):
+        if not column:
+            raise ConfigError("score requires a 'column'")
+        if not weights:
+            raise ConfigError("score requires 'weights'")
+        self.column = column
+        self.weights = {name: float(weight) for name, weight in weights.items()}
+        self.scale = float(scale)
+
+    def apply(self, rows: list[dict], ctx: RunContext) -> list[dict]:
+        normalized = {
+            name: functions.minmax_normalize([row.get(name) for row in rows])
+            for name in self.weights
+        }
+        result = [dict(row) for row in rows]
+        for index, row in enumerate(result):
+            weighted_sum = 0.0
+            weight_total = 0.0
+            for name, weight in self.weights.items():
+                component = normalized[name][index]
+                if component is None:
+                    continue
+                weighted_sum += weight * component
+                weight_total += weight
+            row[self.column] = (
+                None if weight_total == 0 else self.scale * weighted_sum / weight_total
+            )
         return result
 
 

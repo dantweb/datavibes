@@ -1,0 +1,32 @@
+metadata:
+  slug: vehicle-production-ev-share
+  title: Vehicle Sales — EV Share & Adoption Speed
+  category: mobility
+  license: "IEA Global EV Data (free terms)"
+  update_frequency: daily
+  attribution: "IEA Global EV Data Explorer"
+
+schema:
+  - { name: country,         dtype: str }
+  - { name: year,            dtype: int }
+  - { name: ev_sales,        dtype: float, unit: "vehicles", nullable: true }
+  - { name: ev_share_pct,    dtype: float, unit: "%", nullable: true, description: "EV % of new car sales" }
+  - { name: charging_points, dtype: float, unit: "count", nullable: true }
+  - { name: ev_cagr_5y,      dtype: float, unit: "%", nullable: true, description: "5y CAGR of EV sales share" }
+  - { name: ev_infra_corr,   dtype: float, nullable: true, description: "corr(EV share, charging points) per country" }
+
+sources:
+  - type: iea-ev
+    parameters:
+      "EV sales": ev_sales
+      "EV sales share": ev_share_pct
+      "EV charging points": charging_points
+    mode: Cars
+    category: Historical
+
+processing:
+  - normalize
+  - sort:   { by: [country, year] }
+  - derive: { column: ev_cagr_5y,    expr: "cagr(ev_share_pct, years=5)", by: [country] }
+  - derive: { column: ev_infra_corr, expr: "corr(ev_share_pct, charging_points)", by: [country] }
+  - validate
