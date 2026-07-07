@@ -1,0 +1,106 @@
+<!doctype html>
+<!--
+  datavibes dataset report — HTML→PDF template (WeasyPrint).
+
+  Professional New-York-consultancy house style: warm ivory paper, ink text,
+  an oxblood accent, a serif display face for headings and a clean serif body,
+  generous margins, hairline rules, running header/footer with page numbers.
+
+  Placeholders are filled by datavibes.report.html_pdf.render_html_report:
+    {{title}} {{category}} {{update_frequency}} {{generated_at}} {{rows}}
+    {{analytics_html}} {{statistics_html}} {{charts_html}} {{sources_html}}
+  Charts are inlined as data: URIs, so this file is fully self-contained.
+  Copy this file and point `report.template` in config.yaml at your own to
+  restyle every dataset report.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  @page {
+    size: A4;
+    margin: 26mm 22mm 22mm 22mm;
+    @top-left { content: "DATAVIBES  ·  DATASET REPORT"; font-family: Georgia, serif;
+                font-size: 7.5pt; letter-spacing: 1.5pt; color: #9a8f7d; }
+    @top-right { content: "{{category}}"; font-family: Georgia, serif; font-size: 7.5pt;
+                 letter-spacing: 1pt; color: #9a8f7d; text-transform: uppercase; }
+    @bottom-left { content: "{{title}}"; font-family: Georgia, serif; font-size: 7.5pt;
+                   color: #9a8f7d; }
+    @bottom-right { content: counter(page) " / " counter(pages); font-family: Georgia, serif;
+                    font-size: 7.5pt; color: #9a8f7d; }
+  }
+  html { -weasy-font-features: normal; }
+  body {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    font-size: 10.5pt; line-height: 1.5; color: #1f2430; background: #fbf9f4; margin: 0;
+  }
+  h1, h2, h3 { font-family: "Didot", "Playfair Display", "Georgia", serif; color: #14181f;
+               font-weight: 700; }
+  a { color: #7a2f1d; text-decoration: none; }
+
+  /* Cover masthead */
+  .masthead { border-top: 3px solid #7a2f1d; border-bottom: 1px solid #d8d0be;
+              padding: 10pt 0 14pt; margin-bottom: 22pt; }
+  .eyebrow { font-size: 8pt; letter-spacing: 3pt; text-transform: uppercase; color: #7a2f1d;
+             margin: 0 0 6pt; }
+  .masthead h1 { font-size: 27pt; line-height: 1.1; margin: 0 0 10pt; letter-spacing: -0.3pt; }
+  .factbar { display: flex; gap: 26pt; font-size: 8.5pt; color: #5b5343;
+             letter-spacing: 0.4pt; text-transform: uppercase; }
+  .factbar b { display: block; font-family: Georgia, serif; font-size: 11pt; color: #14181f;
+               text-transform: none; letter-spacing: 0; margin-top: 2pt; }
+
+  /* Sections */
+  section { margin-bottom: 20pt; }
+  section > h2 { font-size: 15pt; margin: 0 0 3pt; }
+  .rule { height: 1px; background: #d8d0be; border: 0; margin: 0 0 12pt; }
+  .prose h1 { font-size: 15pt; margin: 0 0 6pt; }   /* the LLM's own '# Heading' */
+  .prose h2 { font-size: 12.5pt; margin: 14pt 0 4pt; color: #2a2f3a; }
+  .prose h3 { font-size: 11pt; margin: 12pt 0 3pt; color: #3a4150; }
+  .prose p { margin: 0 0 7pt; }
+  .prose ul { margin: 0 0 8pt 0; padding-left: 16pt; }
+  .prose li { margin: 0 0 3pt; }
+  .prose strong { color: #14181f; }
+  .prose table { border-collapse: collapse; width: 100%; font-size: 9pt; margin: 6pt 0 10pt; }
+  .prose th { text-align: left; border-bottom: 1.5px solid #14181f; padding: 3pt 6pt; }
+  .prose td { border-bottom: 0.5px solid #d8d0be; padding: 3pt 6pt; }
+
+  /* Charts */
+  .figure { margin: 0 0 16pt; page-break-inside: avoid; }
+  .figure img { width: 100%; border: 1px solid #e6e0d2; }
+  .figure figcaption { font-size: 8pt; color: #7a7161; letter-spacing: 0.5pt;
+                       margin-top: 4pt; text-transform: uppercase; }
+
+  .sources { font-size: 9pt; color: #5b5343; }
+  .sources ul { padding-left: 16pt; }
+</style>
+</head>
+<body>
+  <header class="masthead">
+    <p class="eyebrow">Dataset Intelligence Brief</p>
+    <h1>{{title}}</h1>
+    <div class="factbar">
+      <span>Category<b>{{category}}</b></span>
+      <span>Records<b>{{rows}}</b></span>
+      <span>Cadence<b>{{update_frequency}}</b></span>
+      <span>Generated<b>{{generated_at}}</b></span>
+    </div>
+  </header>
+
+  <section>
+    <h2>Analytics</h2><hr class="rule">
+    <div class="prose">{{analytics_html}}</div>
+  </section>
+
+  {{charts_section}}
+
+  <section>
+    <h2>Statistical Works</h2><hr class="rule">
+    <div class="prose">{{statistics_html}}</div>
+  </section>
+
+  <section class="sources">
+    <h2>Sources &amp; Provenance</h2><hr class="rule">
+    <div class="prose">{{sources_html}}</div>
+  </section>
+</body>
+</html>

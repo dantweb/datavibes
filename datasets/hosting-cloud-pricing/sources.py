@@ -154,7 +154,14 @@ def _azure_row(item: dict, region: str, specs: dict[str, dict]) -> dict | None:
     sku = item.get("armSkuName")
     price = item.get("retailPrice")
     product_name = item.get("productName", "")
+    sku_name = item.get("skuName", "")
+    # Spot / Low-Priority rows share the same armSkuName but tag their skuName
+    # ("... Spot" / "... Low Priority"); Windows is flagged in productName. The
+    # skuName format is inconsistent across series (e.g. "Standard_D4s_v5" vs
+    # "E2s v5"), so filter by these markers rather than an exact match.
     if not sku or price in (None, 0) or "Windows" in product_name:
+        return None
+    if "Spot" in sku_name or "Low Priority" in sku_name:
         return None
     spec = specs.get(sku)
     if spec is None:  # cannot compare without vCPU/memory → skip

@@ -32,3 +32,20 @@ processing:
   - derive:  { column: usd_per_gib_hr,  expr: "ratio(usd_per_hour, memory_gib)" }
   - derive:  { column: priceperf_index, expr: "minmax_normalize(usd_per_vcpu_hr, invert=true)" }
   - validate
+
+charts:
+  - type: bar
+    title: "Cheapest instances by price per vCPU-hour"
+    x: instance_type
+    y: usd_per_vcpu_hr
+    agg: min
+    sort: { by: usd_per_vcpu_hr, desc: false }
+    limit: 15
+  - type: scatter
+    title: "Hourly price vs. vCPU count"
+    x: vcpu
+    y: usd_per_hour
+  - type: scatter
+    title: "Price/performance index vs. memory"
+    x: memory_gib
+    y: priceperf_index

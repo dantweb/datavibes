@@ -5,8 +5,20 @@ from datetime import datetime, timezone
 from datavibes.store.filestore import FileStore, slug_hash
 
 
-def test_output_path_matches_plugin_contract_shape(tmp_path):
-    store = FileStore(tmp_path)
+def test_output_path_slug_layout_is_default(tmp_path):
+    store = FileStore(tmp_path)  # default layout = "slug"
+    instant = datetime(2026, 6, 1, 0, 0, tzinfo=timezone.utc)
+    path = store.output_path("environment", "air-quality", instant)
+    # output/<slug>/<YYYY-MM-DD-HH-MM>.csv — profile stays separate from output
+    assert path.relative_to(tmp_path).parts == (
+        "output",
+        "air-quality",
+        "2026-06-01-00-00.csv",
+    )
+
+
+def test_output_path_category_layout_matches_legacy_plugin_contract(tmp_path):
+    store = FileStore(tmp_path, output_layout="category")
     instant = datetime(2026, 6, 1, 0, 0, tzinfo=timezone.utc)
     path = store.output_path("environment", "air-quality", instant)
     parts = path.relative_to(tmp_path).parts
@@ -16,6 +28,18 @@ def test_output_path_matches_plugin_contract_shape(tmp_path):
     assert parts[2].startswith("air-quality-")
     assert len(parts[2].split("-")[-1]) == 8
     assert parts[3] == "2026-06-01-00-00.csv"
+
+
+def test_latest_output_ignores_report_artifacts(tmp_path):
+    store = FileStore(tmp_path)
+    instant = datetime(2026, 6, 1, 0, 0, tzinfo=timezone.utc)
+    snapshot = store.output_path("env", "demo", instant)
+    snapshot.parent.mkdir(parents=True, exist_ok=True)
+    snapshot.write_text("x", encoding="utf-8")
+    # Reports share the output folder but must not be picked as "latest snapshot".
+    for report in ("analytics.md", "statistics.md", "report.pdf"):
+        (snapshot.parent / report).write_text("x", encoding="utf-8")
+    assert store.latest_output("env", "demo").name == "2026-06-01-00-00.csv"
 
 
 def test_slug_hash_is_stable():

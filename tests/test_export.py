@@ -69,8 +69,8 @@ def test_exporter_writes_to_contract_path(store, fixed_clock):
     path = Exporter(store, fixed_clock).export(config, rows)
     parts = path.parts
     assert parts[-1] == "2026-06-01-00-00.csv"
-    assert parts[-2].startswith("air-quality-")
-    assert parts[-3] == "environment"
+    assert parts[-2] == "air-quality"  # output/<slug>/<ts>.csv (slug layout)
+    assert parts[-3] == "output"
     assert path.read_text(encoding="utf-8") == "city,aqi\nBerlin,42\n"
 
 

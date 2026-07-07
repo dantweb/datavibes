@@ -133,8 +133,7 @@ def test_end_to_end_run_is_byte_stable_with_schema_columns(tmp_path):
     first_bytes = first.read_bytes()
     second = sdk.run("energy-renewable-share", http=_fake_http())
 
-    assert first.parts[-3] == "energy"
-    assert first.parts[-2].startswith("energy-renewable-share-")
+    assert first.parts[-2] == "energy-renewable-share"  # output/<slug>/<ts>.csv
     assert first.parts[-1] == "2026-06-01-00-00.csv"
     assert first == second and second.read_bytes() == first_bytes
 

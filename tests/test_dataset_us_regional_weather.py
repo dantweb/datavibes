@@ -168,8 +168,7 @@ def test_end_to_end_run_is_byte_stable_with_schema_columns(tmp_path):
     second = sdk.run("us-regional-weather", http=_fake_http(days=10))
 
     # Path shape: output/environment/us-regional-weather-<hash>/<ts>.csv
-    assert first.parts[-3] == "environment"
-    assert first.parts[-2].startswith("us-regional-weather-")
+    assert first.parts[-2] == "us-regional-weather"  # output/<slug>/<ts>.csv
     assert first.parts[-1] == "2026-06-01-00-00.csv"
 
     # Byte-stable under the fixed clock.

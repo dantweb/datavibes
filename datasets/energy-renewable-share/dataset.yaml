@@ -31,3 +31,24 @@ processing:
       weights: { renewable_elec_pct: 0.5, renewable_cagr_5y: 0.3, renewable_fec_pct: 0.2 }
       scale: 100
   - validate
+
+charts:
+  - type: bar
+    title: "Top renewable-electricity share (2021)"
+    x: country
+    y: renewable_elec_pct
+    filter: { year: 2021 }
+    sort:   { by: renewable_elec_pct, desc: true }
+    limit:  15
+  - type: bar
+    title: "Leading energy-transition scores (2021)"
+    x: country
+    y: transition_score
+    filter: { year: 2021 }
+    sort:   { by: transition_score, desc: true }
+    limit:  15
+  - type: scatter
+    title: "Renewable share vs. transition score (2021)"
+    x: renewable_elec_pct
+    y: transition_score
+    filter: { year: 2021 }

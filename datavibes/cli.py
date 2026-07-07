@@ -42,6 +42,7 @@ def build_parser() -> argparse.ArgumentParser:
         ("process", "latest raw -> processed rows"),
         ("run", "generate + process + export (the cron target)"),
         ("info", "show latest snapshot path + row count"),
+        ("report", "author analytics.md + statistics.md + report.pdf via the LLM"),
     ):
         single = subparsers.add_parser(name, help=help_text)
         single.add_argument("slug")
@@ -76,6 +77,7 @@ def _dispatch(sdk: DatasetSDK, args: argparse.Namespace) -> int:
         "export": _cmd_export,
         "run": _cmd_run,
         "info": _cmd_info,
+        "report": _cmd_report,
     }[args.command]
     return handler(sdk, args)
 
@@ -135,6 +137,14 @@ def _cmd_export(sdk: DatasetSDK, args: argparse.Namespace) -> int:
 def _cmd_run(sdk: DatasetSDK, args: argparse.Namespace) -> int:
     path = sdk.run(args.slug)
     print(f"snapshot: {path}")
+    return 0
+
+
+def _cmd_report(sdk: DatasetSDK, args: argparse.Namespace) -> int:
+    artifacts = sdk.report(args.slug)
+    print(f"analytics:  {artifacts.analytics_md}")
+    print(f"statistics: {artifacts.statistics_md}")
+    print(f"report:     {artifacts.report_pdf}")
     return 0
 
 

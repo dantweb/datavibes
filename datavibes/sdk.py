@@ -7,6 +7,7 @@ singletons, no module-level network client.
 
 from __future__ import annotations
 
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
@@ -39,6 +40,13 @@ def _default_http_factory():
     import requests
 
     return requests.Session()
+
+
+def _default_llm_factory(llm_config):
+    # Imported lazily so the core SDK never hard-depends on the report extras.
+    from datavibes.report.llm import default_llm_client
+
+    return default_llm_client(llm_config)
 
 
 @dataclass
@@ -75,6 +83,7 @@ class DatasetSDK:
         app_config: AppConfig | None = None,
         env_file: str | Path = DEFAULT_ENV_FILE,
         config_file: str | Path = DEFAULT_CONFIG_FILE,
+        llm_factory: Callable[[object], object] | None = None,
     ):
         # Load .env FIRST (real env wins), then build the app config so that
         # ${VAR} interpolation — in config.yaml and dataset.yaml — sees secrets.
@@ -85,7 +94,9 @@ class DatasetSDK:
         self.root = Path(root) if root is not None else Path(paths.datasets_root)
         self.clock = clock or SystemClock()
         self.store = store or FileStore(
-            output_root=paths.output_root, store_root=paths.store_root
+            output_root=paths.output_root,
+            store_root=paths.store_root,
+            output_layout=paths.output_layout,
         )
         self.http_factory = http_factory or _default_http_factory
         self.generator = Generator(
@@ -96,6 +107,7 @@ class DatasetSDK:
         )
         self.processor = Processor(self.clock)
         self.exporter = Exporter(self.store, self.clock)
+        self.llm_factory = llm_factory or _default_llm_factory
 
     # ------------------------------------------------------------------ read
     def list(self) -> list[DatasetInfo]:
@@ -145,11 +157,45 @@ class DatasetSDK:
         return self.exporter.export(config, rows, fmt=self._format(fmt))
 
     def run(self, slug: str, fmt: str | None = None, http=None) -> Path:
-        """The cron target: generate → process → export, composed in-memory."""
+        """The cron target: generate → process → export, composed in-memory.
+
+        When ``llm.enabled`` is set, the dataset's reports (analytics.md /
+        statistics.md / report.pdf) are authored afterwards. Report failures are
+        logged and swallowed — a report problem must never fail a data run.
+        """
         config = self._load(slug)
         snapshot = self.generator.generate(config, http=http)
         processed = self.processor.process(config, snapshot.records)
-        return self.exporter.export(config, processed, fmt=self._format(fmt))
+        path = self.exporter.export(config, processed, fmt=self._format(fmt))
+        if self.app_config.llm.enabled:
+            try:
+                self._write_reports(config, processed)
+            except Exception as error:  # degrade: never fail the run over a report
+                print(f"warning: report generation failed: {error}", file=sys.stderr)
+        return path
+
+    def report(self, slug: str, llm=None):
+        """Author the dataset's reports from its latest processed rows.
+
+        Explicit command — generates regardless of ``llm.enabled``. Returns the
+        :class:`~datavibes.report.reporter.ReportArtifacts` (three written paths).
+        """
+        config = self._load(slug)
+        rows = self.process(slug)
+        return self._write_reports(config, rows, llm=llm)
+
+    def _write_reports(self, config: DatasetConfig, rows: list[dict], llm=None):
+        from datavibes.report.reporter import Reporter
+
+        client = llm if llm is not None else self.llm_factory(self.app_config.llm)
+        output_dir = self.store.dataset_output_dir(config.category, config.slug)
+        report_config = self.app_config.report
+        reporter = Reporter(
+            client,
+            template=report_config.template,
+            charts_enabled=report_config.charts,
+        )
+        return reporter.generate(config, rows, output_dir, self.clock.now())
 
     def _format(self, fmt: str | None) -> str:
         # Precedence: explicit arg > config.yaml defaults.format > built-in.

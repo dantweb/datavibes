@@ -18,6 +18,11 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["pytest>=7.0"]
 parquet = ["pyarrow>=12.0"]
+report = ["anthropic>=0.40", "fpdf2>=2.7", "matplotlib>=3.7", "markdown>=3.5"]
+# OpenAI-compatible providers (DeepSeek, OpenAI, local servers, …):
+openai = ["openai>=1.0"]
+# Full-fidelity HTML/CSS report template (needs system pango/cairo):
+report-html = ["weasyprint>=60"]
 
 [project.scripts]
 datavibes = "datavibes.cli:main"

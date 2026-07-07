@@ -1,5 +1,8 @@
 .venv/
 .env
+# Local app config — copy config.yaml.dist to config.yaml and edit. The .dist
+# template is committed; the working config.yaml is per-machine and ignored.
+/config.yaml
 # Runtime output trees at the repo root only — NOT the datavibes/store/ package
 # (an unanchored `store/` here is what swallowed datavibes/store/filestore.py
 # out of the initial commit).

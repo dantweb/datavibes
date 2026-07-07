@@ -35,8 +35,8 @@ def test_run_writes_contract_path_and_is_byte_stable(tmp_path):
     assert second.read_bytes() == first_bytes
     parts = first.parts
     assert parts[-1] == "2026-06-01-00-00.csv"
-    assert parts[-2].startswith("demo-")
-    assert parts[-3] == "test"
+    assert parts[-2] == "demo"  # output/<slug>/<ts>.csv (slug layout)
+    assert parts[-3] == "output"
     assert first.read_text(encoding="utf-8") == "city,value\nDemo,1\n"
 
 

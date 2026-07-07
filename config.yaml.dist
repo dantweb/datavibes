@@ -1,0 +1,51 @@
+# datavibes app-level configuration TEMPLATE (NON-secret).
+#
+# This is the committed template. Copy it to `config.yaml` (which is gitignored)
+# and edit for your machine:  cp config.yaml.dist config.yaml
+#
+# Secrets NEVER live here — they belong in .env / the process environment only.
+# String values support ${VAR} and ${VAR:-default} interpolation from the
+# environment (real env vars win over .env). This file is optional: without a
+# config.yaml every value below falls back to the built-in default.
+
+paths:
+  datasets_root: datasets      # where dataset folders live
+  output_root: output          # dataset snapshots (overridden by $DATAVIBES_OUTPUT_DIR)
+  store_root: store            # raw snapshots (store/raw/<slug>/<ts>.jsonl)
+  # Where a dataset's generated output (snapshots + analytics.md /
+  # statistics.md / report.pdf) lands under output_root:
+  #   slug     -> output/<slug>/                    (default; profile stays clean)
+  #   category -> output/<category>/<slug>-<hash>/  (legacy dataset-plugin contract)
+  output_layout: slug
+
+http:
+  timeout_seconds: 30
+  max_retries: 3
+  backoff_seconds: 0.5
+  user_agent: "${DATAVIBES_USER_AGENT:-datavibes/0.1 (+https://vbwd.cc)}"
+
+defaults:
+  units: metric
+  format: csv
+
+# LLM-authored per-dataset reports (analytics.md + statistics.md + report.pdf,
+# written into the dataset folder when a run finishes). Non-secret settings only;
+# the API key comes from the environment variable named by `api_key_env`.
+# `enabled: true` makes `datavibes run` generate reports automatically; the
+# `datavibes report <slug>` command always generates regardless of this flag.
+llm:
+  enabled: false
+  # provider: anthropic (Claude) | openai (any OpenAI-compatible Chat Completions API)
+  provider: anthropic
+  model: claude-opus-4-8
+  base_url: ""                # only for provider: openai — the endpoint URL
+  max_tokens: 4000
+  effort: medium              # low | medium | high  (Anthropic only)
+  api_key_env: ANTHROPIC_API_KEY
+  #
+  # --- To use DeepSeek (OpenAI-compatible) instead of Claude, set: ---
+  #   provider: openai
+  #   model: deepseek-chat          # or deepseek-reasoner
+  #   base_url: https://api.deepseek.com
+  #   api_key_env: DEEPSEEK_API_KEY  # put DEEPSEEK_API_KEY=sk-... in .env
+  # Then: pip install 'datavibes[openai]'

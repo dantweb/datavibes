@@ -17,12 +17,12 @@ schema:
 
 sources:
   - type: iea-ev
-    parameters:
-      "EV sales": ev_sales
-      "EV sales share": ev_share_pct
-      "EV charging points": charging_points
-    mode: Cars
     category: Historical
+    years: [2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
+    metrics:
+      - { parameter: "EV sales",          column: ev_sales,        mode: Cars, powertrains: [BEV, PHEV, FCEV] }
+      - { parameter: "EV sales share",    column: ev_share_pct,    mode: Cars, powertrains: [EV] }
+      - { parameter: "EV charging points", column: charging_points, mode: EVSE }
 
 processing:
   - normalize
@@ -30,3 +30,24 @@ processing:
   - derive: { column: ev_cagr_5y,    expr: "cagr(ev_share_pct, years=5)", by: [country] }
   - derive: { column: ev_infra_corr, expr: "corr(ev_share_pct, charging_points)", by: [country] }
   - validate
+
+charts:
+  - type: bar
+    title: "EV sales by market (2024)"
+    x: country
+    y: ev_sales
+    filter: { year: 2024 }
+    sort:   { by: ev_sales, desc: true }
+    limit:  15
+  - type: bar
+    title: "Highest EV sales share (2024)"
+    x: country
+    y: ev_share_pct
+    filter: { year: 2024 }
+    sort:   { by: ev_share_pct, desc: true }
+    limit:  15
+  - type: scatter
+    title: "EV share vs. charging points (2024)"
+    x: charging_points
+    y: ev_share_pct
+    filter: { year: 2024 }

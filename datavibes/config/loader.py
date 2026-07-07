@@ -15,6 +15,7 @@ import yaml
 
 from datavibes.config.interpolate import interpolate_env
 from datavibes.config.models import (
+    ChartSpec,
     DatasetConfig,
     DatasetMetadata,
     SourceSpec,
@@ -41,11 +42,13 @@ def load_config(path: str | Path) -> DatasetConfig:
     schema = _parse_schema(raw.get("schema"), config_path)
     sources = _parse_sources(raw.get("sources"), config_path)
     processing = _parse_processing(raw.get("processing") or [], config_path)
+    charts = _parse_charts(raw.get("charts") or [], config_path)
     return DatasetConfig(
         metadata=metadata,
         schema=schema,
         sources=sources,
         processing=processing,
+        charts=charts,
     )
 
 
@@ -140,6 +143,22 @@ def _parse_processing(block: object, config_path: Path) -> list[StepSpec]:
     specs: list[StepSpec] = []
     for entry in block:
         specs.append(_parse_step(entry, config_path))
+    return specs
+
+
+def _parse_charts(block: object, config_path: Path) -> list[ChartSpec]:
+    if not isinstance(block, list):
+        raise ConfigError(f"{config_path}: 'charts' must be a list")
+    known = {"type", "title", "x", "y", "series", "agg", "filter", "sort", "limit"}
+    specs: list[ChartSpec] = []
+    for entry in block:
+        if not isinstance(entry, dict):
+            raise ConfigError(f"{config_path}: each chart must be a mapping")
+        filtered = {key: value for key, value in entry.items() if key in known}
+        try:
+            specs.append(ChartSpec(**filtered))
+        except TypeError as exc:
+            raise ConfigError(f"{config_path}: invalid chart ({exc})") from exc
     return specs
 
 

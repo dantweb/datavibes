@@ -55,6 +55,42 @@ class StepSpec:
             raise ConfigError("processing step name must be non-empty")
 
 
+CHART_TYPES = ("bar", "line", "scatter", "area")
+
+
+@dataclass
+class ChartSpec:
+    """A declared chart for the dataset report (rendered to a PNG + embedded in the PDF).
+
+    See ``docs/charts.md`` for the full field reference. ``x``/``y`` are column
+    names; ``series`` splits ``y`` into one line/bar-group per distinct value;
+    ``agg`` reduces multiple rows sharing an ``x`` (mean/sum/median/min/max);
+    ``filter`` subsets rows by exact column values; ``sort``/``limit`` pick and
+    order the points shown.
+    """
+
+    type: str
+    title: str
+    x: str
+    y: str
+    series: str | None = None
+    agg: str | None = None
+    filter: dict = field(default_factory=dict)
+    sort: dict = field(default_factory=dict)
+    limit: int | None = None
+
+    def __post_init__(self) -> None:
+        if self.type not in CHART_TYPES:
+            raise ConfigError(
+                f"chart type '{self.type}' unsupported "
+                f"(expected one of {', '.join(CHART_TYPES)})"
+            )
+        if not self.title:
+            raise ConfigError("chart requires a 'title'")
+        if not self.x or not self.y:
+            raise ConfigError(f"chart '{self.title}' requires 'x' and 'y'")
+
+
 @dataclass
 class DatasetConfig:
     """The fully parsed ``dataset.yaml``."""
@@ -63,6 +99,7 @@ class DatasetConfig:
     schema: Schema
     sources: list[SourceSpec] = field(default_factory=list)
     processing: list[StepSpec] = field(default_factory=list)
+    charts: list[ChartSpec] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         if not self.schema.fields:

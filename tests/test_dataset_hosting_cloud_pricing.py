@@ -56,7 +56,7 @@ def _aws_body():
         "terms": {
             "OnDemand": {
                 "AAA": term("AAA", "0.096"),
-                "BBB": term("BBB", "0.192"),
+                "BBB": term("BBB", "0.168"),  # 4 vCPU → 0.042/vCPU (cheapest per-vCPU)
                 "WIN": term("WIN", "0.180"),
                 "DED": term("DED", "0.200"),
             }
@@ -67,10 +67,14 @@ def _aws_body():
 def _azure_page_one():
     return {
         "Items": [
-            {"armSkuName": "Standard_D2s_v5", "retailPrice": 0.088, "unitOfMeasure": "1 Hour",
-             "armRegionName": "eastus", "type": "Consumption", "productName": "Virtual Machines Dsv5"},
-            {"armSkuName": "Standard_D2s_v5", "retailPrice": 0.0, "unitOfMeasure": "1 Hour",
-             "armRegionName": "eastus", "type": "Consumption", "productName": "Virtual Machines Dsv5 Spot"},  # zero → skip
+            # True pay-as-you-go Linux row: skuName == armSkuName.
+            {"armSkuName": "Standard_D2s_v5", "skuName": "Standard_D2s_v5", "retailPrice": 0.096,
+             "unitOfMeasure": "1 Hour", "armRegionName": "eastus", "type": "Consumption",
+             "productName": "Virtual Machines Dsv5 Series"},
+            # Low-Priority row for the same SKU (cheaper) — must be excluded.
+            {"armSkuName": "Standard_D2s_v5", "skuName": "Standard_D2s_v5 Low Priority", "retailPrice": 0.019,
+             "unitOfMeasure": "1 Hour", "armRegionName": "eastus", "type": "Consumption",
+             "productName": "Virtual Machines Dsv5 Series"},
         ],
         "NextPageLink": "https://prices.azure.com/api/retail/prices?$skip=100",
     }
@@ -79,10 +83,21 @@ def _azure_page_one():
 def _azure_page_two():
     return {
         "Items": [
-            {"armSkuName": "Standard_D4s_v5", "retailPrice": 0.176, "unitOfMeasure": "1 Hour",
-             "armRegionName": "eastus", "type": "Consumption", "productName": "Virtual Machines Dsv5"},
-            {"armSkuName": "Unknown_Sku_X", "retailPrice": 0.5, "unitOfMeasure": "1 Hour",
-             "armRegionName": "eastus", "type": "Consumption", "productName": "Virtual Machines X"},  # no specs → skip
+            {"armSkuName": "Standard_D4s_v5", "skuName": "Standard_D4s_v5", "retailPrice": 0.192,
+             "unitOfMeasure": "1 Hour", "armRegionName": "eastus", "type": "Consumption",
+             "productName": "Virtual Machines Dsv5 Series"},
+            # Spot variant — excluded by skuName != armSkuName.
+            {"armSkuName": "Standard_D4s_v5", "skuName": "Standard_D4s_v5 Spot", "retailPrice": 0.040,
+             "unitOfMeasure": "1 Hour", "armRegionName": "eastus", "type": "Consumption",
+             "productName": "Virtual Machines Dsv5 Series"},
+            # Windows row — excluded by productName.
+            {"armSkuName": "Standard_D4s_v5", "skuName": "Standard_D4s_v5", "retailPrice": 0.376,
+             "unitOfMeasure": "1 Hour", "armRegionName": "eastus", "type": "Consumption",
+             "productName": "Virtual Machines Dsv5 Series Windows"},
+            # Unknown SKU (not in specs CSV) — skipped.
+            {"armSkuName": "Unknown_Sku_X", "skuName": "Unknown_Sku_X", "retailPrice": 0.5,
+             "unitOfMeasure": "1 Hour", "armRegionName": "eastus", "type": "Consumption",
+             "productName": "Virtual Machines X"},
         ],
         "NextPageLink": None,
     }
@@ -134,6 +149,9 @@ def test_azure_paging_and_specs_enrichment():
     assert set(skus) == {"Standard_D2s_v5", "Standard_D4s_v5"}
     assert skus["Standard_D2s_v5"]["vcpu"] == 2.0
     assert skus["Standard_D2s_v5"]["memory_gib"] == 8.0
+    # On-demand PAYG price wins; Spot / Low-Priority / Windows rows are excluded.
+    assert skus["Standard_D2s_v5"]["usd_per_hour"] == 0.096
+    assert skus["Standard_D4s_v5"]["usd_per_hour"] == 0.192
 
 
 def test_validate_passes(tmp_path):
@@ -150,8 +168,7 @@ def test_end_to_end_run_is_byte_stable_with_schema_columns(tmp_path):
     first_bytes = first.read_bytes()
     second = sdk.run("hosting-cloud-pricing", http=_fake_http())
 
-    assert first.parts[-3] == "infrastructure"
-    assert first.parts[-2].startswith("hosting-cloud-pricing-")
+    assert first.parts[-2] == "hosting-cloud-pricing"  # output/<slug>/<ts>.csv
     assert first == second and second.read_bytes() == first_bytes
 
     lines = first.read_text(encoding="utf-8").splitlines()
