@@ -107,10 +107,11 @@ charts:
 ## Styling & the PDF
 
 Charts use a restrained, professional palette and are embedded (as inline
-`data:` URIs) into the report PDF, which is rendered from the HTML template at
-`datasets/var/pdf/templates/report.html` (New-York-consultancy house style).
-Point `report.template` in `config.yaml` at a copy of that file to restyle every
-report. The PDF uses WeasyPrint when available (`pip install
+`data:` URIs) into the report PDF, which is rendered from the HTML template
+packaged at `datavibes/report/templates/report.html` (New-York-consultancy house
+style) — it ships inside the wheel, so a `pip install`-only datavibes renders the
+full report. Point `report.template` in `config.yaml` at a copy of that file to
+restyle every report. The PDF uses WeasyPrint when available (`pip install
 'datavibes[report-html]'`); without it, datavibes falls back to a plainer
 built-in PDF that still embeds the same charts.
 

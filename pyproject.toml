@@ -30,6 +30,11 @@ datavibes = "datavibes.cli:main"
 [tool.setuptools.packages.find]
 include = ["datavibes*"]
 
+[tool.setuptools.package-data]
+# Ship the default HTML report template inside the wheel so a pip-only
+# install renders the full report (no working tree required).
+"datavibes.report" = ["templates/*.html"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"

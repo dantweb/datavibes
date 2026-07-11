@@ -324,6 +324,28 @@ def test_reporter_embeds_charts_and_uses_html_template(tmp_path):
     assert artifacts.report_pdf.read_bytes().startswith(b"%PDF")
 
 
+def test_packaged_template_is_importable_resource():
+    """The default template ships inside the package (so a pip-only install works)."""
+    from importlib.resources import files
+
+    resource = files("datavibes.report").joinpath("templates", "report.html")
+    assert resource.is_file()
+    assert "Dataset Intelligence Brief" in resource.read_text(encoding="utf-8")
+
+
+def test_reporter_uses_packaged_template_by_default(tmp_path, monkeypatch):
+    # Run from a directory with no working tree / no datasets/ folder at all.
+    monkeypatch.chdir(tmp_path)
+    # template="" => resolve the packaged default, not a filesystem path.
+    artifacts = Reporter(FakeLlm(), template="").generate(
+        _config(), _rows(), tmp_path / "out", FIXED.now()
+    )
+    pdf = artifacts.report_pdf.read_bytes()
+    assert pdf.startswith(b"%PDF")
+    # WeasyPrint (template) output is materially larger than the fpdf2 fallback.
+    assert len(pdf) > 5000
+
+
 def test_reporter_falls_back_when_template_missing(tmp_path):
     artifacts = Reporter(FakeLlm(), template=str(tmp_path / "nope.html")).generate(
         _config(), _rows(), tmp_path / "out", FIXED.now()

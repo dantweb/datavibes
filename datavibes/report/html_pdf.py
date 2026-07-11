@@ -1,8 +1,8 @@
 """HTML-template → PDF rendering (WeasyPrint) for the professional report.
 
 The report's prose (LLM Markdown) and charts (PNG data URIs) are slotted into
-an HTML template — see ``datasets/var/pdf/templates/report.html`` — and rendered
-to a PDF with WeasyPrint. Both ``markdown`` and ``weasyprint`` are optional; if
+an HTML template — the default ships in ``datavibes/report/templates/report.html``
+and is rendered to a PDF with WeasyPrint. Both ``markdown`` and ``weasyprint`` are optional; if
 either is unavailable the reporter falls back to the plain fpdf2 renderer.
 Charts are inlined as ``data:`` URIs so the PDF is self-contained.
 """

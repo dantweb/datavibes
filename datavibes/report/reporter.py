@@ -35,7 +35,10 @@ ANALYTICS_FILENAME = "analytics.md"
 STATISTICS_FILENAME = "statistics.md"
 REPORT_FILENAME = "report.pdf"
 CHARTS_DIRNAME = "charts"
-DEFAULT_TEMPLATE = "datasets/var/pdf/templates/report.html"
+# Empty template => use the one packaged inside ``datavibes.report.templates``,
+# so a pip-installed datavibes renders the full report with no working tree.
+DEFAULT_TEMPLATE = ""
+PACKAGED_TEMPLATE = "report.html"
 
 _ANALYTICS_SYSTEM = (
     "You are a data analyst. Given a factual profile of a generated dataset, "
@@ -188,11 +191,32 @@ def _fallback_prose(heading: str, facts: str) -> str:
 
 
 def _read_template(template: str) -> str | None:
-    path = Path(template)
-    if path.is_file():
-        return path.read_text(encoding="utf-8")
-    print(f"warning: report template not found at {template}; using plain PDF", file=sys.stderr)
-    return None
+    """Read the report template: an explicit path, else the packaged default."""
+    if template:
+        path = Path(template)
+        if path.is_file():
+            return path.read_text(encoding="utf-8")
+        print(
+            f"warning: report template not found at {template}; using plain PDF",
+            file=sys.stderr,
+        )
+        return None
+    return _packaged_template()
+
+
+def _packaged_template() -> str | None:
+    """The default template shipped inside the wheel (no working tree needed)."""
+    try:
+        from importlib.resources import files
+
+        resource = files("datavibes.report").joinpath("templates", PACKAGED_TEMPLATE)
+        return resource.read_text(encoding="utf-8")
+    except (FileNotFoundError, ModuleNotFoundError, OSError) as error:
+        print(
+            f"warning: packaged report template unavailable ({error}); using plain PDF",
+            file=sys.stderr,
+        )
+        return None
 
 
 def _strip_leading_h1(markdown: str) -> str:

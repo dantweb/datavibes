@@ -1,0 +1,99 @@
+name: release
+
+# Tag-driven release gate: run the full test suite, build the wheel + sdist, prove
+# the packaged report template survives a pip-only install, then attach the
+# artifacts to the GitHub Release. Consumers pin the tag, e.g. in a plugin's
+# requirements.txt:
+#     datavibes[report,openai] @ git+https://github.com/dantweb/datavibes@v0.1.0
+# (There is no PyPI index in this platform — distribution is by git tag.)
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # to create the Release and upload assets
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # WeasyPrint needs system pango/cairo; without them the report PDF silently
+      # degrades to the plain fpdf2 fallback, so the packaging proof below would pass
+      # for the wrong reason.
+      - name: Install system libraries for WeasyPrint
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libpango-1.0-0 libpangoft2-1.0-0 libcairo2 libgdk-pixbuf-2.0-0
+
+      - name: Install project + dev/report extras
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev,report,openai,report-html]"
+
+      - name: Test gate
+        run: pytest
+
+      - name: Build wheel + sdist
+        run: |
+          pip install build
+          python -m build
+
+      # The default HTML report template lives inside the package
+      # (datavibes/report/templates/report.html). Prove it ships in the wheel and
+      # renders from a pip-only install with NO working tree present.
+      - name: Verify packaged template survives a pip-only install
+        run: |
+          set -euo pipefail
+          python -m venv /tmp/pipcheck
+          /tmp/pipcheck/bin/pip install --quiet "$(ls dist/*.whl)[report,report-html]"
+          mkdir -p /tmp/pipwork && cd /tmp/pipwork
+          /tmp/pipcheck/bin/python - <<'PY'
+          from datetime import datetime, timezone
+          from pathlib import Path
+          from importlib.resources import files
+
+          import datavibes
+          from datavibes.config.models import (
+              ChartSpec, DatasetConfig, DatasetMetadata, SourceSpec, StepSpec,
+          )
+          from datavibes.report.reporter import Reporter
+          from datavibes.schema.field import Field, Schema
+
+          assert files("datavibes.report").joinpath("templates", "report.html").is_file()
+          assert not Path("datasets").exists(), "working tree leaked into the check"
+
+          class FakeLlm:
+              def complete(self, system, prompt):
+                  return "# Analytics\n\npackaged-template check\n"
+
+          config = DatasetConfig(
+              metadata=DatasetMetadata(slug="pkg", title="Packaged Template Check", category="test"),
+              schema=Schema(fields=[Field("region", "str"), Field("v", "float")]),
+              sources=[SourceSpec(type="static", options={})],
+              processing=[StepSpec(name="normalize", options={})],
+              charts=[ChartSpec(type="bar", title="V by region", x="region", y="v")],
+          )
+          rows = [{"region": "a", "v": 1.0}, {"region": "b", "v": 2.0}]
+          artifacts = Reporter(FakeLlm(), template="").generate(
+              config, rows, Path("out"), datetime(2026, 1, 1, tzinfo=timezone.utc)
+          )
+          pdf = artifacts.report_pdf.read_bytes()
+          assert pdf.startswith(b"%PDF"), "not a PDF"
+          assert len(pdf) > 5000, "fpdf2 fallback — packaged template did not render"
+          print(f"OK datavibes {datavibes.__version__}: packaged template rendered ({len(pdf)} bytes)")
+          PY
+
+      - name: Publish artifacts to the GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*.whl
+            dist/*.tar.gz
+          generate_release_notes: true

@@ -49,3 +49,9 @@ llm:
   #   base_url: https://api.deepseek.com
   #   api_key_env: DEEPSEEK_API_KEY  # put DEEPSEEK_API_KEY=sk-... in .env
   # Then: pip install 'datavibes[openai]'
+
+# Report rendering (the analytics/statistics prose + charts PDF).
+report:
+  charts: true      # render the dataset.yaml `charts:` into the PDF (see docs/charts.md)
+  template: ""      # empty = the template packaged in datavibes.report.templates
+                    # set a path to a copy of it to restyle every report

@@ -94,11 +94,13 @@ class ReportConfig:
 
     ``charts`` toggles rendering the dataset's declared charts into the PDF.
     ``template`` is the HTML template used for the PDF (rendered with WeasyPrint
-    when available; falls back to a plain built-in layout otherwise).
+    when available; falls back to a plain built-in layout otherwise). Leave it
+    **empty** to use the template packaged inside ``datavibes.report.templates``;
+    set a path to restyle every report with your own copy.
     """
 
     charts: bool = True
-    template: str = "datasets/var/pdf/templates/report.html"
+    template: str = ""
 
 
 @dataclass

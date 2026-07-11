@@ -70,3 +70,5 @@ __all__ = [
     "SourceFetchError",
     "UnknownStrategyError",
 ]
+
+__version__ = "0.1.0"
