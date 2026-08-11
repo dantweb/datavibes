@@ -3,7 +3,7 @@ metadata:
   title: Energy Mix — Renewable Share & Transition Speed
   category: energy
   license: "World Bank Open Data CC-BY-4.0"
-  update_frequency: daily
+  update_frequency: annual
   attribution: "World Bank Open Data (EG.ELC.RNEW.ZS, EG.FEC.RNEW.ZS)"
 
 schema:

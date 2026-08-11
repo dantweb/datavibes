@@ -3,7 +3,7 @@ metadata:
   title: EU Tech Job Market — ICT Vacancy Pressure & Specialist Supply by Country
   category: infrastructure
   license: "Eurostat open data — free reuse with attribution (CC-BY-4.0 equivalent)"
-  update_frequency: monthly
+  update_frequency: annual
   attribution: "Eurostat: jvs_a_rate_r2 (job vacancy rate by NACE), isoc_sks_itspt (employed ICT specialists)"
 
 schema:

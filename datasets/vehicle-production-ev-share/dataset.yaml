@@ -3,7 +3,7 @@ metadata:
   title: Vehicle Sales — EV Share & Adoption Speed
   category: mobility
   license: "IEA Global EV Data (free terms)"
-  update_frequency: daily
+  update_frequency: annual
   attribution: "IEA Global EV Data Explorer"
 
 schema:

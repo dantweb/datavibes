@@ -3,7 +3,7 @@ metadata:
   title: Tech Salary & Compensation — ICT Labour Cost, Premium and Purchasing Power
   category: infrastructure
   license: "Eurostat open data — free reuse with attribution (CC-BY-4.0 equivalent)"
-  update_frequency: quarterly
+  update_frequency: annual
   attribution: "Eurostat: lc_lci_lev (labour cost levels by NACE), tec00114 (GDP per capita in PPS)"
 
 schema:

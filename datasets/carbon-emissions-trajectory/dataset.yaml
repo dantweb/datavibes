@@ -3,7 +3,7 @@ metadata:
   title: Carbon Emissions & Reduction Trajectory — History, Intensity and 5-Year Projection
   category: environment
   license: "CC-BY-4.0 (Our World in Data / Global Carbon Budget); World Bank Open Data CC-BY-4.0"
-  update_frequency: monthly
+  update_frequency: annual
   attribution: "Our World in Data — Global Carbon Budget (annual CO₂ emissions); World Bank (population, GDP)"
 
 schema:

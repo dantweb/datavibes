@@ -3,7 +3,7 @@ metadata:
   title: World Bank Global Development — Income, Longevity, Connectivity and Inequality
   category: macro
   license: "World Bank Open Data CC-BY-4.0"
-  update_frequency: monthly
+  update_frequency: annual
   attribution: "World Bank Open Data — Indicators API (NY.GDP.PCAP.CD, SP.POP.TOTL, SP.DYN.LE00.IN, IT.NET.USER.ZS, EG.ELC.ACCS.ZS, SE.XPD.TOTL.GD.ZS)"
 
 schema:
