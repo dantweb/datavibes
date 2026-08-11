@@ -1,0 +1,115 @@
+metadata:
+  slug: eu-economic-demographic
+  title: EU Economic & Demographic Indicators — Population, Output, Prices, Labour
+  category: macro
+  license: "Eurostat open data — free reuse with attribution (CC-BY-4.0 equivalent)"
+  update_frequency: monthly
+  attribution: "Eurostat: tps00001 (population), tec00114 (GDP per capita PPS), tec00118 (HICP), une_rt_a (unemployment)"
+
+schema:
+  - { name: geo_code,               dtype: str }
+  - { name: country,                dtype: str,   nullable: true }
+  - { name: year,                   dtype: int }
+  - { name: population,             dtype: float, nullable: true, unit: "persons", description: "population on 1 January" }
+  - { name: gdp_per_capita_pps_index, dtype: float, nullable: true, description: "GDP per capita in PPS, EU27 = 100" }
+  - { name: inflation_rate,         dtype: float, nullable: true, unit: "%", description: "HICP annual average rate of change" }
+  - { name: unemployment_rate,      dtype: float, nullable: true, unit: "%", description: "unemployment, 15-74, both sexes, % of active population" }
+  - { name: population_cagr_5y,     dtype: float, nullable: true, unit: "%", description: "5-year compound population growth" }
+  - { name: population_share_pct,   dtype: float, nullable: true, unit: "%", description: "country share of the cohort population that year" }
+  - { name: gdp_growth_cagr_5y,     dtype: float, nullable: true, unit: "%", description: "5-year compound growth of the GDP-per-capita index" }
+  - { name: misery_index,           dtype: float, nullable: true, description: "inflation + unemployment — the classic household-pressure gauge" }
+  - { name: prosperity_zscore,      dtype: float, nullable: true, description: "standardised GDP per capita across the cohort" }
+  - { name: stability_score,        dtype: float, nullable: true, description: "0-100 composite: high output, low inflation, low unemployment" }
+  - { name: economy_class,          dtype: str,   nullable: true, description: "leading | above-average | catching-up | lagging" }
+  - { name: is_shrinking,           dtype: bool,  nullable: true, description: "population contracting over the last five years" }
+  - { name: is_under_pressure,      dtype: bool,  nullable: true, description: "misery index above 10" }
+
+sources:
+  - type: jsonstat
+    url: https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/tps00001
+    value_column: population
+    dimensions:    { geo: geo_code, time: year }
+    label_columns: { geo: country }
+    params: { format: JSON, lang: EN, freq: A, indic_de: JAN, sinceTimePeriod: "2010" }
+
+  - type: jsonstat
+    url: https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/tec00114
+    value_column: gdp_per_capita_pps_index
+    dimensions: { geo: geo_code, time: year }
+    params: { format: JSON, lang: EN, freq: A, sinceTimePeriod: "2010" }
+
+  - type: jsonstat
+    url: https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/tec00118
+    value_column: inflation_rate
+    dimensions: { geo: geo_code, time: year }
+    params: { format: JSON, lang: EN, freq: A, sinceTimePeriod: "2010" }
+
+  - type: jsonstat
+    url: https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/une_rt_a
+    value_column: unemployment_rate
+    dimensions: { geo: geo_code, time: year }
+    params:
+      format: JSON
+      lang: EN
+      freq: A
+      age: Y15-74
+      sex: T
+      unit: PC_ACT
+      sinceTimePeriod: "2010"
+
+processing:
+  - normalize
+  - join:   { "on": [geo_code, year] }
+  - filter: { when: { column: population, not_null: true } }
+  - sort:   { by: [geo_code, year] }
+  - derive: { column: population_cagr_5y,   expr: "cagr(population, years=5)", by: [geo_code] }
+  - derive: { column: gdp_growth_cagr_5y,   expr: "cagr(gdp_per_capita_pps_index, years=5)", by: [geo_code] }
+  - derive: { column: population_share_pct, expr: "share_of_total(population)", by: [year] }
+  - derive: { column: prosperity_zscore,    expr: "zscore(gdp_per_capita_pps_index)" }
+  - derive: { column: misery_index,         expr: "add(inflation_rate, unemployment_rate)" }
+  - score:
+      column: stability_score
+      weights: { gdp_per_capita_pps_index: 0.6, unemployment_rate: 0.2, inflation_rate: 0.2 }
+      scale: 100
+  - classify:
+      column: economy_class
+      value: gdp_per_capita_pps_index
+      bins:
+        - { min: 125, label: leading }
+        - { min: 100, label: above-average }
+        - { min: 75,  label: catching-up }
+        - { label: lagging }
+      default: unknown
+  - flag:
+      column: is_shrinking
+      when: { column: population_cagr_5y, lt: 0 }
+  - flag:
+      column: is_under_pressure
+      when: { column: misery_index, gt: 10 }
+  - validate
+
+charts:
+  - type: bar
+    title: "GDP per capita in PPS (EU27 = 100), 2024"
+    x: country
+    y: gdp_per_capita_pps_index
+    filter: { year: 2024 }
+    sort:   { by: gdp_per_capita_pps_index, desc: true }
+    limit:  25
+  - type: bar
+    title: "Five-year population growth"
+    x: country
+    y: population_cagr_5y
+    filter: { year: 2024 }
+    sort:   { by: population_cagr_5y, desc: true }
+    limit:  25
+  - type: scatter
+    title: "Prosperity vs. unemployment (2024)"
+    x: gdp_per_capita_pps_index
+    y: unemployment_rate
+    filter: { year: 2024 }
+  - type: line
+    title: "Inflation over time"
+    x: year
+    y: inflation_rate
+    series: country

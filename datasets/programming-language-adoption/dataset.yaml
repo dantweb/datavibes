@@ -1,0 +1,151 @@
+metadata:
+  slug: programming-language-adoption
+  title: Programming Language Adoption — Repository Base vs. Developer Q&A Demand
+  category: infrastructure
+  license: "GitHub REST API terms; Stack Exchange content CC-BY-SA-4.0"
+  update_frequency: weekly
+  attribution: "GitHub Search API (repository counts); Stack Exchange API (Stack Overflow tag counts)"
+
+schema:
+  - { name: language,            dtype: str }
+  - { name: gh_language,         dtype: str,   nullable: true, description: "GitHub Linguist language name used for the search" }
+  - { name: so_tag,              dtype: str,   nullable: true, description: "Stack Overflow tag (URL-encoded)" }
+  - { name: repo_count,          dtype: int,   nullable: true, description: "public GitHub repositories with this primary language" }
+  - { name: so_questions,        dtype: int,   nullable: true, description: "Stack Overflow questions carrying the tag" }
+  - { name: questions_per_repo,  dtype: float, nullable: true, description: "Q&A demand per repository — high = steep learning curve or legacy support load" }
+  - { name: repo_share_pct,      dtype: float, nullable: true, unit: "%", description: "share of the cohort's repository base" }
+  - { name: question_share_pct,  dtype: float, nullable: true, unit: "%", description: "share of the cohort's tagged questions" }
+  - { name: repo_zscore,         dtype: float, nullable: true }
+  - { name: question_zscore,     dtype: float, nullable: true }
+  - { name: adoption_index,      dtype: float, nullable: true, description: "0-1 min-max repository base within the cohort" }
+  - { name: adoption_score,      dtype: float, nullable: true, description: "0-100 composite of repository base and Q&A demand" }
+  - { name: repo_concentration_hhi, dtype: float, nullable: true, description: "HHI of the whole language cohort's repository base (identical on every row)" }
+  - { name: repo_gini,           dtype: float, nullable: true, description: "Gini of the cohort's repository base (identical on every row)" }
+  - { name: adoption_tier,       dtype: str,   nullable: true, description: "dominant | mainstream | established | niche" }
+  - { name: is_top_decile,       dtype: bool,  nullable: true }
+
+sources:
+  # One GitHub code-search call per language: `total_count` is the whole answer,
+  # so per_page=1 keeps the payload minimal. Search is metered separately from
+  # the core API (30/min authenticated, 10/min anonymous) — hence the pacing.
+  - type: multi_http_json
+    url: "https://api.github.com/search/repositories"
+    token_env: GITHUB_TOKEN
+    delay_seconds: 2.5
+    headers: { Accept: "application/vnd.github+json" }
+    params: { q: "language:{gh_language}", per_page: 1 }
+    carry: [language, gh_language]
+    fields: { repo_count: total_count }
+    items:
+      - { language: Python,      gh_language: Python }
+      - { language: JavaScript,  gh_language: JavaScript }
+      - { language: TypeScript,  gh_language: TypeScript }
+      - { language: Java,        gh_language: Java }
+      - { language: "C#",        gh_language: "C#" }
+      - { language: "C++",       gh_language: "C++" }
+      - { language: C,           gh_language: C }
+      - { language: Go,          gh_language: Go }
+      - { language: Rust,        gh_language: Rust }
+      - { language: PHP,         gh_language: PHP }
+      - { language: Ruby,        gh_language: Ruby }
+      - { language: Swift,       gh_language: Swift }
+      - { language: Kotlin,      gh_language: Kotlin }
+      - { language: Scala,       gh_language: Scala }
+      - { language: R,           gh_language: R }
+      - { language: Dart,        gh_language: Dart }
+      - { language: Elixir,      gh_language: Elixir }
+      - { language: Haskell,     gh_language: Haskell }
+      - { language: Perl,        gh_language: Perl }
+      - { language: Lua,         gh_language: Lua }
+      - { language: Shell,       gh_language: Shell }
+      - { language: Julia,       gh_language: Julia }
+      - { language: Zig,         gh_language: Zig }
+      - { language: Clojure,     gh_language: Clojure }
+
+  # Stack Overflow tag volume — the demand side of the same language.
+  - type: multi_http_json
+    url: "https://api.stackexchange.com/2.3/tags/{so_tag}/info"
+    params: { site: stackoverflow }
+    select: "$.items[*]"
+    carry: [language, so_tag]
+    delay_seconds: 0.3
+    fields: { so_questions: count }
+    items:
+      - { language: Python,      so_tag: python }
+      - { language: JavaScript,  so_tag: javascript }
+      - { language: TypeScript,  so_tag: typescript }
+      - { language: Java,        so_tag: java }
+      - { language: "C#",        so_tag: "c%23" }
+      - { language: "C++",       so_tag: "c%2b%2b" }
+      - { language: C,           so_tag: c }
+      - { language: Go,          so_tag: go }
+      - { language: Rust,        so_tag: rust }
+      - { language: PHP,         so_tag: php }
+      - { language: Ruby,        so_tag: ruby }
+      - { language: Swift,       so_tag: swift }
+      - { language: Kotlin,      so_tag: kotlin }
+      - { language: Scala,       so_tag: scala }
+      - { language: R,           so_tag: r }
+      - { language: Dart,        so_tag: dart }
+      - { language: Elixir,      so_tag: elixir }
+      - { language: Haskell,     so_tag: haskell }
+      - { language: Perl,        so_tag: perl }
+      - { language: Lua,         so_tag: lua }
+      - { language: Shell,       so_tag: bash }
+      - { language: Julia,       so_tag: julia }
+      - { language: Zig,         so_tag: zig }
+      - { language: Clojure,     so_tag: clojure }
+
+processing:
+  - normalize
+  - join:    { "on": [language] }
+  - sort:    { by: [language] }
+  - derive:  { column: questions_per_repo,      expr: "ratio(so_questions, repo_count)" }
+  - derive:  { column: repo_zscore,             expr: "zscore(repo_count)" }
+  - derive:  { column: question_zscore,         expr: "zscore(so_questions)" }
+  - derive:  { column: adoption_index,          expr: "minmax_normalize(repo_count)" }
+  - derive:  { column: repo_concentration_hhi,  expr: "hhi(repo_count)" }
+  - derive:  { column: repo_gini,               expr: "gini(repo_count)" }
+  - derive:  { column: repo_share_pct,          expr: "share_of_total(repo_count)" }
+  - derive:  { column: question_share_pct,      expr: "share_of_total(so_questions)" }
+  - score:
+      column: adoption_score
+      weights: { repo_count: 0.6, so_questions: 0.4 }
+      scale: 100
+  - classify:
+      column: adoption_tier
+      value: adoption_score
+      bins:
+        - { min: 60, label: dominant }
+        - { min: 25, label: mainstream }
+        - { min: 8,  label: established }
+        - { label: niche }
+      default: unknown
+  - flag:
+      column: is_top_decile
+      when: { column: adoption_index, gte: 0.9 }
+  - validate
+
+charts:
+  - type: bar
+    title: "Public repositories by primary language"
+    x: language
+    y: repo_count
+    sort: { by: repo_count, desc: true }
+    limit: 20
+  - type: bar
+    title: "Stack Overflow question volume by language"
+    x: language
+    y: so_questions
+    sort: { by: so_questions, desc: true }
+    limit: 20
+  - type: scatter
+    title: "Repository base vs. Q&A demand"
+    x: repo_count
+    y: so_questions
+  - type: bar
+    title: "Questions asked per repository (support burden)"
+    x: language
+    y: questions_per_repo
+    sort: { by: questions_per_repo, desc: true }
+    limit: 20

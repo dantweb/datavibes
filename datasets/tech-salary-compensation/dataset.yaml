@@ -1,0 +1,134 @@
+metadata:
+  slug: tech-salary-compensation
+  title: Tech Salary & Compensation — ICT Labour Cost, Premium and Purchasing Power
+  category: infrastructure
+  license: "Eurostat open data — free reuse with attribution (CC-BY-4.0 equivalent)"
+  update_frequency: quarterly
+  attribution: "Eurostat: lc_lci_lev (labour cost levels by NACE), tec00114 (GDP per capita in PPS)"
+
+schema:
+  - { name: geo_code,                  dtype: str }
+  - { name: country,                   dtype: str,   nullable: true }
+  - { name: year,                      dtype: int }
+  - { name: ict_hourly_cost_eur,       dtype: float, nullable: true, unit: "EUR/hour", description: "total hourly labour cost, NACE J (information & communication)" }
+  - { name: ict_hourly_wages_eur,      dtype: float, nullable: true, unit: "EUR/hour", description: "wages and salaries component only, NACE J" }
+  - { name: all_sector_hourly_cost_eur, dtype: float, nullable: true, unit: "EUR/hour", description: "total hourly labour cost, business economy excluding public administration (NACE B-S_X_O)" }
+  - { name: gdp_per_capita_pps_index,  dtype: float, nullable: true, description: "GDP per capita in PPS, EU27=100 — the purchasing-power anchor" }
+  - { name: ict_premium_pct,           dtype: float, nullable: true, unit: "%", description: "ICT cost as a percent of the all-sector cost — 130 = a 30% tech premium" }
+  - { name: wage_cost_pct,             dtype: float, nullable: true, unit: "%", description: "wages and salaries as a share of total ICT labour cost — the remainder is employer social contributions" }
+  - { name: ict_cost_cagr_3y,          dtype: float, nullable: true, unit: "%", description: "3-year compound growth of ICT hourly labour cost" }
+  - { name: cost_vs_purchasing_power,  dtype: float, nullable: true, description: "ICT hourly cost ÷ GDP-per-capita index — high = expensive relative to local economic strength" }
+  - { name: cost_zscore,               dtype: float, nullable: true, description: "standardised ICT hourly cost across the cohort" }
+  - { name: cost_index,                dtype: float, nullable: true, description: "0-1 min-max ICT hourly cost within the cohort" }
+  - { name: value_score,               dtype: float, nullable: true, description: "0-100 hiring-value composite: cheap ICT labour in a strong economy scores high" }
+  - { name: cost_tier,                 dtype: str,   nullable: true, description: "premium | high | mid | low-cost" }
+  - { name: is_above_eu_median_cost,   dtype: bool,  nullable: true }
+
+sources:
+  - type: jsonstat
+    url: https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/lc_lci_lev
+    value_column: ict_hourly_cost_eur
+    dimensions:    { geo: geo_code, time: year }
+    label_columns: { geo: country }
+    params:
+      format: JSON
+      lang: EN
+      freq: A
+      nace_r2: J
+      unit: EUR
+      lcstruct: D1_D4_MD5
+      sinceTimePeriod: "2020"
+
+  - type: jsonstat
+    url: https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/lc_lci_lev
+    value_column: ict_hourly_wages_eur
+    dimensions: { geo: geo_code, time: year }
+    params:
+      format: JSON
+      lang: EN
+      freq: A
+      nace_r2: J
+      unit: EUR
+      lcstruct: D11
+      sinceTimePeriod: "2020"
+
+  - type: jsonstat
+    url: https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/lc_lci_lev
+    value_column: all_sector_hourly_cost_eur
+    dimensions: { geo: geo_code, time: year }
+    params:
+      format: JSON
+      lang: EN
+      freq: A
+      nace_r2: B-S_X_O
+      unit: EUR
+      lcstruct: D1_D4_MD5
+      sinceTimePeriod: "2020"
+
+  - type: jsonstat
+    url: https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/tec00114
+    value_column: gdp_per_capita_pps_index
+    dimensions: { geo: geo_code, time: year }
+    params:
+      format: JSON
+      lang: EN
+      freq: A
+      sinceTimePeriod: "2020"
+
+processing:
+  - normalize
+  - join:   { "on": [geo_code, year] }
+  # lc_lci_lev publishes annual levels from 2020 onwards; every remaining row
+  # is a real ICT observation once the GDP-only geographies are dropped.
+  - filter: { when: { column: ict_hourly_cost_eur, not_null: true } }
+  - sort:   { by: [geo_code, year] }
+  - derive: { column: ict_premium_pct,          expr: "share(ict_hourly_cost_eur, all_sector_hourly_cost_eur)" }
+  - derive: { column: wage_cost_pct,            expr: "share(ict_hourly_wages_eur, ict_hourly_cost_eur)" }
+  - derive: { column: ict_cost_cagr_3y,         expr: "cagr(ict_hourly_cost_eur, years=3)", by: [geo_code] }
+  - derive: { column: cost_vs_purchasing_power, expr: "ratio(ict_hourly_cost_eur, gdp_per_capita_pps_index)" }
+  - derive: { column: cost_zscore,              expr: "zscore(ict_hourly_cost_eur)" }
+  - derive: { column: cost_index,               expr: "minmax_normalize(ict_hourly_cost_eur)" }
+  - score:
+      column: value_score
+      # Cheap ICT labour inside a high-purchasing-power economy = best hiring value.
+      weights: { cost_index: 0.6, gdp_per_capita_pps_index: 0.4 }
+      scale: 100
+  - classify:
+      column: cost_tier
+      value: ict_hourly_cost_eur
+      bins:
+        - { min: 45, label: premium }
+        - { min: 30, label: high }
+        - { min: 15, label: mid }
+        - { label: low-cost }
+      default: unknown
+  - flag:
+      column: is_above_eu_median_cost
+      when: { column: cost_index, gt: 0.5 }
+  - validate
+
+charts:
+  - type: bar
+    title: "ICT hourly labour cost by country (2024)"
+    x: country
+    y: ict_hourly_cost_eur
+    filter: { year: 2024 }
+    sort:   { by: ict_hourly_cost_eur, desc: true }
+    limit:  20
+  - type: bar
+    title: "Tech premium over the wider economy (2024)"
+    x: country
+    y: ict_premium_pct
+    filter: { year: 2024 }
+    sort:   { by: ict_premium_pct, desc: true }
+    limit:  20
+  - type: scatter
+    title: "Labour cost vs. purchasing power (2024)"
+    x: gdp_per_capita_pps_index
+    y: ict_hourly_cost_eur
+    filter: { year: 2024 }
+  - type: line
+    title: "ICT hourly labour cost over time"
+    x: year
+    y: ict_hourly_cost_eur
+    series: country

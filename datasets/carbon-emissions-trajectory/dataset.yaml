@@ -1,0 +1,123 @@
+metadata:
+  slug: carbon-emissions-trajectory
+  title: Carbon Emissions & Reduction Trajectory — History, Intensity and 5-Year Projection
+  category: environment
+  license: "CC-BY-4.0 (Our World in Data / Global Carbon Budget); World Bank Open Data CC-BY-4.0"
+  update_frequency: monthly
+  attribution: "Our World in Data — Global Carbon Budget (annual CO₂ emissions); World Bank (population, GDP)"
+
+schema:
+  - { name: country,               dtype: str,   nullable: true }
+  - { name: iso3,                  dtype: str }
+  - { name: year,                  dtype: int }
+  - { name: co2_tonnes,            dtype: float, nullable: true, unit: "tonnes CO₂", description: "annual territorial CO₂ emissions" }
+  - { name: population,            dtype: float, nullable: true, unit: "persons" }
+  - { name: gdp_usd,               dtype: float, nullable: true, unit: "current USD" }
+  - { name: co2_per_capita,        dtype: float, nullable: true, unit: "tonnes/person" }
+  - { name: co2_per_usd_gdp,       dtype: float, nullable: true, unit: "kg CO₂/USD", description: "carbon intensity of output" }
+  - { name: co2_yoy_pct,           dtype: float, nullable: true, unit: "%", description: "year-over-year change in emissions" }
+  - { name: co2_cagr_10y,          dtype: float, nullable: true, unit: "%", description: "10-year compound growth of emissions" }
+  - { name: co2_5y_avg,            dtype: float, nullable: true, unit: "tonnes CO₂", description: "trailing 5-year mean" }
+  - { name: co2_projection_5y,     dtype: float, nullable: true, unit: "tonnes CO₂", description: "linear trend over the last 10 years, projected 5 years ahead" }
+  - { name: projected_change_pct,  dtype: float, nullable: true, unit: "%", description: "projected 5-year change against the current level" }
+  - { name: global_share_pct,      dtype: float, nullable: true, unit: "%", description: "country share of that year's cohort emissions" }
+  - { name: emitter_concentration_hhi, dtype: float, nullable: true, description: "HHI of world emissions that year — how concentrated the emitter base is" }
+  - { name: trajectory_class,      dtype: str,   nullable: true, description: "steep-decline | declining | plateau | rising | steep-rise" }
+  - { name: emitter_tier,          dtype: str,   nullable: true, description: "mega | major | mid | minor emitter" }
+  - { name: is_on_reduction_path,  dtype: bool,  nullable: true, description: "10-year compound emissions growth below zero" }
+  - { name: is_top_emitter,        dtype: bool,  nullable: true, description: "holds more than 1% of world emissions that year" }
+
+sources:
+  # OWID publishes each grapher as a plain CSV with human-readable headers, so
+  # `rename` maps them onto schema columns before `normalize` drops the rest.
+  - type: http_csv
+    url: https://ourworldindata.org/grapher/annual-co2-emissions-per-country.csv
+    params: { csvType: full }
+
+  - type: worldbank-indicator
+    date_range: "1960:2024"
+    indicators:
+      SP.POP.TOTL: population
+      NY.GDP.MKTP.CD: gdp_usd
+
+processing:
+  - rename:
+      columns:
+        Entity: country
+        Code: iso3
+        Year: year
+        "Annual CO₂ emissions": co2_tonnes
+  # The OWID file carries aggregates (World, continents, income groups) that ship
+  # an EMPTY iso3; drop them before normalize, which refuses a blank key column.
+  - filter: { all: [{ column: iso3, not_null: true }, { column: iso3, ne: "" }] }
+  - normalize
+  - join:   { "on": [iso3, year] }
+  - filter: { when: { column: co2_tonnes, not_null: true } }
+  - filter: { when: { column: population, not_null: true } }
+  - sort:   { by: [iso3, year] }
+  - derive: { column: co2_per_capita,     expr: "ratio(co2_tonnes, population)" }
+  - derive: { column: co2_per_usd_gdp,    expr: "ratio(co2_tonnes, gdp_usd)" }
+  - derive: { column: co2_yoy_pct,        expr: "yoy(co2_tonnes)",                by: [iso3] }
+  - derive: { column: co2_cagr_10y,       expr: "cagr(co2_tonnes, years=10)",     by: [iso3] }
+  - derive: { column: co2_5y_avg,         expr: "rolling_avg(co2_tonnes, window=5)", by: [iso3] }
+  - derive: { column: global_share_pct,   expr: "share_of_total(co2_tonnes)",     by: [year] }
+  - derive: { column: emitter_concentration_hhi, expr: "hhi(co2_tonnes)",         by: [year] }
+  - forecast:
+      column: co2_projection_5y
+      value: co2_tonnes
+      by: [iso3]
+      horizon: 5
+      window: 10
+  - derive: { column: projected_change_pct, expr: "share(co2_projection_5y, co2_tonnes)" }
+  - classify:
+      column: trajectory_class
+      value: co2_cagr_10y
+      bins:
+        - { max: -2.0, label: steep-decline }
+        - { max: -0.2, label: declining }
+        - { max: 0.5,  label: plateau }
+        - { max: 3.0,  label: rising }
+        - { label: steep-rise }
+      default: unknown
+  - classify:
+      column: emitter_tier
+      value: global_share_pct
+      bins:
+        - { min: 5.0,  label: mega }
+        - { min: 1.0,  label: major }
+        - { min: 0.1,  label: mid }
+        - { label: minor }
+      default: unknown
+  - flag:
+      column: is_on_reduction_path
+      when: { column: co2_cagr_10y, lt: 0 }
+  - flag:
+      column: is_top_emitter
+      when: { column: global_share_pct, gt: 1.0 }
+  - validate
+
+charts:
+  - type: bar
+    title: "Largest emitters (2023)"
+    x: country
+    y: co2_tonnes
+    filter: { year: 2023 }
+    sort:   { by: co2_tonnes, desc: true }
+    limit:  20
+  - type: bar
+    title: "Emissions per capita (2023)"
+    x: country
+    y: co2_per_capita
+    filter: { year: 2023 }
+    sort:   { by: co2_per_capita, desc: true }
+    limit:  20
+  - type: scatter
+    title: "Current emissions vs. five-year projection (2023)"
+    x: co2_tonnes
+    y: co2_projection_5y
+    filter: { year: 2023 }
+  - type: line
+    title: "Concentration of world emissions over time (HHI)"
+    x: year
+    y: emitter_concentration_hhi
+    agg: mean

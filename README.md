@@ -210,17 +210,28 @@ for the full scaffolding architecture.
 datavibes ships a **finite, shared library of built-in primitives** so that a whole
 catalog of datasets is authorable as config, not code:
 
-- **Source adapters** — `http_json`, `http_csv`, `paged_http_json` (token + paging),
-  `jsonstat` (Eurostat / e-Stat), `sdmx` (World Bank). A per-dataset `sources.py` is the
-  exception (~30 lines), only when a source's auth/paging/shape is unique.
-- **Processing steps** — `normalize`, `dedupe`, `derive`, `aggregate`, `validate`, `join`,
-  `score`, `flag`, `classify`, `forecast`.
+- **Source adapters** — `static`, `http_json`, `http_csv`, `paged_http_json` (page /
+  offset / cursor paging + an env-var bearer token), `multi_http_json` (fan out over a
+  declared item list, one request each), `columnar_http_json` (transpose an API's
+  parallel arrays into rows), `jsonstat` (Eurostat / e-Stat cubes) and
+  `worldbank-indicator`. A per-dataset `sources.py` is the exception (~30 lines), only
+  when a source's auth/paging/shape is unique.
+- **Processing steps** — `normalize`, `rename`, `dedupe`, `filter`, `sort`, `join`,
+  `derive`, `aggregate`, `age_days`, `score`, `flag`, `classify`, `forecast`, `validate`.
 - **Derive helpers** — `yoy`, `pct_change`, `cagr`, `rolling_avg`, `anomaly`, `corr` /
-  `rolling_corr`, `gini`, `hhi`, `minmax_normalize`, `zscore`, `share` / `penetration`,
-  `volatility`, `seasonal_index`.
+  `rolling_corr`, `ratio`, `add`, `subtract`, `share` / `penetration`, `share_of_total`,
+  `gini`, `hhi`, `minmax_normalize`, `zscore`, `volatility`, `seasonal_index`,
+  `linear_forecast`.
 
 Every "statistical preprocessing" requirement in the product catalog (aggregates,
 anomalies, rolling averages, correlations, growth rates, inequality metrics, geographic
 joins, scoring, forecasting, concentration, volatility, …) maps onto one of these named
 primitives. A row-by-row proof that all **30** catalog datasets are covered is in
-[`docs/dev_log_day/20260704/reports/r01-dataset-catalog-coverage.md`](docs/dev_log_day/20260704/reports/r01-dataset-catalog-coverage.md).
+[`docs/dev_log_day/20260704/reports/r01-dataset-catalog-coverage.md`](docs/dev_log_day/20260704/reports/r01-dataset-catalog-coverage.md);
+the primitives that report called for were completed in
+[`docs/dev_log_day/20260811/sprints/s12-catalog-primitives-and-datasets.md`](docs/dev_log_day/20260811/sprints/s12-catalog-primitives-and-datasets.md).
+
+> **Not built:** an `sdmx` adapter. Every SDMX source the catalog needs (Eurostat,
+> World Bank) is reachable through `jsonstat` or `worldbank-indicator`, and the one
+> SDMX-JSON endpoint worth adding it for (the ECB Data Portal) blocks non-browser
+> clients — so there is nothing to test it against yet.

@@ -1,0 +1,153 @@
+metadata:
+  slug: air-quality-pollution
+  title: Air Quality & Pollution — Hourly Pollutant Load and Health Risk by European City
+  category: environment
+  license: "CC-BY-4.0 (Open-Meteo Air Quality API; CAMS European air quality reanalysis)"
+  update_frequency: hourly
+  attribution: "Open-Meteo Air Quality API (air-quality-api.open-meteo.com), based on CAMS"
+
+schema:
+  - { name: city,                 dtype: str }
+  - { name: country,              dtype: str,   nullable: true }
+  - { name: latitude,             dtype: float, nullable: true }
+  - { name: longitude,            dtype: float, nullable: true }
+  - { name: observed_at,          dtype: str,   description: "local hour, ISO-8601" }
+  - { name: pm10,                 dtype: float, nullable: true, unit: "µg/m³" }
+  - { name: pm2_5,                dtype: float, nullable: true, unit: "µg/m³" }
+  - { name: nitrogen_dioxide,     dtype: float, nullable: true, unit: "µg/m³" }
+  - { name: ozone,                dtype: float, nullable: true, unit: "µg/m³" }
+  - { name: sulphur_dioxide,      dtype: float, nullable: true, unit: "µg/m³" }
+  - { name: carbon_monoxide,      dtype: float, nullable: true, unit: "µg/m³" }
+  - { name: european_aqi,         dtype: float, nullable: true, unit: "EAQI", description: "European Air Quality Index" }
+  - { name: pm2_5_24h_avg,        dtype: float, nullable: true, unit: "µg/m³", description: "trailing 24-hour mean — the basis of the WHO daily guideline" }
+  - { name: pm10_24h_avg,         dtype: float, nullable: true, unit: "µg/m³" }
+  - { name: pm2_5_anomaly,        dtype: float, nullable: true, unit: "µg/m³", description: "deviation from the city's period mean" }
+  - { name: pm2_5_zscore,         dtype: float, nullable: true, description: "standardised within the city's own series" }
+  - { name: diurnal_index,        dtype: float, nullable: true, description: "hour-of-day seasonal index — 1.20 means that hour runs 20% above the city average" }
+  - { name: pm_ratio,             dtype: float, nullable: true, description: "PM2.5 ÷ PM10 — high = combustion-dominated, low = dust/road-wear" }
+  - { name: traffic_proxy,        dtype: float, nullable: true, description: "NO₂ + PM2.5, the road-traffic signature" }
+  - { name: health_risk_score,    dtype: float, nullable: true, description: "0-100 composite of the WHO-weighted pollutant load" }
+  - { name: aqi_band,             dtype: str,   nullable: true, description: "good | fair | moderate | poor | very-poor" }
+  - { name: exceeds_who_pm25_daily, dtype: bool, nullable: true, description: "24-hour PM2.5 mean above the 15 µg/m³ WHO 2021 guideline" }
+  - { name: exceeds_who_pm10_daily, dtype: bool, nullable: true, description: "24-hour PM10 mean above the 45 µg/m³ WHO 2021 guideline" }
+
+sources:
+  # Open-Meteo returns one `hourly` block of parallel arrays per location, so a
+  # single columnar fetch per city yields its whole hourly series.
+  - type: columnar_http_json
+    url: https://air-quality-api.open-meteo.com/v1/air-quality
+    select: "$.hourly"
+    index: time
+    index_column: observed_at
+    carry: [city, country, latitude, longitude]
+    delay_seconds: 0.2
+    params:
+      latitude: "{latitude}"
+      longitude: "{longitude}"
+      hourly: "pm10,pm2_5,nitrogen_dioxide,ozone,sulphur_dioxide,carbon_monoxide,european_aqi"
+      past_days: 7
+      forecast_days: 1
+    fields:
+      pm10: pm10
+      pm2_5: pm2_5
+      nitrogen_dioxide: nitrogen_dioxide
+      ozone: ozone
+      sulphur_dioxide: sulphur_dioxide
+      carbon_monoxide: carbon_monoxide
+      european_aqi: european_aqi
+    items:
+      - { city: Berlin,     country: DE, latitude: 52.52, longitude: 13.41 }
+      - { city: Munich,     country: DE, latitude: 48.14, longitude: 11.58 }
+      - { city: Hamburg,    country: DE, latitude: 53.55, longitude: 9.99 }
+      - { city: Paris,      country: FR, latitude: 48.86, longitude: 2.35 }
+      - { city: Lyon,       country: FR, latitude: 45.76, longitude: 4.84 }
+      - { city: Madrid,     country: ES, latitude: 40.42, longitude: -3.70 }
+      - { city: Barcelona,  country: ES, latitude: 41.39, longitude: 2.17 }
+      - { city: Rome,       country: IT, latitude: 41.90, longitude: 12.50 }
+      - { city: Milan,      country: IT, latitude: 45.46, longitude: 9.19 }
+      - { city: Naples,     country: IT, latitude: 40.85, longitude: 14.27 }
+      - { city: Warsaw,     country: PL, latitude: 52.23, longitude: 21.01 }
+      - { city: Krakow,     country: PL, latitude: 50.06, longitude: 19.94 }
+      - { city: Vienna,     country: AT, latitude: 48.21, longitude: 16.37 }
+      - { city: Amsterdam,  country: NL, latitude: 52.37, longitude: 4.90 }
+      - { city: Brussels,   country: BE, latitude: 50.85, longitude: 4.35 }
+      - { city: Prague,     country: CZ, latitude: 50.08, longitude: 14.44 }
+      - { city: Lisbon,     country: PT, latitude: 38.72, longitude: -9.14 }
+      - { city: Stockholm,  country: SE, latitude: 59.33, longitude: 18.07 }
+      - { city: Copenhagen, country: DK, latitude: 55.68, longitude: 12.57 }
+      - { city: Oslo,       country: "NO", latitude: 59.91, longitude: 10.75 }
+      - { city: Helsinki,   country: FI, latitude: 60.17, longitude: 24.94 }
+      - { city: Dublin,     country: IE, latitude: 53.35, longitude: -6.26 }
+      - { city: Athens,     country: GR, latitude: 37.98, longitude: 23.73 }
+      - { city: Budapest,   country: HU, latitude: 47.50, longitude: 19.04 }
+      - { city: Bucharest,  country: RO, latitude: 44.43, longitude: 26.10 }
+      - { city: Sofia,      country: BG, latitude: 42.70, longitude: 23.32 }
+      - { city: Zagreb,     country: HR, latitude: 45.81, longitude: 15.98 }
+      - { city: Belgrade,   country: RS, latitude: 44.79, longitude: 20.45 }
+      - { city: Istanbul,   country: TR, latitude: 41.01, longitude: 28.98 }
+      - { city: London,     country: GB, latitude: 51.51, longitude: -0.13 }
+
+processing:
+  - normalize
+  - dedupe: { keys: [city, observed_at] }
+  - filter: { when: { column: pm2_5, not_null: true } }
+  - sort:   { by: [city, observed_at] }
+  - derive: { column: pm2_5_24h_avg,  expr: "rolling_avg(pm2_5, window=24)",     by: [city] }
+  - derive: { column: pm10_24h_avg,   expr: "rolling_avg(pm10, window=24)",      by: [city] }
+  - derive: { column: pm2_5_anomaly,  expr: "anomaly(pm2_5)",                    by: [city] }
+  - derive: { column: pm2_5_zscore,   expr: "zscore(pm2_5)",                     by: [city] }
+  - derive: { column: diurnal_index,  expr: "seasonal_index(pm2_5, period=24)",  by: [city] }
+  - derive: { column: pm_ratio,       expr: "ratio(pm2_5, pm10)" }
+  - derive: { column: traffic_proxy,  expr: "add(nitrogen_dioxide, pm2_5)" }
+  - score:
+      column: health_risk_score
+      # Weighted towards the pollutants with the strongest mortality evidence.
+      weights:
+        pm2_5: 0.35
+        pm10: 0.20
+        nitrogen_dioxide: 0.20
+        ozone: 0.15
+        sulphur_dioxide: 0.10
+      scale: 100
+  - classify:
+      column: aqi_band
+      value: european_aqi
+      bins:
+        - { max: 20,  label: good }
+        - { max: 40,  label: fair }
+        - { max: 60,  label: moderate }
+        - { max: 80,  label: poor }
+        - { label: very-poor }
+      default: unknown
+  - flag:
+      column: exceeds_who_pm25_daily
+      when: { column: pm2_5_24h_avg, gt: 15 }
+  - flag:
+      column: exceeds_who_pm10_daily
+      when: { column: pm10_24h_avg, gt: 45 }
+  - validate
+
+charts:
+  - type: bar
+    title: "Mean PM2.5 by city over the period"
+    x: city
+    y: pm2_5
+    agg: mean
+    sort: { by: pm2_5, desc: true }
+    limit: 25
+  - type: bar
+    title: "Peak European AQI by city"
+    x: city
+    y: european_aqi
+    agg: max
+    sort: { by: european_aqi, desc: true }
+    limit: 25
+  - type: line
+    title: "Hourly PM2.5 trace by city"
+    x: observed_at
+    y: pm2_5
+    series: city
+  - type: scatter
+    title: "Traffic signature vs. composite health risk"
+    x: traffic_proxy
+    y: health_risk_score

@@ -1,0 +1,130 @@
+metadata:
+  slug: eu-tech-job-market
+  title: EU Tech Job Market — ICT Vacancy Pressure & Specialist Supply by Country
+  category: infrastructure
+  license: "Eurostat open data — free reuse with attribution (CC-BY-4.0 equivalent)"
+  update_frequency: monthly
+  attribution: "Eurostat: jvs_a_rate_r2 (job vacancy rate by NACE), isoc_sks_itspt (employed ICT specialists)"
+
+schema:
+  - { name: geo_code,                 dtype: str,   description: "Eurostat geo code (country or aggregate)" }
+  - { name: country,                  dtype: str,   nullable: true }
+  - { name: year,                     dtype: int }
+  - { name: ict_vacancy_rate,         dtype: float, nullable: true, unit: "%", description: "job vacancy rate, NACE J (information & communication)" }
+  - { name: all_sector_vacancy_rate,  dtype: float, nullable: true, unit: "%", description: "job vacancy rate, whole business economy (NACE B-S)" }
+  - { name: ict_specialists_pct,      dtype: float, nullable: true, unit: "%", description: "employed ICT specialists as a share of total employment" }
+  - { name: ict_specialists_thousands, dtype: float, nullable: true, unit: "thousand persons" }
+  - { name: vacancy_premium,          dtype: float, nullable: true, description: "ICT vacancy rate ÷ all-sector vacancy rate — >1 means tech hiring is tighter than the wider economy" }
+  - { name: specialist_growth_cagr_3y, dtype: float, nullable: true, unit: "%", description: "3-year CAGR of the ICT specialist headcount" }
+  - { name: specialist_share_of_eu_pct, dtype: float, nullable: true, unit: "%", description: "country share of the cohort's ICT specialist headcount that year" }
+  - { name: talent_pool_zscore,       dtype: float, nullable: true, description: "standardised specialist density across the cohort" }
+  - { name: market_tightness_score,   dtype: float, nullable: true, description: "0-100 composite of vacancy pressure and specialist scarcity" }
+  - { name: tightness_class,          dtype: str,   nullable: true, description: "overheated | tight | balanced | slack" }
+  - { name: is_tighter_than_economy,  dtype: bool,  nullable: true }
+
+sources:
+  # Eurostat serves every table as a JSON-stat cube; the dimensions we pin here
+  # (freq/nace/sizeclas/unit) collapse to singletons server-side, so only geo and
+  # time survive into the rows.
+  - type: jsonstat
+    url: https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/jvs_a_rate_r2
+    value_column: ict_vacancy_rate
+    dimensions:    { geo: geo_code, time: year }
+    label_columns: { geo: country }
+    params:
+      format: JSON
+      lang: EN
+      freq: A
+      nace_r2: J
+      sizeclas: TOTAL
+      unit: AVG_A
+      sinceTimePeriod: "2015"
+
+  - type: jsonstat
+    url: https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/jvs_a_rate_r2
+    value_column: all_sector_vacancy_rate
+    dimensions:    { geo: geo_code, time: year }
+    params:
+      format: JSON
+      lang: EN
+      freq: A
+      nace_r2: B-S
+      sizeclas: TOTAL
+      unit: AVG_A
+      sinceTimePeriod: "2015"
+
+  - type: jsonstat
+    url: https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/isoc_sks_itspt
+    value_column: ict_specialists_pct
+    dimensions:    { geo: geo_code, time: year }
+    label_columns: { geo: country }
+    params:
+      format: JSON
+      lang: EN
+      freq: A
+      unit: PC_EMP
+      sinceTimePeriod: "2015"
+
+  - type: jsonstat
+    url: https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/isoc_sks_itspt
+    value_column: ict_specialists_thousands
+    dimensions: { geo: geo_code, time: year }
+    params:
+      format: JSON
+      lang: EN
+      freq: A
+      unit: THS_PER
+      sinceTimePeriod: "2015"
+
+processing:
+  - normalize
+  - join:   { "on": [geo_code, year] }
+  - sort:   { by: [geo_code, year] }
+  - derive: { column: vacancy_premium,           expr: "ratio(ict_vacancy_rate, all_sector_vacancy_rate)" }
+  - derive: { column: specialist_growth_cagr_3y, expr: "cagr(ict_specialists_thousands, years=3)", by: [geo_code] }
+  - derive: { column: specialist_share_of_eu_pct, expr: "share_of_total(ict_specialists_thousands)", by: [year] }
+  - derive: { column: talent_pool_zscore,        expr: "zscore(ict_specialists_pct)" }
+  - score:
+      column: market_tightness_score
+      # High vacancy pressure with a thin specialist base = the tightest market.
+      weights: { ict_vacancy_rate: 0.5, vacancy_premium: 0.3, ict_specialists_pct: 0.2 }
+      scale: 100
+  - classify:
+      column: tightness_class
+      value: ict_vacancy_rate
+      bins:
+        - { min: 4.0, label: overheated }
+        - { min: 2.5, label: tight }
+        - { min: 1.2, label: balanced }
+        - { label: slack }
+      default: unknown
+  - flag:
+      column: is_tighter_than_economy
+      when: { column: vacancy_premium, gt: 1.0 }
+  - validate
+
+charts:
+  - type: bar
+    title: "ICT job vacancy rate by country (2024)"
+    x: country
+    y: ict_vacancy_rate
+    filter: { year: 2024 }
+    sort:   { by: ict_vacancy_rate, desc: true }
+    limit:  20
+  - type: bar
+    title: "ICT specialists as a share of employment (2024)"
+    x: country
+    y: ict_specialists_pct
+    filter: { year: 2024 }
+    sort:   { by: ict_specialists_pct, desc: true }
+    limit:  20
+  - type: scatter
+    title: "Vacancy pressure vs. specialist density (2024)"
+    x: ict_specialists_pct
+    y: ict_vacancy_rate
+    filter: { year: 2024 }
+  - type: line
+    title: "ICT specialist headcount over time"
+    x: year
+    y: ict_specialists_thousands
+    series: country

@@ -36,8 +36,9 @@ class AnthropicLlmClient:
 
     def complete(self, system: str, prompt: str) -> str:
         client = self._ensure_client()
-        # Opus 4.8: adaptive thinking is opt-in and sampling params are removed;
-        # a single non-streaming call suffices for a few-thousand-token report.
+        # Opus 5: thinking is on by default and sampling params are removed, so
+        # `max_tokens` has to cover thinking *and* the prose. A single
+        # non-streaming call suffices for a report of this size.
         response = client.messages.create(
             model=self.config.model,
             max_tokens=self.config.max_tokens,

@@ -1,15 +1,18 @@
-"""Bespoke ``worldbank-indicator`` source for the Energy → Renewable Share dataset.
+"""``worldbank-indicator`` source — the World Bank Indicators API, keyless.
 
-The World Bank Indicators API is keyless but returns a two-element envelope
-(``[metadata, [records]]``) with a nested ``country`` object and page/pages
-paging — a shape no generic adapter covers. This ~1-screen :class:`Source` maps
-each indicator to one schema column and emits flat ``{country, iso3, year,
-<column>}`` rows; the ``join`` step later merges the per-indicator rows by
-``(iso3, year)``. No secret is required.
+The API returns a two-element envelope (``[metadata, [records]]``) with a nested
+``country`` object and page/pages paging — a shape no generic adapter covers.
+This :class:`Source` maps each indicator to one schema column and emits flat
+``{country, iso3, year, <column>}`` rows; a ``join`` step later merges the
+per-indicator rows by ``(iso3, year)``. No secret is required.
+
+Promoted out of ``datasets/energy-renewable-share/sources.py`` in S12 once a
+third dataset needed it — one adapter, many datasets (DRY).
 """
 
 from __future__ import annotations
 
+import time
 from typing import Iterable
 
 from datavibes.context import FetchContext
@@ -30,15 +33,21 @@ class WorldBankIndicatorSource(Source):
         indicators: dict[str, str] | None = None,
         date_range: str = "2000:2024",
         per_page: int = 20000,
+        delay_seconds: float = 1.0,
     ):
         # ``indicators`` maps a World Bank indicator id → the schema column it feeds.
         self.indicators = indicators or {}
         self.date_range = date_range
         self.per_page = per_page
+        # The API throttles a burst of indicator calls from one IP; pacing the
+        # loop is the difference between a full snapshot and an empty one.
+        self.delay_seconds = float(delay_seconds)
 
     def fetch(self, ctx: FetchContext) -> Iterable[dict]:
         records: list[dict] = []
-        for indicator, column in self.indicators.items():
+        for position, (indicator, column) in enumerate(self.indicators.items()):
+            if position and self.delay_seconds:
+                time.sleep(self.delay_seconds)
             records.extend(self._fetch_indicator(ctx, indicator, column))
         return records
 
@@ -48,7 +57,9 @@ class WorldBankIndicatorSource(Source):
         url = WORLD_BANK_URL.format(indicator=indicator)
         collected: list[dict] = []
         page = 1
-        for _ in range(MAX_PAGES):
+        for attempt in range(MAX_PAGES):
+            if attempt and self.delay_seconds:
+                time.sleep(self.delay_seconds)
             params = {
                 "format": "json",
                 "per_page": self.per_page,

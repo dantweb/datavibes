@@ -20,8 +20,8 @@ paths:
 
 http:
   timeout_seconds: 30
-  max_retries: 3
-  backoff_seconds: 0.5
+  max_retries: 5           # 429/5xx are retried; public APIs meter hard
+  backoff_seconds: 2.0     # linear: 2s, 4s, 6s, 8s
   user_agent: "${DATAVIBES_USER_AGENT:-datavibes/0.1 (+https://vbwd.cc)}"
 
 defaults:
@@ -34,13 +34,16 @@ defaults:
 # `enabled: true` makes `datavibes run` generate reports automatically; the
 # `datavibes report <slug>` command always generates regardless of this flag.
 llm:
-  enabled: false
+  # true = `datavibes run` also authors the report bundle for every dataset
+  enabled: true
   # provider: anthropic (Claude) | openai (any OpenAI-compatible Chat Completions API)
   provider: anthropic
-  model: claude-opus-4-8
+  model: claude-opus-5
   base_url: ""                # only for provider: openai — the endpoint URL
-  max_tokens: 4000
-  effort: medium              # low | medium | high  (Anthropic only)
+  # Opus 5 thinks by default, and max_tokens caps thinking + response text
+  # together — a report-sized budget must leave room for both.
+  max_tokens: 16000
+  effort: medium              # low | medium | high | xhigh | max  (Anthropic only)
   api_key_env: ANTHROPIC_API_KEY
   #
   # --- To use DeepSeek (OpenAI-compatible) instead of Claude, set: ---

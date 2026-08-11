@@ -1,0 +1,226 @@
+metadata:
+  slug: oss-project-health
+  title: OSS Project Health & Risk — Maintenance, Adoption and Bus-Factor Signals
+  category: infrastructure
+  license: "Public repository + package-registry metadata (per-project licences vary)"
+  update_frequency: daily
+  attribution: "GitHub REST API; npm registry download API; pypistats.org"
+
+schema:
+  - { name: project,             dtype: str }
+  - { name: repo,                dtype: str,   nullable: true, description: "owner/name on GitHub" }
+  - { name: ecosystem,           dtype: str,   nullable: true, description: "npm | pypi | infra" }
+  - { name: package,             dtype: str,   nullable: true, description: "registry package name, where one exists" }
+  - { name: primary_language,    dtype: str,   nullable: true }
+  - { name: spdx_license,        dtype: str,   nullable: true }
+  - { name: stars,               dtype: int,   nullable: true }
+  - { name: forks,               dtype: int,   nullable: true }
+  - { name: watchers,            dtype: int,   nullable: true, description: "subscribers actively watching the repo" }
+  - { name: open_issues,         dtype: int,   nullable: true, description: "open issues + pull requests" }
+  - { name: archived,            dtype: bool,  nullable: true }
+  - { name: created_at,          dtype: str,   nullable: true }
+  - { name: pushed_at,           dtype: str,   nullable: true }
+  - { name: days_since_push,     dtype: int,   nullable: true, unit: "days" }
+  - { name: days_since_creation, dtype: int,   nullable: true, unit: "days" }
+  - { name: downloads_last_month, dtype: int,  nullable: true, unit: "downloads/30d" }
+  - { name: issue_burden,        dtype: float, nullable: true, description: "open issues per 1k stars — unattended backlog pressure" }
+  - { name: fork_ratio,          dtype: float, nullable: true, description: "forks ÷ stars — proxy for contributor intent vs. passive interest" }
+  - { name: stars_per_day,       dtype: float, nullable: true, description: "lifetime star accrual rate" }
+  - { name: attention_index,     dtype: float, nullable: true, description: "0-1 min-max star rank within the cohort" }
+  - { name: maintenance_index,   dtype: float, nullable: true, description: "0-1, 1 = most recently pushed in the cohort" }
+  - { name: health_score,        dtype: float, nullable: true, description: "0-100 composite of adoption, contribution and maintenance recency" }
+  - { name: risk_class,          dtype: str,   nullable: true, description: "healthy | watch | at-risk | critical" }
+  - { name: is_stale,            dtype: bool,  nullable: true, description: "no push in over 180 days" }
+  - { name: is_backlogged,       dtype: bool,  nullable: true, description: "issue backlog above 20 open issues per 1k stars" }
+
+sources:
+  # ---- repository health: one GitHub call per project -----------------------
+  # GITHUB_TOKEN is optional but strongly advised: unauthenticated callers get
+  # 60 requests/hour, which this source alone would exhaust.
+  - type: multi_http_json
+    url: "https://api.github.com/repos/{repo}"
+    token_env: GITHUB_TOKEN
+    delay_seconds: 0.1
+    headers: { Accept: "application/vnd.github+json" }
+    fields:
+      stars: stargazers_count
+      forks: forks_count
+      watchers: subscribers_count
+      open_issues: open_issues_count
+      archived: archived
+      created_at: created_at
+      pushed_at: pushed_at
+      primary_language: language
+      spdx_license: license.spdx_id
+    items:
+      - { project: React,          repo: facebook/react,            ecosystem: npm,   package: react }
+      - { project: Vue,            repo: vuejs/core,                ecosystem: npm,   package: vue }
+      - { project: Angular,        repo: angular/angular,           ecosystem: npm,   package: "@angular/core" }
+      - { project: Svelte,         repo: sveltejs/svelte,           ecosystem: npm,   package: svelte }
+      - { project: Next.js,        repo: vercel/next.js,            ecosystem: npm,   package: next }
+      - { project: Vite,           repo: vitejs/vite,               ecosystem: npm,   package: vite }
+      - { project: Webpack,        repo: webpack/webpack,           ecosystem: npm,   package: webpack }
+      - { project: esbuild,        repo: evanw/esbuild,             ecosystem: npm,   package: esbuild }
+      - { project: Rollup,         repo: rollup/rollup,             ecosystem: npm,   package: rollup }
+      - { project: TypeScript,     repo: microsoft/TypeScript,      ecosystem: npm,   package: typescript }
+      - { project: ESLint,         repo: eslint/eslint,             ecosystem: npm,   package: eslint }
+      - { project: Jest,           repo: jestjs/jest,               ecosystem: npm,   package: jest }
+      - { project: Playwright,     repo: microsoft/playwright,      ecosystem: npm,   package: playwright }
+      - { project: Express,        repo: expressjs/express,         ecosystem: npm,   package: express }
+      - { project: NestJS,         repo: nestjs/nest,               ecosystem: npm,   package: "@nestjs/core" }
+      - { project: Axios,          repo: axios/axios,               ecosystem: npm,   package: axios }
+      - { project: Tailwind CSS,   repo: tailwindlabs/tailwindcss,  ecosystem: npm,   package: tailwindcss }
+      - { project: Prisma,         repo: prisma/prisma,             ecosystem: npm,   package: prisma }
+      - { project: Socket.IO,      repo: socketio/socket.io,        ecosystem: npm,   package: socket.io }
+      - { project: n8n,            repo: n8n-io/n8n,                ecosystem: npm,   package: n8n }
+      - { project: Requests,       repo: psf/requests,              ecosystem: pypi,  package: requests }
+      - { project: Flask,          repo: pallets/flask,             ecosystem: pypi,  package: flask }
+      - { project: Django,         repo: django/django,             ecosystem: pypi,  package: django }
+      - { project: FastAPI,        repo: fastapi/fastapi,           ecosystem: pypi,  package: fastapi }
+      - { project: NumPy,          repo: numpy/numpy,               ecosystem: pypi,  package: numpy }
+      - { project: pandas,         repo: pandas-dev/pandas,         ecosystem: pypi,  package: pandas }
+      - { project: scikit-learn,   repo: scikit-learn/scikit-learn, ecosystem: pypi,  package: scikit-learn }
+      - { project: PyTorch,        repo: pytorch/pytorch,           ecosystem: pypi,  package: torch }
+      - { project: Transformers,   repo: huggingface/transformers,  ecosystem: pypi,  package: transformers }
+      - { project: LangChain,      repo: langchain-ai/langchain,    ecosystem: pypi,  package: langchain }
+      - { project: Pydantic,       repo: pydantic/pydantic,         ecosystem: pypi,  package: pydantic }
+      - { project: SQLAlchemy,     repo: sqlalchemy/sqlalchemy,     ecosystem: pypi,  package: sqlalchemy }
+      - { project: Celery,         repo: celery/celery,             ecosystem: pypi,  package: celery }
+      - { project: Poetry,         repo: python-poetry/poetry,      ecosystem: pypi,  package: poetry }
+      - { project: Ruff,           repo: astral-sh/ruff,            ecosystem: pypi,  package: ruff }
+      - { project: pytest,         repo: pytest-dev/pytest,         ecosystem: pypi,  package: pytest }
+      - { project: Airflow,        repo: apache/airflow,            ecosystem: pypi,  package: apache-airflow }
+      - { project: Scrapy,         repo: scrapy/scrapy,             ecosystem: pypi,  package: scrapy }
+      - { project: Black,          repo: psf/black,                 ecosystem: pypi,  package: black }
+      - { project: Ansible,        repo: ansible/ansible,           ecosystem: pypi,  package: ansible }
+      - { project: Kubernetes,     repo: kubernetes/kubernetes,     ecosystem: infra }
+      - { project: Terraform,      repo: hashicorp/terraform,       ecosystem: infra }
+      - { project: Grafana,        repo: grafana/grafana,           ecosystem: infra }
+      - { project: Prometheus,     repo: prometheus/prometheus,     ecosystem: infra }
+      - { project: Elasticsearch,  repo: elastic/elasticsearch,     ecosystem: infra }
+      - { project: Redis,          repo: redis/redis,               ecosystem: infra }
+      - { project: PostgreSQL,     repo: postgres/postgres,         ecosystem: infra }
+      - { project: Traefik,        repo: traefik/traefik,           ecosystem: infra }
+      - { project: etcd,           repo: etcd-io/etcd,              ecosystem: infra }
+      - { project: Istio,          repo: istio/istio,               ecosystem: infra }
+      - { project: Argo CD,        repo: argoproj/argo-cd,          ecosystem: infra }
+      - { project: Cilium,         repo: cilium/cilium,             ecosystem: infra }
+      - { project: MinIO,          repo: minio/minio,               ecosystem: infra }
+      - { project: Supabase,       repo: supabase/supabase,         ecosystem: infra }
+      - { project: Keycloak,       repo: keycloak/keycloak,         ecosystem: infra }
+
+  # ---- real usage: npm registry monthly downloads ---------------------------
+  - type: multi_http_json
+    url: "https://api.npmjs.org/downloads/point/last-month/{package}"
+    carry: [project]
+    fields: { downloads_last_month: downloads }
+    items:
+      - { project: React,        package: react }
+      - { project: Vue,          package: vue }
+      - { project: Angular,      package: "@angular/core" }
+      - { project: Svelte,       package: svelte }
+      - { project: Next.js,      package: next }
+      - { project: Vite,         package: vite }
+      - { project: Webpack,      package: webpack }
+      - { project: esbuild,      package: esbuild }
+      - { project: Rollup,       package: rollup }
+      - { project: TypeScript,   package: typescript }
+      - { project: ESLint,       package: eslint }
+      - { project: Jest,         package: jest }
+      - { project: Playwright,   package: playwright }
+      - { project: Express,      package: express }
+      - { project: NestJS,       package: "@nestjs/core" }
+      - { project: Axios,        package: axios }
+      - { project: Tailwind CSS, package: tailwindcss }
+      - { project: Prisma,       package: prisma }
+      - { project: Socket.IO,    package: socket.io }
+      - { project: n8n,          package: n8n }
+
+  # ---- real usage: PyPI monthly downloads ----------------------------------
+  - type: multi_http_json
+    url: "https://pypistats.org/api/packages/{package}/recent"
+    carry: [project]
+    delay_seconds: 0.2
+    fields: { downloads_last_month: data.last_month }
+    items:
+      - { project: Requests,     package: requests }
+      - { project: Flask,        package: flask }
+      - { project: Django,       package: django }
+      - { project: FastAPI,      package: fastapi }
+      - { project: NumPy,        package: numpy }
+      - { project: pandas,       package: pandas }
+      - { project: scikit-learn, package: scikit-learn }
+      - { project: PyTorch,      package: torch }
+      - { project: Transformers, package: transformers }
+      - { project: LangChain,    package: langchain }
+      - { project: Pydantic,     package: pydantic }
+      - { project: SQLAlchemy,   package: sqlalchemy }
+      - { project: Celery,       package: celery }
+      - { project: Poetry,       package: poetry }
+      - { project: Ruff,         package: ruff }
+      - { project: pytest,       package: pytest }
+      - { project: Airflow,      package: apache-airflow }
+      - { project: Scrapy,       package: scrapy }
+      - { project: Black,        package: black }
+      - { project: Ansible,      package: ansible }
+
+processing:
+  - normalize
+  - join:    { "on": [project] }
+  - age_days: { column: days_since_push,     value: pushed_at }
+  - age_days: { column: days_since_creation, value: created_at }
+  - derive:  { column: fork_ratio,        expr: "ratio(forks, stars)" }
+  - derive:  { column: issue_burden,      expr: "ratio(open_issues, stars)" }
+  - derive:  { column: stars_per_day,     expr: "ratio(stars, days_since_creation)" }
+  - derive:  { column: attention_index,   expr: "minmax_normalize(stars)" }
+  - derive:  { column: maintenance_index, expr: "minmax_normalize(days_since_push, invert=true)" }
+  - score:
+      column: health_score
+      weights:
+        maintenance_index: 0.4
+        attention_index: 0.2
+        fork_ratio: 0.2
+        stars_per_day: 0.2
+      scale: 100
+  - classify:
+      column: risk_class
+      value: days_since_push
+      bins:
+        - { max: 30,  label: healthy }
+        - { max: 180, label: watch }
+        - { max: 365, label: at-risk }
+        - { label: critical }
+      default: unknown
+  - flag:
+      column: is_stale
+      any:
+        - { column: days_since_push, gt: 180 }
+        - { column: archived, eq: true }
+  - flag:
+      column: is_backlogged
+      when: { column: issue_burden, gt: 0.02 }
+  - validate
+
+charts:
+  - type: bar
+    title: "Highest maintenance risk (days since last push)"
+    x: project
+    y: days_since_push
+    sort: { by: days_since_push, desc: true }
+    limit: 15
+  - type: bar
+    title: "Composite health score by project"
+    x: project
+    y: health_score
+    sort: { by: health_score, desc: true }
+    limit: 20
+  - type: scatter
+    title: "Adoption vs. issue backlog pressure"
+    x: stars
+    y: issue_burden
+  - type: bar
+    title: "Monthly package downloads (npm + PyPI)"
+    x: project
+    y: downloads_last_month
+    sort: { by: downloads_last_month, desc: true }
+    limit: 15

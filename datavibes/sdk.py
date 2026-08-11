@@ -165,6 +165,10 @@ class DatasetSDK:
         """
         config = self._load(slug)
         snapshot = self.generator.generate(config, http=http)
+        # A source that fails degrades to zero rows by design (LSP), which makes a
+        # rate-limited API look exactly like a green run with an empty CSV. Say so.
+        for failure in snapshot.failed_sources:
+            print(f"warning: source failed -> {failure}", file=sys.stderr)
         processed = self.processor.process(config, snapshot.records)
         path = self.exporter.export(config, processed, fmt=self._format(fmt))
         if self.app_config.llm.enabled:

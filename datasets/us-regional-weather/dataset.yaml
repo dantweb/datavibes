@@ -29,3 +29,25 @@ processing:
   - derive:    { column: temp_roll7_c,     expr: "rolling_avg(temp_mean_c, window=7)" }
   - derive:    { column: precip_temp_corr, expr: "rolling_corr(precip_mm, temp_mean_c, window=30)" }
   - validate
+
+charts:
+  - type: line
+    title: "Daily mean temperature by region"
+    x: date
+    y: temp_mean_c
+    series: region
+  - type: line
+    title: "Seven-day rolling mean temperature"
+    x: date
+    y: temp_roll7_c
+    series: region
+  - type: bar
+    title: "Total precipitation by region"
+    x: region
+    y: precip_mm
+    agg: sum
+    sort: { by: precip_mm, desc: true }
+  - type: scatter
+    title: "Temperature anomaly vs. precipitation"
+    x: precip_mm
+    y: temp_anomaly_c

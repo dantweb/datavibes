@@ -1,0 +1,108 @@
+metadata:
+  slug: power-price-volatility
+  title: European Power Price Volatility — Intraday Day-Ahead Spot by Bidding Zone
+  category: energy
+  license: "CC-BY-4.0 (Fraunhofer ISE energy-charts; source data Bundesnetzagentur/SMARD, ENTSO-E)"
+  update_frequency: daily
+  attribution: "energy-charts.info day-ahead spot price API (Fraunhofer ISE)"
+
+schema:
+  - { name: bidding_zone,        dtype: str,   description: "ENTSO-E bidding-zone code" }
+  - { name: unix_seconds,        dtype: int,   description: "start of the quarter-hourly interval, UTC epoch seconds" }
+  - { name: price_eur_mwh,       dtype: float, nullable: true, unit: "EUR/MWh", description: "day-ahead spot price for the interval" }
+  - { name: price_change_pct,    dtype: float, nullable: true, description: "fractional change vs. the previous interval" }
+  - { name: volatility_2h,       dtype: float, nullable: true, unit: "EUR/MWh", description: "trailing 8-interval (2-hour) standard deviation" }
+  - { name: volatility_6h,       dtype: float, nullable: true, unit: "EUR/MWh", description: "trailing 24-interval (6-hour) standard deviation" }
+  - { name: price_vs_day_mean,   dtype: float, nullable: true, unit: "EUR/MWh", description: "deviation from the zone's mean price for the day" }
+  - { name: price_zscore,        dtype: float, nullable: true, description: "standardised price within the zone's day" }
+  - { name: rolling_avg_2h,      dtype: float, nullable: true, unit: "EUR/MWh" }
+  - { name: intraday_position,   dtype: float, nullable: true, description: "0-1 where the interval sits between the zone's daily low and high" }
+  - { name: price_band,          dtype: str,   nullable: true, description: "negative | cheap | normal | expensive | extreme" }
+  - { name: is_negative_price,   dtype: bool,  nullable: true, description: "oversupply — generators pay to deliver" }
+  - { name: is_price_spike,      dtype: bool,  nullable: true, description: "more than two standard deviations above the zone's daily mean" }
+  - { name: is_high_volatility,  dtype: bool,  nullable: true, description: "2-hour volatility above 25 EUR/MWh" }
+
+sources:
+  # One columnar fetch per bidding zone. The endpoint serves the current
+  # delivery day at quarter-hourly resolution and rate-limits aggressively, so
+  # the loop is paced; a zone that still refuses simply contributes no rows.
+  - type: columnar_http_json
+    url: https://api.energy-charts.info/price
+    index: unix_seconds
+    index_column: unix_seconds
+    params: { bzn: "{bidding_zone}" }
+    carry: [bidding_zone]
+    fields: { price_eur_mwh: price }
+    delay_seconds: 3.0
+    items:
+      - { bidding_zone: DE-LU }
+      - { bidding_zone: FR }
+      - { bidding_zone: NL }
+      - { bidding_zone: BE }
+      - { bidding_zone: AT }
+      - { bidding_zone: CH }
+      - { bidding_zone: PL }
+      - { bidding_zone: CZ }
+      - { bidding_zone: HU }
+      - { bidding_zone: DK1 }
+      - { bidding_zone: DK2 }
+      - { bidding_zone: IT-North }
+      - { bidding_zone: NO2 }
+      - { bidding_zone: SE4 }
+      - { bidding_zone: FI }
+
+processing:
+  - normalize
+  - dedupe: { keys: [bidding_zone, unix_seconds] }
+  - filter: { when: { column: price_eur_mwh, not_null: true } }
+  - sort:   { by: [bidding_zone, unix_seconds] }
+  - derive: { column: price_change_pct,  expr: "pct_change(price_eur_mwh)",              by: [bidding_zone] }
+  - derive: { column: volatility_2h,     expr: "volatility(price_eur_mwh, window=8)",    by: [bidding_zone] }
+  - derive: { column: volatility_6h,     expr: "volatility(price_eur_mwh, window=24)",   by: [bidding_zone] }
+  - derive: { column: rolling_avg_2h,    expr: "rolling_avg(price_eur_mwh, window=8)",   by: [bidding_zone] }
+  - derive: { column: price_vs_day_mean, expr: "anomaly(price_eur_mwh)",                 by: [bidding_zone] }
+  - derive: { column: price_zscore,      expr: "zscore(price_eur_mwh)",                  by: [bidding_zone] }
+  - derive: { column: intraday_position, expr: "minmax_normalize(price_eur_mwh)",        by: [bidding_zone] }
+  - classify:
+      column: price_band
+      value: price_eur_mwh
+      bins:
+        - { max: 0,   label: negative }
+        - { max: 40,  label: cheap }
+        - { max: 120, label: normal }
+        - { max: 250, label: expensive }
+        - { label: extreme }
+      default: unknown
+  - flag:
+      column: is_negative_price
+      when: { column: price_eur_mwh, lt: 0 }
+  - flag:
+      column: is_price_spike
+      when: { column: price_zscore, gt: 2 }
+  - flag:
+      column: is_high_volatility
+      when: { column: volatility_2h, gt: 25 }
+  - validate
+
+charts:
+  - type: line
+    title: "Intraday day-ahead price by bidding zone"
+    x: unix_seconds
+    y: price_eur_mwh
+    series: bidding_zone
+  - type: bar
+    title: "Mean day-ahead price by zone"
+    x: bidding_zone
+    y: price_eur_mwh
+    agg: mean
+    sort: { by: price_eur_mwh, desc: true }
+  - type: bar
+    title: "Intraday volatility by zone (2-hour standard deviation)"
+    x: bidding_zone
+    y: volatility_2h
+    agg: max
+    sort: { by: volatility_2h, desc: true }
+  - type: scatter
+    title: "Price level vs. local volatility"
+    x: price_eur_mwh
+    y: volatility_2h

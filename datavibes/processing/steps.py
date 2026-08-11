@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import re
 import statistics
+from datetime import datetime, timezone
 from typing import Callable
 
 from datavibes.context import RunContext
@@ -32,6 +33,15 @@ DERIVE_FUNCTIONS: dict[str, Callable] = {
     "corr": functions.corr,
     "minmax_normalize": functions.minmax_normalize,
     "volatility": functions.volatility,
+    # S12 primitive library
+    "add": functions.add,
+    "subtract": functions.subtract,
+    "share_of_total": functions.share_of_total,
+    "gini": functions.gini,
+    "hhi": functions.hhi,
+    "zscore": functions.zscore,
+    "seasonal_index": functions.seasonal_index,
+    "linear_forecast": functions.linear_forecast,
 }
 
 
@@ -111,17 +121,7 @@ class DeriveStep(ProcessingStep):
         return result
 
     def _groups(self, rows: list[dict]) -> list[list[int]]:
-        if not self.by:
-            return [list(range(len(rows)))]
-        order: list[tuple] = []
-        buckets: dict[tuple, list[int]] = {}
-        for index, row in enumerate(rows):
-            key = tuple(row.get(name) for name in self.by)
-            if key not in buckets:
-                buckets[key] = []
-                order.append(key)
-            buckets[key].append(index)
-        return [buckets[key] for key in order]
+        return _group_indices(rows, self.by)
 
 
 @register_step("aggregate")
@@ -280,6 +280,248 @@ class ScoreStep(ProcessingStep):
         return result
 
 
+@register_step("rename")
+class RenameStep(ProcessingStep):
+    """Rename source keys to schema column names before ``normalize`` drops them.
+
+    Bulk CSV/JSON publishers name their columns for humans (``Annual CO₂
+    emissions``, ``Entity``), never for a schema. Renaming here keeps the mapping
+    declarative instead of pushing a bespoke adapter into every dataset that
+    consumes a public CSV.
+    """
+
+    def __init__(self, columns: dict | None = None):
+        if not columns:
+            raise ConfigError("rename requires a 'columns' mapping")
+        self.columns = dict(columns)
+
+    def apply(self, rows: list[dict], ctx: RunContext) -> list[dict]:
+        result: list[dict] = []
+        for row in rows:
+            renamed = {}
+            for key, value in row.items():
+                renamed[self.columns.get(key, key)] = value
+            result.append(renamed)
+        return result
+
+
+@register_step("age_days")
+class AgeDaysStep(ProcessingStep):
+    """Whole days between an ISO-8601 timestamp column and the run instant.
+
+    Staleness is the core risk signal of an OSS/model health dataset, and it is
+    the one derivation that genuinely needs the run's timestamp. It reads that
+    timestamp off the **injected** clock on the context — the same clock that
+    stamps the snapshot filename — so a run remains reproducible: same config +
+    same timestamp → same bytes. An unparseable or missing value yields ``None``.
+    """
+
+    def __init__(self, column: str, value: str):
+        if not column:
+            raise ConfigError("age_days requires a 'column'")
+        if not value:
+            raise ConfigError("age_days requires a 'value' column")
+        self.column = column
+        self.value = value
+
+    def apply(self, rows: list[dict], ctx: RunContext) -> list[dict]:
+        now = ctx.clock.now() if ctx.clock is not None else None
+        result = [dict(row) for row in rows]
+        for row in result:
+            row[self.column] = _days_between(now, row.get(self.value))
+        return result
+
+
+def _days_between(now, value) -> int | None:
+    if now is None or value in (None, ""):
+        return None
+    text = str(value).strip().replace("Z", "+00:00")
+    try:
+        moment = datetime.fromisoformat(text)
+    except ValueError:
+        try:
+            moment = datetime.strptime(text[:10], "%Y-%m-%d")
+        except ValueError:
+            return None
+    if moment.tzinfo is None:
+        moment = moment.replace(tzinfo=timezone.utc)
+    reference = now if now.tzinfo is not None else now.replace(tzinfo=timezone.utc)
+    return (reference - moment).days
+
+
+@register_step("flag")
+class FlagStep(ProcessingStep):
+    """Set a boolean ``column`` from one or more threshold/membership conditions.
+
+    One condition goes in ``when``; several combine under ``all`` (logical AND)
+    or ``any`` (logical OR). A condition names a ``column`` plus exactly the
+    operators it needs — ``gt``/``gte``/``lt``/``lte``/``eq``/``ne``/``in``/
+    ``not_in``/``is_null``/``not_null`` — and every operator listed must hold.
+    A row whose value is missing simply fails an ordering test rather than
+    raising, so a partially-populated dataset still flags.
+    """
+
+    def __init__(
+        self,
+        column: str,
+        when: dict | None = None,
+        all: list | None = None,  # noqa: A002 - the config keyword is 'all'
+        any: list | None = None,  # noqa: A002 - the config keyword is 'any'
+    ):
+        if not column:
+            raise ConfigError("flag requires a 'column'")
+        provided = [block for block in (when, all, any) if block]
+        if len(provided) != 1:
+            raise ConfigError("flag requires exactly one of 'when', 'all', 'any'")
+        self.column = column
+        self.conditions = [when] if when else list(all or any or [])
+        self.mode = "all" if (when or all) else "any"
+        for condition in self.conditions:
+            if not isinstance(condition, dict) or not condition.get("column"):
+                raise ConfigError("flag condition requires a 'column'")
+
+    def apply(self, rows: list[dict], ctx: RunContext) -> list[dict]:
+        result = [dict(row) for row in rows]
+        for row in result:
+            outcomes = [_matches(row, condition) for condition in self.conditions]
+            row[self.column] = all(outcomes) if self.mode == "all" else any(outcomes)
+        return result
+
+
+@register_step("filter")
+class FilterStep(ProcessingStep):
+    """Keep only the rows matching the condition(s) — same predicates as ``flag``.
+
+    An outer ``join`` across sources of differing coverage legitimately produces
+    rows where the headline measure never arrived (a geography present in one
+    table and absent from another). Those rows are noise in a product a customer
+    pays for, so a dataset drops them declaratively here rather than shipping
+    columns of blanks.
+    """
+
+    def __init__(
+        self,
+        when: dict | None = None,
+        all: list | None = None,  # noqa: A002 - the config keyword is 'all'
+        any: list | None = None,  # noqa: A002 - the config keyword is 'any'
+    ):
+        provided = [block for block in (when, all, any) if block]
+        if len(provided) != 1:
+            raise ConfigError("filter requires exactly one of 'when', 'all', 'any'")
+        self.conditions = [when] if when else list(all or any or [])
+        self.mode = "all" if (when or all) else "any"
+        for condition in self.conditions:
+            if not isinstance(condition, dict) or not condition.get("column"):
+                raise ConfigError("filter condition requires a 'column'")
+
+    def apply(self, rows: list[dict], ctx: RunContext) -> list[dict]:
+        kept: list[dict] = []
+        for row in rows:
+            outcomes = [_matches(row, condition) for condition in self.conditions]
+            if all(outcomes) if self.mode == "all" else any(outcomes):
+                kept.append(row)
+        return kept
+
+
+@register_step("classify")
+class ClassifyStep(ProcessingStep):
+    """Bucket a numeric ``value`` column into a labelled ``column``.
+
+    ``bins`` are tried in order; the first whose ``min``/``max`` bounds contain
+    the value wins (``min`` inclusive, ``max`` exclusive-of-the-next-bin i.e.
+    ``value <= max``). A bin with neither bound is the catch-all. A missing or
+    non-numeric value takes ``default``.
+    """
+
+    def __init__(
+        self,
+        column: str,
+        value: str,
+        bins: list | None = None,
+        default: str | None = None,
+    ):
+        if not column:
+            raise ConfigError("classify requires a 'column'")
+        if not value:
+            raise ConfigError("classify requires a 'value' column")
+        if not bins:
+            raise ConfigError("classify requires 'bins'")
+        for entry in bins:
+            if not isinstance(entry, dict) or not entry.get("label"):
+                raise ConfigError("each classify bin requires a 'label'")
+        self.column = column
+        self.value = value
+        self.bins = bins
+        self.default = default
+
+    def apply(self, rows: list[dict], ctx: RunContext) -> list[dict]:
+        result = [dict(row) for row in rows]
+        for row in result:
+            row[self.column] = self._label_for(row.get(self.value))
+        return result
+
+    def _label_for(self, value: object) -> str | None:
+        number = _as_number(value)
+        if number is None:
+            return self.default
+        for entry in self.bins:
+            low, high = entry.get("min"), entry.get("max")
+            if low is not None and number < float(low):
+                continue
+            if high is not None and number > float(high):
+                continue
+            return entry["label"]
+        return self.default
+
+
+@register_step("forecast")
+class ForecastStep(ProcessingStep):
+    """Project ``value`` ``horizon`` periods ahead into ``column``.
+
+    A trailing least-squares fit over the last ``window`` rows of each ``by``
+    group is evaluated ``horizon`` positions past the current row — so an
+    emissions series carries its own extrapolated trajectory alongside the
+    observation. Rows before the window fills carry ``None``. Sort the rows by
+    time first; the step trusts the row order it is given.
+    """
+
+    def __init__(
+        self,
+        column: str,
+        value: str,
+        by: list[str] | None = None,
+        horizon: int = 1,
+        window: int = 5,
+        method: str = "linear",
+    ):
+        if not column:
+            raise ConfigError("forecast requires a 'column'")
+        if not value:
+            raise ConfigError("forecast requires a 'value' column")
+        if method != "linear":
+            raise ConfigError("forecast only supports method='linear'")
+        if horizon < 1:
+            raise ConfigError("forecast 'horizon' must be >= 1")
+        if window < 2:
+            raise ConfigError("forecast 'window' must be >= 2")
+        self.column = column
+        self.value = value
+        self.by = by or []
+        self.horizon = horizon
+        self.window = window
+
+    def apply(self, rows: list[dict], ctx: RunContext) -> list[dict]:
+        result = [dict(row) for row in rows]
+        for indices in _group_indices(rows, self.by):
+            series = [_as_number(rows[index].get(self.value)) for index in indices]
+            projected = functions.linear_forecast(
+                series, horizon=self.horizon, window=self.window
+            )
+            for position, value in zip(indices, projected):
+                result[position][self.column] = value
+        return result
+
+
 @register_step("validate")
 class ValidateStep(ProcessingStep):
     """Assert the rows conform to the schema; raise loudly if not."""
@@ -294,6 +536,80 @@ class ValidateStep(ProcessingStep):
 
 def _sort_key(key: tuple) -> tuple:
     return tuple((value is None, str(value)) for value in key)
+
+
+def _group_indices(rows: list[dict], by: list[str]) -> list[list[int]]:
+    """Row positions bucketed by the ``by`` columns, in first-seen order.
+
+    Shared by every grouped step so a windowed computation never spans two
+    entities (a 5-year CAGR, or a trend fit, stops at the country boundary).
+    """
+    if not by:
+        return [list(range(len(rows)))]
+    order: list[tuple] = []
+    buckets: dict[tuple, list[int]] = {}
+    for index, row in enumerate(rows):
+        key = tuple(row.get(name) for name in by)
+        if key not in buckets:
+            buckets[key] = []
+            order.append(key)
+        buckets[key].append(index)
+    return [buckets[key] for key in order]
+
+
+def _as_number(value: object) -> float | None:
+    """Best-effort numeric read — anything non-numeric reads as missing."""
+    if value is None or isinstance(value, bool):
+        return None
+    try:
+        return float(value)  # type: ignore[arg-type]
+    except (TypeError, ValueError):
+        return None
+
+
+_COMPARATORS: dict[str, Callable[[object, object], bool]] = {
+    "gt": lambda left, right: left > right,
+    "gte": lambda left, right: left >= right,
+    "lt": lambda left, right: left < right,
+    "lte": lambda left, right: left <= right,
+}
+
+
+def _matches(row: dict, condition: dict) -> bool:
+    """Evaluate one ``flag`` condition against a row (every operator must hold)."""
+    value = row.get(condition["column"])
+    for operator, operand in condition.items():
+        if operator == "column":
+            continue
+        if not _operator_holds(operator, value, operand):
+            return False
+    return True
+
+
+def _operator_holds(operator: str, value: object, operand: object) -> bool:
+    if operator == "is_null":
+        return (value is None) is bool(operand)
+    if operator == "not_null":
+        return (value is not None) is bool(operand)
+    if operator == "eq":
+        return value == operand
+    if operator == "ne":
+        return value != operand
+    if operator == "in":
+        return value in (operand or [])
+    if operator == "not_in":
+        return value not in (operand or [])
+    comparator = _COMPARATORS.get(operator)
+    if comparator is None:
+        raise ConfigError(
+            f"flag: unknown operator '{operator}' "
+            f"(known: {', '.join(sorted(_COMPARATORS))}, eq, ne, in, not_in, "
+            f"is_null, not_null)"
+        )
+    number, threshold = _as_number(value), _as_number(operand)
+    if number is None or threshold is None:
+        return False
+    return comparator(number, threshold)
 
 
 def _parse_expr(expr: str) -> tuple[str, list[str], dict]:

@@ -1,0 +1,99 @@
+metadata:
+  slug: world-bank-global-development
+  title: World Bank Global Development — Income, Longevity, Connectivity and Inequality
+  category: macro
+  license: "World Bank Open Data CC-BY-4.0"
+  update_frequency: monthly
+  attribution: "World Bank Open Data — Indicators API (NY.GDP.PCAP.CD, SP.POP.TOTL, SP.DYN.LE00.IN, IT.NET.USER.ZS, EG.ELC.ACCS.ZS, SE.XPD.TOTL.GD.ZS)"
+
+schema:
+  - { name: country,               dtype: str,   nullable: true }
+  - { name: iso3,                  dtype: str }
+  - { name: year,                  dtype: int }
+  - { name: gdp_per_capita_usd,    dtype: float, nullable: true, unit: "current USD" }
+  - { name: population,            dtype: float, nullable: true, unit: "persons" }
+  - { name: life_expectancy_years, dtype: float, nullable: true, unit: "years" }
+  - { name: internet_users_pct,    dtype: float, nullable: true, unit: "% of population" }
+  - { name: electricity_access_pct, dtype: float, nullable: true, unit: "% of population" }
+  - { name: education_spend_pct_gdp, dtype: float, nullable: true, unit: "% of GDP" }
+  - { name: gdp_per_capita_cagr_10y, dtype: float, nullable: true, unit: "%", description: "10-year compound growth of income per head" }
+  - { name: internet_cagr_5y,      dtype: float, nullable: true, unit: "%", description: "5-year compound growth of internet penetration" }
+  - { name: population_share_pct,  dtype: float, nullable: true, unit: "%", description: "country share of the cohort population that year" }
+  - { name: income_gini_global,    dtype: float, nullable: true, description: "Gini of GDP-per-capita across all countries in that year — global income dispersion" }
+  - { name: income_zscore,         dtype: float, nullable: true, description: "standardised income per head within the year" }
+  - { name: income_longevity_corr, dtype: float, nullable: true, description: "within-country correlation of income and life expectancy over the period" }
+  - { name: development_score,     dtype: float, nullable: true, description: "0-100 composite of income, longevity, connectivity and electrification" }
+  - { name: development_tier,      dtype: str,   nullable: true, description: "advanced | upper-middle | lower-middle | low-income" }
+  - { name: is_digitally_connected, dtype: bool, nullable: true, description: "more than 75% of the population online" }
+  - { name: is_electrified,        dtype: bool,  nullable: true, description: "universal or near-universal electricity access (≥99%)" }
+
+sources:
+  - type: worldbank-indicator
+    date_range: "2000:2024"
+    indicators:
+      NY.GDP.PCAP.CD: gdp_per_capita_usd
+      SP.POP.TOTL: population
+      SP.DYN.LE00.IN: life_expectancy_years
+      IT.NET.USER.ZS: internet_users_pct
+      EG.ELC.ACCS.ZS: electricity_access_pct
+      SE.XPD.TOTL.GD.ZS: education_spend_pct_gdp
+
+processing:
+  - normalize
+  - join:   { "on": [iso3, year] }
+  - filter: { when: { column: gdp_per_capita_usd, not_null: true } }
+  - sort:   { by: [iso3, year] }
+  - derive: { column: gdp_per_capita_cagr_10y, expr: "cagr(gdp_per_capita_usd, years=10)", by: [iso3] }
+  - derive: { column: internet_cagr_5y,        expr: "cagr(internet_users_pct, years=5)",  by: [iso3] }
+  - derive: { column: income_longevity_corr,   expr: "corr(gdp_per_capita_usd, life_expectancy_years)", by: [iso3] }
+  - derive: { column: population_share_pct,    expr: "share_of_total(population)",  by: [year] }
+  - derive: { column: income_gini_global,      expr: "gini(gdp_per_capita_usd)",    by: [year] }
+  - derive: { column: income_zscore,           expr: "zscore(gdp_per_capita_usd)",  by: [year] }
+  - score:
+      column: development_score
+      weights:
+        gdp_per_capita_usd: 0.35
+        life_expectancy_years: 0.25
+        internet_users_pct: 0.25
+        electricity_access_pct: 0.15
+      scale: 100
+  - classify:
+      column: development_tier
+      value: gdp_per_capita_usd
+      bins:
+        - { min: 25000, label: advanced }
+        - { min: 8000,  label: upper-middle }
+        - { min: 2000,  label: lower-middle }
+        - { label: low-income }
+      default: unknown
+  - flag:
+      column: is_digitally_connected
+      when: { column: internet_users_pct, gt: 75 }
+  - flag:
+      column: is_electrified
+      when: { column: electricity_access_pct, gte: 99 }
+  - validate
+
+charts:
+  - type: bar
+    title: "GDP per capita, 2023"
+    x: country
+    y: gdp_per_capita_usd
+    filter: { year: 2023 }
+    sort:   { by: gdp_per_capita_usd, desc: true }
+    limit:  25
+  - type: scatter
+    title: "Income vs. life expectancy (2023)"
+    x: gdp_per_capita_usd
+    y: life_expectancy_years
+    filter: { year: 2023 }
+  - type: scatter
+    title: "Income vs. internet penetration (2023)"
+    x: gdp_per_capita_usd
+    y: internet_users_pct
+    filter: { year: 2023 }
+  - type: line
+    title: "Global income dispersion (Gini of GDP per capita) over time"
+    x: year
+    y: income_gini_global
+    agg: mean

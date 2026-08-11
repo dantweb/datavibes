@@ -1,0 +1,138 @@
+metadata:
+  slug: renewable-grid-status
+  title: Renewable Grid Status — Daily Renewable, Solar and Wind Share of Load
+  category: energy
+  license: "CC-BY-4.0 (Fraunhofer ISE energy-charts; source data Bundesnetzagentur/SMARD, ENTSO-E)"
+  update_frequency: daily
+  attribution: "energy-charts.info API (Fraunhofer ISE)"
+
+schema:
+  - { name: country,                dtype: str,   description: "ENTSO-E country code" }
+  - { name: day,                    dtype: str,   description: "calendar day, DD.MM.YYYY as published" }
+  - { name: renewable_share_pct,    dtype: float, nullable: true, unit: "%", description: "daily average renewable share of load" }
+  - { name: solar_share_pct,        dtype: float, nullable: true, unit: "%", description: "daily average solar share of load" }
+  - { name: wind_onshore_share_pct, dtype: float, nullable: true, unit: "%", description: "daily average onshore wind share of load" }
+  - { name: renewable_7d_avg,       dtype: float, nullable: true, unit: "%", description: "trailing 7-day mean renewable share" }
+  - { name: renewable_anomaly,      dtype: float, nullable: true, unit: "pp", description: "deviation from the country's period mean, percentage points" }
+  - { name: renewable_volatility_7d, dtype: float, nullable: true, unit: "pp", description: "trailing 7-day standard deviation of the renewable share" }
+  - { name: weekday_seasonal_index, dtype: float, nullable: true, description: "day-of-week seasonal index — 1.10 means that weekday runs 10% above the country average" }
+  - { name: variable_share_pct,     dtype: float, nullable: true, unit: "%", description: "solar + onshore wind — the weather-dependent portion" }
+  - { name: dispatchable_gap_pct,   dtype: float, nullable: true, unit: "%", description: "renewable share not covered by solar or onshore wind" }
+  - { name: grid_greenness_score,   dtype: float, nullable: true, description: "0-100 composite of renewable level and stability" }
+  - { name: supply_class,           dtype: str,   nullable: true, description: "green-dominant | green-majority | mixed | fossil-dominant" }
+  - { name: is_low_renewable_day,   dtype: bool,  nullable: true, description: "renewable share below 25% — a residual-load stress day" }
+  - { name: is_variability_spike,   dtype: bool,  nullable: true, description: "7-day volatility above 15 percentage points" }
+
+sources:
+  # energy-charts returns parallel arrays (`days` + `data`), so each measure is
+  # one columnar fetch per country; delay_seconds keeps the public API happy.
+  - type: columnar_http_json
+    url: https://api.energy-charts.info/ren_share_daily_avg
+    index: days
+    index_column: day
+    params: { country: "{country}" }
+    carry: [country]
+    fields: { renewable_share_pct: data }
+    delay_seconds: 3.0
+    items:
+      - { country: de }
+      - { country: fr }
+      - { country: es }
+      - { country: it }
+      - { country: be }
+      - { country: pl }
+      - { country: cz }
+      - { country: pt }
+
+  - type: columnar_http_json
+    url: https://api.energy-charts.info/solar_share_daily_avg
+    index: days
+    index_column: day
+    params: { country: "{country}" }
+    carry: [country]
+    fields: { solar_share_pct: data }
+    delay_seconds: 3.0
+    items:
+      - { country: de }
+      - { country: fr }
+      - { country: es }
+      - { country: it }
+      - { country: be }
+      - { country: pl }
+      - { country: cz }
+      - { country: pt }
+
+  - type: columnar_http_json
+    url: https://api.energy-charts.info/wind_onshore_share_daily_avg
+    index: days
+    index_column: day
+    params: { country: "{country}" }
+    carry: [country]
+    fields: { wind_onshore_share_pct: data }
+    delay_seconds: 3.0
+    items:
+      - { country: de }
+      - { country: fr }
+      - { country: es }
+      - { country: it }
+      - { country: be }
+      - { country: pl }
+      - { country: cz }
+      - { country: pt }
+
+processing:
+  - normalize
+  - join:   { "on": [country, day] }
+  - filter: { when: { column: renewable_share_pct, not_null: true } }
+  # `day` is published DD.MM.YYYY, so sort on the API's own emission order per
+  # country by re-sorting on country first and keeping the source order within it.
+  - sort:   { by: [country] }
+  - derive: { column: variable_share_pct,      expr: "add(solar_share_pct, wind_onshore_share_pct)" }
+  - derive: { column: renewable_7d_avg,        expr: "rolling_avg(renewable_share_pct, window=7)", by: [country] }
+  - derive: { column: renewable_anomaly,       expr: "anomaly(renewable_share_pct)", by: [country] }
+  - derive: { column: renewable_volatility_7d, expr: "volatility(renewable_share_pct, window=7)", by: [country] }
+  - derive: { column: weekday_seasonal_index,  expr: "seasonal_index(renewable_share_pct, period=7)", by: [country] }
+  - derive: { column: dispatchable_gap_pct,    expr: "subtract(renewable_share_pct, variable_share_pct)" }
+  - score:
+      column: grid_greenness_score
+      weights: { renewable_share_pct: 0.7, variable_share_pct: 0.3 }
+      scale: 100
+  - classify:
+      column: supply_class
+      value: renewable_share_pct
+      bins:
+        - { min: 75, label: green-dominant }
+        - { min: 50, label: green-majority }
+        - { min: 25, label: mixed }
+        - { label: fossil-dominant }
+      default: unknown
+  - flag:
+      column: is_low_renewable_day
+      when: { column: renewable_share_pct, lt: 25 }
+  - flag:
+      column: is_variability_spike
+      when: { column: renewable_volatility_7d, gt: 15 }
+  - validate
+
+charts:
+  - type: line
+    title: "Daily renewable share of load by country"
+    x: day
+    y: renewable_share_pct
+    series: country
+  - type: bar
+    title: "Average renewable share over the period"
+    x: country
+    y: renewable_share_pct
+    agg: mean
+    sort: { by: renewable_share_pct, desc: true }
+  - type: bar
+    title: "Renewable variability (7-day standard deviation)"
+    x: country
+    y: renewable_volatility_7d
+    agg: mean
+    sort: { by: renewable_volatility_7d, desc: true }
+  - type: scatter
+    title: "Renewable level vs. weather-dependent share"
+    x: variable_share_pct
+    y: renewable_share_pct

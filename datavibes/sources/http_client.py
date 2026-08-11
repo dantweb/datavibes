@@ -53,7 +53,9 @@ def request_with_retry(
         if 200 <= status < 300:
             return response
         last_status = status
-        is_transient = 500 <= status < 600
+        # 429 is transient too: the polite public APIs (energy-charts, GitHub)
+        # meter unauthenticated callers and expect a backed-off retry.
+        is_transient = 500 <= status < 600 or status == 429
         if is_transient and attempt < attempts - 1:
             sleep(settings.backoff_seconds * (attempt + 1))
             continue

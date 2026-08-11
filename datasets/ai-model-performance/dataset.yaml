@@ -1,0 +1,104 @@
+metadata:
+  slug: ai-model-performance
+  title: AI Model Performance & Adoption — Hugging Face Hub Leaderboard
+  category: infrastructure
+  license: "Hugging Face Hub public model metadata (per-model licences vary)"
+  update_frequency: daily
+  attribution: "Hugging Face Hub API (https://huggingface.co/api/models)"
+
+schema:
+  - { name: model_id,          dtype: str,   description: "org/name identifier on the Hub" }
+  - { name: author,            dtype: str,   nullable: true }
+  - { name: task,              dtype: str,   nullable: true, description: "pipeline tag (text-generation, feature-extraction, …)" }
+  - { name: library,           dtype: str,   nullable: true, description: "primary framework (transformers, sentence-transformers, …)" }
+  - { name: downloads_30d,     dtype: int,   nullable: true, unit: "downloads/30d" }
+  - { name: likes,             dtype: int,   nullable: true, unit: "count" }
+  - { name: created_at,        dtype: str,   nullable: true }
+  - { name: last_modified,     dtype: str,   nullable: true }
+  - { name: days_since_update, dtype: int,   nullable: true, unit: "days" }
+  - { name: days_since_launch, dtype: int,   nullable: true, unit: "days" }
+  - { name: downloads_per_like, dtype: float, nullable: true, description: "usage per unit of visible enthusiasm — high = quiet workhorse" }
+  - { name: downloads_per_day,  dtype: float, nullable: true, unit: "downloads/day", description: "30d downloads amortised over model lifetime" }
+  - { name: adoption_zscore,   dtype: float, nullable: true, description: "standardised 30-day download volume across the cohort" }
+  - { name: freshness_index,   dtype: float, nullable: true, description: "0-1, 1 = updated most recently in the cohort" }
+  - { name: momentum_score,    dtype: float, nullable: true, description: "0-100 composite of adoption, enthusiasm and maintenance recency" }
+  - { name: maintenance_class, dtype: str,   nullable: true, description: "active | maintained | dormant | abandoned" }
+  - { name: is_stale,          dtype: bool,  nullable: true, description: "no repository update in over a year" }
+
+sources:
+  - type: paged_http_json
+    url: https://huggingface.co/api/models
+    select: "$[*]"
+    paging: offset
+    offset_param: skip
+    page_size_param: limit
+    page_size: 100
+    max_pages: 5
+    params:
+      sort: downloads
+      direction: -1
+      # `full` is required alongside `sort`: the Hub omits author/lastModified
+      # from a sorted listing unless the full record is requested.
+      full: "true"
+    fields:
+      model_id: id
+      author: author
+      task: pipeline_tag
+      library: library_name
+      downloads_30d: downloads
+      likes: likes
+      created_at: createdAt
+      last_modified: lastModified
+
+processing:
+  - normalize
+  - dedupe:  { keys: [model_id] }
+  - sort:    { by: [model_id] }
+  - age_days: { column: days_since_update, value: last_modified }
+  - age_days: { column: days_since_launch, value: created_at }
+  - derive:  { column: downloads_per_like,  expr: "ratio(downloads_30d, likes)" }
+  - derive:  { column: downloads_per_day,   expr: "ratio(downloads_30d, days_since_launch)" }
+  - derive:  { column: adoption_zscore,     expr: "zscore(downloads_30d)" }
+  - derive:  { column: freshness_index,     expr: "minmax_normalize(days_since_update, invert=true)" }
+  - score:
+      column: momentum_score
+      weights: { downloads_30d: 0.5, likes: 0.2, freshness_index: 0.3 }
+      scale: 100
+  - classify:
+      column: maintenance_class
+      value: days_since_update
+      bins:
+        - { max: 90,  label: active }
+        - { max: 365, label: maintained }
+        - { max: 730, label: dormant }
+        - { label: abandoned }
+      default: unknown
+  - flag:
+      column: is_stale
+      when: { column: days_since_update, gt: 365 }
+  - validate
+
+charts:
+  - type: bar
+    title: "Most-downloaded models (last 30 days)"
+    x: model_id
+    y: downloads_30d
+    sort: { by: downloads_30d, desc: true }
+    limit: 15
+  - type: bar
+    title: "Highest momentum scores"
+    x: model_id
+    y: momentum_score
+    sort: { by: momentum_score, desc: true }
+    limit: 15
+  - type: scatter
+    title: "Adoption vs. maintenance recency"
+    x: days_since_update
+    y: adoption_zscore
+  - type: bar
+    title: "Download volume by task"
+    x: task
+    y: downloads_30d
+    agg: sum
+    sort: { by: downloads_30d, desc: true }
+    limit: 12
