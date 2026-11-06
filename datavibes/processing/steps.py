@@ -47,6 +47,7 @@ DERIVE_FUNCTIONS: dict[str, Callable] = {
     "sex_majority": functions.sex_majority,
     "round_to": functions.round_to,
     "at_least": functions.at_least,
+    "null_outside": functions.null_outside,
 }
 
 
@@ -418,7 +419,10 @@ class FilterStep(ProcessingStep):
         when: dict | None = None,
         all: list | None = None,  # noqa: A002 - the config keyword is 'all'
         any: list | None = None,  # noqa: A002 - the config keyword is 'any'
+        reason: str | None = None,
     ):
+        # ``reason`` labels the dropped rows in the run provenance (map legends).
+        self.exclusion_reason = reason or "filtered out"
         provided = [block for block in (when, all, any) if block]
         if len(provided) != 1:
             raise ConfigError("filter requires exactly one of 'when', 'all', 'any'")
@@ -533,6 +537,44 @@ class ForecastStep(ProcessingStep):
             )
             for position, value in zip(indices, projected):
                 result[position][self.column] = value
+        return result
+
+
+@register_step("lookup")
+class LookupStep(ProcessingStep):
+    """Enrich rows with columns from another source's rows, matched on a key.
+
+    One-to-many, unlike ``join``: every city row of a country receives that
+    country's columns. The lookup rows are identified by the generator's
+    ``_source`` tag (``<source type>#<index>``) and removed from the output.
+    """
+
+    def __init__(self, from_source: str = "", on: str = "", columns: dict | None = None):
+        if not from_source:
+            raise ConfigError("lookup requires 'from_source' (the source type providing the lookup rows)")
+        if not on:
+            raise ConfigError("lookup requires 'on' (the key column)")
+        if not columns:
+            raise ConfigError("lookup requires a 'columns' mapping {lookup column: target column}")
+        self.prefix = f"{from_source}#"
+        self.on = on
+        self.columns = dict(columns)
+
+    def apply(self, rows: list[dict], ctx: RunContext) -> list[dict]:
+        table: dict = {}
+        targets: list[dict] = []
+        for row in rows:
+            if str(row.get("_source", "")).startswith(self.prefix):
+                table.setdefault(row.get(self.on), row)
+            else:
+                targets.append(row)
+        result: list[dict] = []
+        for row in targets:
+            enriched = dict(row)
+            match = table.get(row.get(self.on), {})
+            for source_column, target_column in self.columns.items():
+                enriched[target_column] = match.get(source_column)
+            result.append(enriched)
         return result
 
 

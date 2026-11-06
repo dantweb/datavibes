@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000.0 1149.8" width="1000.0" height="1149.8" font-family="Helvetica, Arial, sans-serif">
+<defs>
+<clipPath id="map-area"><rect x="20.0" y="44.0" width="960.0" height="773.8"/></clipPath>
+<linearGradient id="legend-bar-0" x1="0" x2="1" y1="0" y2="0"><stop offset="0.0%" stop-color="#e6f1ff"/><stop offset="100.0%" stop-color="#0077ff"/></linearGradient>
+<linearGradient id="legend-bar-1" x1="0" x2="1" y1="0" y2="0"><stop offset="0.0%" stop-color="#ffe6e6"/><stop offset="100.0%" stop-color="#ff0000"/></linearGradient>
+</defs>
+<rect x="0" y="0" width="1000.0" height="1149.8" fill="#ffffff"/>
+<text x="20.0" y="30.0" font-size="20" font-weight="bold" fill="#333333">Fixture cities</text>
+<g clip-path="url(#map-area)" stroke="#ffffff" stroke-width="0.3" stroke-linejoin="round">
+<path id="AAA" fill="#e3e6ea" fill-rule="evenodd" d="M20.0 181.2L129.5 181.2L121.9 44.0L20.0 44.0L20.0 181.2Z"><title>Alpha</title></path>
+<path id="BBB" fill="#e3e6ea" fill-rule="evenodd" d="M129.5 181.2L239.1 181.2L223.9 44.0L121.9 44.0L129.5 181.2Z"><title>Beta</title></path>
+<path id="CCC" fill="#e3e6ea" fill-rule="evenodd" d="M20.0 817.8L267.2 817.8L260.0 488.4L20.0 488.4L20.0 817.8ZM81.7 734.6L143.4 734.6L142.7 651.7L81.3 651.7L81.7 734.6Z"><title>Gamma &amp; &lt;Co&gt;</title></path>
+<path id="DDD" fill="#e3e6ea" fill-rule="evenodd" d="M740.0 488.4L860.0 488.4L829.1 330.5L713.5 330.5L740.0 488.4ZM920.0 488.4L980.0 488.4L964.1 408.6L905.1 408.6L920.0 488.4Z"><title>Delta</title></path>
+<circle cx="142.7" cy="651.7" r="12.0" fill="#ff0000" fill-opacity="0.85" stroke="#ffffff" stroke-width="0.3"><title>name: Big &amp; &lt;Co&gt; · population: 10000000</title></circle>
+<circle cx="787.0" cy="408.6" r="3.8" fill="#d9d9d9" fill-opacity="0.85" stroke="#ffffff" stroke-width="0.3"><title>name: Mid · population: 1000000</title></circle>
+<circle cx="73.0" cy="110.8" r="1.2" fill="#c7e1ff" fill-opacity="0.85" stroke="#ffffff" stroke-width="0.3"><title>name: Small · population: 100000</title></circle>
+</g>
+<text x="20.0" y="845.8" font-size="13" font-weight="bold" fill="#333333">Colour: sex majority (country level) · intensity (white → full): density</text>
+<text x="20.0" y="867.8" font-size="11" fill="#333333">More men than women</text>
+<rect x="20.0" y="871.8" width="320.0" height="12.0" fill="url(#legend-bar-0)" stroke="#999999" stroke-width="0.5"/>
+<line x1="20.0" y1="883.8" x2="20.0" y2="887.8" stroke="#333333" stroke-width="0.8"/>
+<text x="20.0" y="898.8" font-size="10" text-anchor="middle" fill="#333333">50</text>
+<line x1="180.0" y1="883.8" x2="180.0" y2="887.8" stroke="#333333" stroke-width="0.8"/>
+<text x="180.0" y="898.8" font-size="10" text-anchor="middle" fill="#333333">707</text>
+<line x1="340.0" y1="883.8" x2="340.0" y2="887.8" stroke="#333333" stroke-width="0.8"/>
+<text x="340.0" y="898.8" font-size="10" text-anchor="middle" fill="#333333">10,000</text>
+<text x="20.0" y="913.8" font-size="11" fill="#333333">More women than men</text>
+<rect x="20.0" y="917.8" width="320.0" height="12.0" fill="url(#legend-bar-1)" stroke="#999999" stroke-width="0.5"/>
+<line x1="20.0" y1="929.8" x2="20.0" y2="933.8" stroke="#333333" stroke-width="0.8"/>
+<text x="20.0" y="944.8" font-size="10" text-anchor="middle" fill="#333333">50</text>
+<line x1="180.0" y1="929.8" x2="180.0" y2="933.8" stroke="#333333" stroke-width="0.8"/>
+<text x="180.0" y="944.8" font-size="10" text-anchor="middle" fill="#333333">707</text>
+<line x1="340.0" y1="929.8" x2="340.0" y2="933.8" stroke="#333333" stroke-width="0.8"/>
+<text x="340.0" y="944.8" font-size="10" text-anchor="middle" fill="#333333">10,000</text>
+<rect x="20.0" y="949.8" width="12.0" height="12.0" fill="#9e9e9e" stroke="#999999" stroke-width="0.5"/>
+<text x="37.0" y="959.8" font-size="11" fill="#333333">≈ equal</text>
+<rect x="106.0" y="949.8" width="12.0" height="12.0" fill="#d9d9d9" stroke="#999999" stroke-width="0.5"/>
+<text x="123.0" y="959.8" font-size="11" fill="#333333">No data</text>
+<text x="20.0" y="981.8" font-size="11" fill="#333333">Dot area: population</text>
+<circle cx="42.8" cy="1012.6" r="1.2" fill="none" stroke="#333333" stroke-width="0.8"/>
+<text x="42.8" y="1026.8" font-size="10" text-anchor="middle" fill="#333333">100,000</text>
+<circle cx="112.8" cy="1010.0" r="3.8" fill="none" stroke="#333333" stroke-width="0.8"/>
+<text x="112.8" y="1026.8" font-size="10" text-anchor="middle" fill="#333333">1,000,000</text>
+<circle cx="192.5" cy="1001.8" r="12.0" fill="none" stroke="#333333" stroke-width="0.8"/>
+<text x="192.5" y="1026.8" font-size="10" text-anchor="middle" fill="#333333">10,000,000</text>
+<text x="20.0" y="1044.8" font-size="12" font-weight="bold" fill="#333333">Coverage</text>
+<text x="20.0" y="1060.8" font-size="11" fill="#333333">Points shown: 3 of 4</text>
+<text x="20.0" y="1075.8" font-size="11" fill="#333333">Not included: 1 — no coordinates: 1</text>
+<text x="20.0" y="1090.8" font-size="11" fill="#333333">Shown without colour (grey): 1</text>
+<text x="20.0" y="1111.8" font-size="10" fill="#666666">Fixture geometry</text>
+<text x="20.0" y="1125.8" font-size="10" fill="#666666">Boundaries are de facto (Natural Earth) and imply no endorsement.</text>
+</svg>

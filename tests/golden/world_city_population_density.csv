@@ -1,0 +1,5 @@
+wikidata_id,city,iso3,country,latitude,longitude,population,area_km2,density_per_km2,country_female_share_pct,country_male_share_pct,country_majority,density_saturation,overpopulated
+Q3,Dhaka,BGD,Bangladesh,23.76,90.39,10278882,306.4,33547.3,50.4,49.6,female,1.0,True
+Q4,Berlin,DEU,Germany,52.52,13.4,3755251,891.1,4214.2,50.6,49.4,female,0.1,False
+Q2,Doha,QAT,Qatar,25.29,51.53,1186023,132.1,8978.2,28.4,71.6,male,0.4281,False
+Q1,Moscow,RUS,Russian Federation,55.75,37.62,13010112,2561.5,5079.1,53.6,46.4,female,0.181,False

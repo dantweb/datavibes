@@ -25,7 +25,28 @@
     `DATAVIBES_OUTPUT_DIR` is overridden; see the `.env` item below.
   - The `dev_log_day` skill now points at `docs/dev_log_day/` (it pointed at `docs/dev_log/`).
 
+- **S14 — city dot maps** · [sprint](done/s14-city-dot-maps.md) · [results](reports/r08-city-dot-maps.md)
+  - `svg-dot-map` writer (one dot per city ≥ 100,000, area ∝ population, same colour
+    scales), `sparql` source, `lookup` step, `null_outside` helper.
+  - `world-city-population-density` (country sex majority × city density) and
+    `-heat` (city density, red ≥ 10,000/km²). Live: 4,017 cities of ≥ 100k. Those that
+    can't be coloured are excluded, leaving 3,236 cities on the men/women map and 3,255 on
+    the heat map. Every map legend now has a **Coverage** block (shown / not included and
+    why), fed by run provenance from reasoned `filter` steps. 335 tests pass. Uncommitted.
+
+- **Documentation + licence:** `docs/managing-datasets.md` (operations, config,
+  scheduling, troubleshooting, catalog of 19 datasets), `docs/creating-datasets.md`
+  (tutorial; its five example configs were extracted and run live), `docs/reference.md`
+  (every primitive), `docs/README.md` index. `LICENSE`: BSL 1.1, with production use
+  free below 1 BTC annual revenue; Apache 2.0 from 2030-11-06.
+
 ## Carried forward
+
+- **Licence parameters to confirm:** Licensor "vbwd", Change Date 2030-11-06, Change
+  License Apache 2.0, and the contact URL were chosen as defaults.
+
+- **City data quality:** wrong Wikidata areas inside the 10–60,000/km² bounds; metro areas
+  typed as cities; XKS/XKX alias for `lookup` ([r08](reports/r08-city-dot-maps.md)).
 
 - **Map colour domain:** the men/women map's intensity still tops out at Macao
   (20,631/km², not drawn at 110m). Options: cap it at the overpopulation threshold, or add

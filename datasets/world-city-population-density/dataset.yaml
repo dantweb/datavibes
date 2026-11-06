@@ -1,0 +1,131 @@
+# colored-geostats #2 — every city of 100,000+ people as a dot on the world map.
+#   dot area   → city population
+#   dot colour → hue: the COUNTRY's sex majority (blue: more men · red: more women · grey: ≈ equal)
+#                     — open data has a city-level men/women split for only ~8% of cities
+#                intensity: white → full blue/red by the CITY's own density (log scale)
+
+parameters:
+  # Smallest city drawn (people). Used inside the SPARQL query below.
+  #   Try: CITY_MIN_POPULATION=500000 datavibes run world-city-population-density
+  min_city_population: "${CITY_MIN_POPULATION:-100000}"
+  # City density (people/km²) at or above which a city counts as OVERPOPULATED.
+  # Cities are far denser than countries (median ≈ 1,400/km²), hence 10,000 not 1,000.
+  overpopulated_per_km2: &overpopulated_per_km2 "${CITY_OVERPOPULATED_PER_KM2:-10000}"
+
+metadata:
+  slug: world-city-population-density
+  title: World Cities — Population, Density & Sex-Ratio Dot Map
+  category: colored-geostats
+  license: "CC0 (Wikidata); CC BY 4.0 (World Bank WDI); map geometry public domain (Natural Earth)"
+  update_frequency: monthly
+  attribution: &attribution "Cities: Wikidata (population, area, coordinates) · Sex ratio: World Bank WDI SP.POP.TOTL.FE.ZS, country level"
+
+schema:
+  - { name: wikidata_id,              dtype: str }
+  - { name: city,                     dtype: str }
+  - { name: iso3,                     dtype: str }
+  - { name: country,                  dtype: str,   nullable: true }
+  - { name: latitude,                 dtype: float }
+  - { name: longitude,                dtype: float }
+  - { name: population,               dtype: int }
+  - { name: area_km2,                 dtype: float, nullable: true }
+  - { name: density_per_km2,          dtype: float, unit: "people/km2", nullable: true, description: "population / area; cities with a missing or implausible area are excluded" }
+  - { name: country_female_share_pct, dtype: float, unit: "%", nullable: true }
+  - { name: country_male_share_pct,   dtype: float, unit: "%", nullable: true }
+  - { name: country_majority,         dtype: str,   nullable: true, description: "male | female | equal (±0.05 pp), country level" }
+  - { name: density_saturation,       dtype: float, nullable: true, description: "log-normalised city density in [0.1, 1.0] — the dot intensity" }
+  - { name: overpopulated,            dtype: bool,  nullable: true, description: "density_per_km2 >= parameters.overpopulated_per_km2" }
+
+sources:
+  - type: sparql
+    strip_uri_prefix: true
+    query: |
+      # Labels are resolved OUTSIDE the grouped subquery, i.e. only for the final
+      # ~4,000 cities; inside it the label service ran per row and took ~55 s
+      # (Wikidata's limit is 60 s). Now ~15 s cold.
+      SELECT ?city ?cityLabel ?iso3 ?population ?latitude ?longitude ?area_km2
+      WHERE {
+        {
+          SELECT ?city (SAMPLE(?iso) AS ?iso3) (MAX(?pop) AS ?population)
+                 (SAMPLE(?lat) AS ?latitude) (SAMPLE(?lon) AS ?longitude)
+                 (MAX(?areaM2) / 1000000 AS ?area_km2)
+          WHERE {
+            ?city wdt:P31/wdt:P279* wd:Q515 ;
+                  wdt:P1082 ?pop ;
+                  wdt:P17/wdt:P298 ?iso ;
+                  p:P625/psv:P625 [ wikibase:geoLatitude ?lat ; wikibase:geoLongitude ?lon ] .
+            # Wikidata keeps historical countries next to the current one; drop the
+            # withdrawn ISO 3166-3 codes (USSR, GDR, Yugoslavia, …).
+            FILTER(?iso NOT IN ("SUN", "DDR", "YUG", "CSK", "SCG", "ANT"))
+            OPTIONAL { ?city p:P2046/psn:P2046/wikibase:quantityAmount ?areaM2 . }
+          }
+          GROUP BY ?city
+          HAVING (MAX(?pop) >= ${CITY_MIN_POPULATION:-100000})
+        }
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "en,mul". }
+      }
+  - type: worldbank-latest
+    indicators:
+      SP.POP.TOTL.FE.ZS: { value: female_share_pct }
+    most_recent_non_empty: true
+    exclude_aggregates: true
+
+processing:
+  - rename: { columns: { city: wikidata_id, cityLabel: city } }
+  - lookup:
+      from_source: worldbank-latest
+      "on": iso3
+      columns: { female_share_pct: country_female_share_pct, country: country }
+  - normalize
+  - derive: { column: density_per_km2,          expr: "ratio(population, area_km2)" }
+  # Wikidata areas are crowd-sourced; a wrong unit gives impossible densities. Null them.
+  - derive: { column: density_per_km2,          expr: "null_outside(density_per_km2)", params: { low: 10, high: 60000 } }
+  - derive: { column: country_male_share_pct,   expr: "complement(country_female_share_pct, total=100)" }
+  - derive: { column: country_majority,         expr: "sex_majority(country_male_share_pct, tolerance=0.05)" }
+  # Exclude cities whose dot can't be coloured. One filter per reason, so the map legend
+  # can say how many cities were left out and why.
+  - filter: { when: { column: density_per_km2, not_null: true }, reason: "no usable density (missing or implausible area)" }
+  - filter: { when: { column: country_male_share_pct, not_null: true }, reason: "no country sex-ratio data" }
+  - derive: { column: density_saturation,       expr: "scale_to_range(density_per_km2, method=log, floor=0.1, ceil=1.0)" }
+  - derive: { column: overpopulated,            expr: "at_least(density_per_km2)", params: { threshold: *overpopulated_per_km2 } }
+  - derive: { column: density_per_km2,          expr: "round_to(density_per_km2, digits=1)" }
+  - derive: { column: area_km2,                 expr: "round_to(area_km2, digits=2)" }
+  - derive: { column: latitude,                 expr: "round_to(latitude, digits=4)" }
+  - derive: { column: longitude,                expr: "round_to(longitude, digits=4)" }
+  - derive: { column: country_female_share_pct, expr: "round_to(country_female_share_pct, digits=3)" }
+  - derive: { column: country_male_share_pct,   expr: "round_to(country_male_share_pct, digits=3)" }
+  - derive: { column: density_saturation,       expr: "round_to(density_saturation, digits=4)" }
+  - sort: { by: [iso3, city, wikidata_id] }
+  - validate
+
+outputs:
+  - csv
+  - svg-dot-map:
+      geometry: natural-earth-admin0-110m
+      scope: world
+      projection: equal-earth
+      exclude: [ATA]
+      latitude_column: latitude
+      longitude_column: longitude
+      size_column: population
+      size_label: city population
+      name_column: city
+      item_label: cities
+      label_columns: [country, population, density_per_km2, country_majority]
+      min_radius: 1.2
+      max_radius: 16
+      title: "Cities of 100,000+: population, density & sex ratio"
+      footer: *attribution
+      background: "#f3f6f9"
+      basemap_color: "#d5d9de"
+      border_color: "#ffffff"
+      dot_stroke: "#55595e"
+      color_scale:
+        type: sex-ratio-bivariate
+        ratio_column: country_male_share_pct
+        ratio_label: "sex majority (country level)"
+        value_column: density_per_km2
+        value_label: "city density (people/km², log scale)"
+        normalize: log
+        saturation_range: [0.1, 1.0]
+        tie_tolerance_pct: 0.05

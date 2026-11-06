@@ -83,6 +83,7 @@ class SexRatioBivariateScale(ColorScale):
         female_hue: float = 0.0,
         equal_color: str = "#9e9e9e",
         value_label: str = "",
+        ratio_label: str = "sex majority",
     ):
         floor, ceil = (float(bound) for bound in saturation_range)
         if not 0.0 <= floor < ceil <= 1.0:
@@ -100,6 +101,7 @@ class SexRatioBivariateScale(ColorScale):
         self.female_hue = float(female_hue)
         self.equal_color = equal_color
         self.value_label = value_label or value_column
+        self.ratio_label = ratio_label
 
     def paint(self, rows: list[dict]) -> Painting:
         densities = [row.get(self.value_column) for row in rows]
@@ -140,7 +142,7 @@ class SexRatioBivariateScale(ColorScale):
             )
         )
         return Legend(
-            title=f"Colour: sex majority · intensity (white → full): {self.value_label}",
+            title=f"Colour: {self.ratio_label} · intensity (white → full): {self.value_label}",
             bars=bars,
             swatches=(LegendSwatch(label="≈ equal", color=self.equal_color),),
         )

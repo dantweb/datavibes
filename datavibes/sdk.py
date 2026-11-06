@@ -184,12 +184,12 @@ class DatasetSDK:
         # rate-limited API look exactly like a green run with an empty CSV. Say so.
         for failure in snapshot.failed_sources:
             print(f"warning: source failed -> {failure}", file=sys.stderr)
-        processed = self.processor.process(config, snapshot.records)
+        processed, provenance = self.processor.process_with_provenance(config, snapshot.records)
         if fmt is not None:
-            paths = [self.exporter.export(config, processed, fmt=fmt)]
+            paths = [self.exporter.export(config, processed, fmt=fmt, provenance=provenance)]
         else:
             paths = self.exporter.export_outputs(
-                config, processed, default_format=self._format(None)
+                config, processed, default_format=self._format(None), provenance=provenance
             )
         if self.app_config.llm.enabled:
             try:

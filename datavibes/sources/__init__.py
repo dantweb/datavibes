@@ -8,6 +8,7 @@ from datavibes.sources.multi_http_json import MultiHttpJsonSource
 from datavibes.sources.paged_http_json import PagedHttpJsonSource
 from datavibes.sources.static import StaticSource
 from datavibes.sources.worldbank import WorldBankIndicatorSource
+from datavibes.sources.sparql import SparqlSource
 from datavibes.sources.worldbank_latest import WorldBankLatestSource
 
 __all__ = [
@@ -20,4 +21,5 @@ __all__ = [
     "JsonStatSource",
     "WorldBankIndicatorSource",
     "WorldBankLatestSource",
+    "SparqlSource",
 ]

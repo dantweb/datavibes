@@ -13,6 +13,7 @@ from typing import TYPE_CHECKING, Iterable
 if TYPE_CHECKING:
     from datavibes.context import FetchContext, RunContext
     from datavibes.maps.painting import Painting
+    from datavibes.provenance import Provenance
     from datavibes.schema.field import Schema
 
 
@@ -38,6 +39,13 @@ class Writer(ABC):
     @abstractmethod
     def write(self, rows: list[dict], schema: "Schema", dest: Path) -> Path:
         """Write ``rows`` to ``dest`` and return the written path."""
+
+    def attach_provenance(self, provenance: "Provenance") -> None:
+        """Optionally receive the run's provenance (rows excluded, and why).
+
+        Called by the exporter before :meth:`write`. Most writers ignore it;
+        map writers print it in their legend.
+        """
 
 
 class ColorScale(ABC):

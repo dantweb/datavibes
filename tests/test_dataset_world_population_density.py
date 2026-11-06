@@ -163,6 +163,8 @@ def test_bivariate_run_writes_csv_svg_and_join_report_byte_stably(tmp_path, fixe
     assert report["rows_not_drawn"] == ["MAC"]               # micro-state, no 110m shape
     assert "KOS" in report["features_with_missing_values"]   # aliased, but no density
     assert "ATA" not in report["features_without_rows"]      # excluded from the map
+    assert "Countries coloured: " in svg and "Without data (grey): " in svg
+    assert "In the data but not drawn (too small at this scale or outside the map): 1" in svg
 
 
 def test_csv_columns_and_derived_values(tmp_path, fixed_clock, make_session):

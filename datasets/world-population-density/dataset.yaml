@@ -58,6 +58,7 @@ outputs:
       projection: equal-earth
       exclude: [ATA]                       # Antarctica: no population data, a third of the canvas
       key_column: iso3
+      item_label: countries
       key_aliases: { SSD: SDS, PSE: PSX, XKX: KOS }   # World Bank ISO3 → Natural Earth ADM0_A3
       label_columns: [density_per_km2, male_share_pct, overpopulated, density_year]
       title: "Population density & sex ratio by country"

@@ -23,8 +23,9 @@ from datavibes.maps.geometry import (
     bounds,
     select_features,
 )
-from datavibes.maps.painting import LegendSwatch
+from datavibes.maps.painting import LegendSwatch, Painting
 from datavibes.maps.projection import resolve_projection
+from datavibes.provenance import Provenance
 from datavibes.registry import register_writer, resolve_color_scale
 from datavibes.schema.field import Schema
 
@@ -62,6 +63,7 @@ class SvgMapWriter(Writer):
         border_color: str = "#ffffff",
         border_width: float = 0.3,
         geometry_manifest: str | None = None,
+        item_label: str = "areas",
     ):
         if scope not in SCOPES:
             raise ConfigError(f"unknown map scope '{scope}' (expected one of {', '.join(SCOPES)})")
@@ -89,6 +91,12 @@ class SvgMapWriter(Writer):
         self.no_data_color = no_data_color
         self.border_color = border_color
         self.border_width = float(border_width)
+        # What one drawn thing is called in the coverage legend ("countries", "cities").
+        self.item_label = item_label
+        self.provenance = Provenance()
+
+    def attach_provenance(self, provenance: Provenance) -> None:
+        self.provenance = provenance
 
     # ------------------------------------------------------------------ write
     def write(self, rows: list[dict], schema: Schema, dest: Path) -> Path:
@@ -105,15 +113,51 @@ class SvgMapWriter(Writer):
 
         # The colour domain is the whole dataset (all rows), so map and CSV agree.
         painting = self.scale.paint(rows)
-        rows_by_key, fills_by_key, duplicates = self._index(rows, painting.fills)
+        layer, extra_legend, report = self._build_layers(features, rows, painting)
+        if self.provenance.exclusions:
+            report["excluded"] = self.provenance.as_dict()
 
         dest.parent.mkdir(parents=True, exist_ok=True)
-        dest.write_text(self._render(features, rows_by_key, fills_by_key, painting.legend), encoding="utf-8")
-        report = self._join_report(features, rows, rows_by_key, fills_by_key, duplicates)
+        dest.write_text(
+            self._render(
+                features,
+                layer,
+                painting.legend,
+                extra_legend,
+                self._show_no_data(report),
+                self._coverage_lines(report),
+            ),
+            encoding="utf-8",
+        )
         dest.with_suffix(".join.json").write_text(
             json.dumps(report, indent=2, sort_keys=True, ensure_ascii=False) + "\n", encoding="utf-8"
         )
         return dest
+
+    # ----------------------------------------------------------------- layers
+    def _build_layers(self, features: list[MapFeature], rows: list[dict], painting: Painting):
+        """Choropleth: each feature filled from its matched row.
+
+        Returns ``(layer, extra_legend, report)``: ``layer(to_canvas)`` → SVG
+        elements for the map area; ``extra_legend(left, top)`` → ``(elements,
+        height)`` drawn under the colour legend; ``report`` → the join report.
+        Subclasses override this to draw other map types on the same frame.
+        """
+        rows_by_key, fills_by_key, duplicates = self._index(rows, painting.fills)
+
+        def layer(to_canvas) -> list[str]:
+            return [
+                self._feature_path(
+                    feature,
+                    to_canvas,
+                    fills_by_key.get(feature.key) or self.no_data_color,
+                    self._tooltip(feature, rows_by_key.get(feature.key)),
+                )
+                for feature in features
+            ]
+
+        report = self._join_report(features, rows, rows_by_key, fills_by_key, duplicates)
+        return layer, _no_extra_legend, report
 
     # ------------------------------------------------------------------- join
     def _key_for(self, row: dict) -> str | None:
@@ -159,7 +203,37 @@ class SvgMapWriter(Writer):
         }
 
     # ----------------------------------------------------------------- render
-    def _render(self, features: list[MapFeature], rows_by_key, fills_by_key, legend) -> str:
+    def _coverage_lines(self, report: dict) -> list[str]:
+        """Legend "Coverage" block: what is coloured, what is grey, what is missing."""
+        drawn = report["drawn_features"]
+        coloured = report["matched_features"] - len(report["features_with_missing_values"])
+        label = self.item_label.capitalize()
+        lines = [
+            f"{label} coloured: {coloured:,} of {drawn:,} drawn",
+            f"Without data (grey): {drawn - coloured:,}",
+        ]
+        if report["rows_not_drawn"]:
+            lines.append(
+                "In the data but not drawn (too small at this scale or outside the map): "
+                f"{len(report['rows_not_drawn']):,}"
+            )
+        if self.provenance.exclusions:
+            lines.append(f"Excluded from the data: {_exclusion_summary(self.provenance.as_dict())}")
+        return lines
+
+    def _show_no_data(self, report: dict) -> bool:
+        """Whether the legend needs a "No data" swatch. Countries always might."""
+        return True
+
+    def _render(
+        self,
+        features: list[MapFeature],
+        layer,
+        legend,
+        extra_legend,
+        show_no_data: bool = True,
+        coverage: Sequence[str] = (),
+    ) -> str:
         standard_parallel = 0.0
         if self.scope != "world":
             lon_min, lat_min, lon_max, lat_max = self.clip_bbox or bounds(features)
@@ -179,14 +253,18 @@ class SvgMapWriter(Writer):
             x, y = project(lon, lat)
             return MARGIN + (x - x_min) * scale, map_top + (y_max - y) * scale
 
-        paths = [self._feature_path(feature, to_canvas, rows_by_key, fills_by_key) for feature in features]
+        paths = layer(to_canvas)
 
         legend_top = map_top + map_height + 16
-        legend_defs, legend_body, legend_height = svg.legend_markup(
-            legend, [LegendSwatch(label="No data", color=self.no_data_color)], MARGIN, legend_top
+        no_data = [LegendSwatch(label="No data", color=self.no_data_color)] if show_no_data else []
+        legend_defs, legend_body, legend_height = svg.legend_markup(legend, no_data, MARGIN, legend_top)
+        extra_body, extra_height = extra_legend(MARGIN, legend_top + legend_height)
+        coverage_body, coverage_height = _coverage_markup(
+            coverage, MARGIN, legend_top + legend_height + extra_height
         )
+        legend_body = legend_body + extra_body + coverage_body
         footer_lines = [line for line in (self.footer, self.entry.attribution, self.disclaimer) if line]
-        footer_top = legend_top + legend_height + 14
+        footer_top = legend_top + legend_height + extra_height + coverage_height + 14
         height = footer_top + 14 * len(footer_lines) + MARGIN / 2
 
         parts = [
@@ -242,7 +320,8 @@ class SvgMapWriter(Writer):
         ys = [y for _, y in projected]
         return min(xs), min(ys), max(xs), max(ys)
 
-    def _feature_path(self, feature: MapFeature, to_canvas, rows_by_key, fills_by_key) -> str:
+    @staticmethod
+    def _feature_path(feature: MapFeature, to_canvas, fill: str, tooltip: str) -> str:
         data = "".join(
             svg.ring_path([to_canvas(lon, lat) for lon, lat in ring])
             for polygon in feature.polygons
@@ -250,10 +329,9 @@ class SvgMapWriter(Writer):
         )
         if not data:
             return ""
-        fill = fills_by_key.get(feature.key) or self.no_data_color
         return (
             f'<path id="{svg.text(feature.key)}" fill="{fill}" fill-rule="evenodd" d="{data}">'
-            f"<title>{svg.text(self._tooltip(feature, rows_by_key.get(feature.key)))}</title></path>"
+            f"<title>{svg.text(tooltip)}</title></path>"
         )
 
     def _tooltip(self, feature: MapFeature, row: dict | None) -> str:
@@ -261,6 +339,32 @@ class SvgMapWriter(Writer):
             return f"{feature.name} — no data"
         details = " · ".join(f"{column}: {_format_cell(row.get(column))}" for column in self.label_columns)
         return f"{feature.name} — {details}" if details else feature.name
+
+
+def _no_extra_legend(left: float, top: float) -> tuple[list[str], float]:
+    return [], 0.0
+
+
+def _exclusion_summary(excluded: dict[str, int]) -> str:
+    total = sum(excluded.values())
+    reasons = " · ".join(f"{reason}: {count:,}" for reason, count in excluded.items())
+    return f"{total:,} — {reasons}"
+
+
+def _coverage_markup(lines: Sequence[str], left: float, top: float) -> tuple[list[str], float]:
+    """A bold "Coverage" heading and one text line per entry under it."""
+    if not lines:
+        return [], 0.0
+    body = [
+        f'<text x="{svg.number(left)}" y="{svg.number(top + 18)}" font-size="12" '
+        f'font-weight="bold" fill="{svg.TEXT_COLOR}">Coverage</text>'
+    ]
+    for index, line in enumerate(lines):
+        body.append(
+            f'<text x="{svg.number(left)}" y="{svg.number(top + 34 + 15 * index)}" font-size="11" '
+            f'fill="{svg.TEXT_COLOR}">{svg.text(line)}</text>'
+        )
+    return body, 26 + 15 * len(lines)
 
 
 def _format_cell(value: object) -> str:

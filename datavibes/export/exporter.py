@@ -7,6 +7,7 @@ from pathlib import Path
 
 from datavibes.config.models import DatasetConfig, OutputSpec
 from datavibes.context import Clock
+from datavibes.provenance import Provenance
 from datavibes.registry import resolve_writer
 from datavibes.store.filestore import FileStore
 
@@ -21,13 +22,21 @@ class Exporter:
         self.clock = clock
 
     def export(
-        self, config: DatasetConfig, rows: list[dict], fmt: str = "csv"
+        self,
+        config: DatasetConfig,
+        rows: list[dict],
+        fmt: str = "csv",
+        provenance: Provenance | None = None,
     ) -> Path:
         """Write one format (the explicit ``--format`` path)."""
-        return self._write(config, rows, OutputSpec(name=fmt), self.clock.now())
+        return self._write(config, rows, OutputSpec(name=fmt), self.clock.now(), provenance)
 
     def export_outputs(
-        self, config: DatasetConfig, rows: list[dict], default_format: str = "csv"
+        self,
+        config: DatasetConfig,
+        rows: list[dict],
+        default_format: str = "csv",
+        provenance: Provenance | None = None,
     ) -> list[Path]:
         """Write every declared output; all share one timestamp stem.
 
@@ -36,12 +45,18 @@ class Exporter:
         """
         specs = config.outputs or [OutputSpec(name=default_format)]
         timestamp = self.clock.now()
-        return [self._write(config, rows, spec, timestamp) for spec in specs]
+        return [self._write(config, rows, spec, timestamp, provenance) for spec in specs]
 
     def _write(
-        self, config: DatasetConfig, rows: list[dict], spec: OutputSpec, timestamp: datetime
+        self,
+        config: DatasetConfig,
+        rows: list[dict],
+        spec: OutputSpec,
+        timestamp: datetime,
+        provenance: Provenance | None = None,
     ) -> Path:
         writer = resolve_writer(spec.name, spec.options)
+        writer.attach_provenance(provenance or Provenance())
         extension = getattr(writer, "extension", None) or _FORMAT_EXTENSIONS.get(spec.name, spec.name)
         dest = self.store.output_path(
             config.category, config.slug, timestamp, extension=extension

@@ -496,6 +496,19 @@ def at_least(series: Sequence[Number], threshold: Number = 0.0) -> list:
     return [None if value is None or _is_nan(value) else float(value) >= limit for value in series]
 
 
+def null_outside(series: Sequence[Number], low: float, high: float) -> list[Number]:
+    """Keep values within ``[low, high]``; anything outside becomes ``None``.
+
+    For crowd-sourced inputs where a wrong unit produces impossible values
+    (a city area entered in hectares → 3,000,000 people/km²).
+    """
+    lower, upper = float(low), float(high)
+    return [
+        None if value is None or _is_nan(value) or not lower <= float(value) <= upper else float(value)
+        for value in series
+    ]
+
+
 def round_to(series: Sequence[Number], digits: int = 2) -> list[Number]:
     """Round each present value to ``digits`` decimals (for publishable columns)."""
     return [None if value is None else round(float(value), int(digits)) for value in series]
