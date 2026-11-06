@@ -14,6 +14,18 @@ same dataset every time. Monetisation, API delivery, entitlements and billing li
 **elsewhere** — in the VBWD `dataset` plugin, which *consumes* the files this tool
 produces (see [Output contract](#output-contract)).
 
+## Documentation
+
+| Guide | For |
+|---|---|
+| [docs/managing-datasets.md](docs/managing-datasets.md) | Running, configuring, scheduling and troubleshooting the existing datasets, plus the catalog of all of them |
+| [docs/creating-datasets.md](docs/creating-datasets.md) | Building a new dataset, step by step, with five complete working examples (CSV, API panel, country map, city dot map, custom adapter) |
+| [docs/reference.md](docs/reference.md) | Every source, processing step, derive helper, output writer and colour scale with its options |
+| [docs/charts.md](docs/charts.md) | Charts in the LLM-authored dataset reports |
+
+Licence: [Business Source License 1.1](LICENSE). Free for non-production use, and
+for production use while your annual revenue is below 1 BTC. See [License](#license).
+
 ---
 
 ## What this is (and is not)
@@ -201,6 +213,45 @@ sha256. `make geometry` refreshes the Natural Earth file.
 Shipped datasets: `world-population-density` (bivariate) and
 `world-population-density-heat` (spectral, same CSV).
 
+### City dot maps (`svg-dot-map`)
+
+`svg-dot-map` draws one dot per row on a neutral country basemap. It takes the same
+options and colour scales as `svg-map`, plus:
+
+```yaml
+  - svg-dot-map:
+      latitude_column: latitude
+      longitude_column: longitude
+      size_column: population      # dot AREA ∝ value (radius ∝ √value); largest drawn first
+      name_column: city            # tooltip heading
+      min_radius: 1.2
+      max_radius: 16
+      size_legend: [100000, 1000000, 10000000]
+      basemap_color: "#d5d9de"
+      dot_stroke: "#55595e"
+      color_scale: { … }           # same scales as svg-map
+```
+
+**Coverage legend.** Every map ends its legend with a "Coverage" block. Country maps show
+how many countries are coloured, grey, or in the data but too small to draw. Dot maps
+show "Cities shown: 3,236 of 4,017" and why the rest are not included. The exclusion
+counts come from the pipeline: give a `filter` step a `reason:` and the processor records
+how many rows it dropped (`Provenance`). The exporter then hands that record to every
+writer through `Writer.attach_provenance` (a no-op by default). `item_label: cities`
+names the things counted. The counts are also written to `<ts>.join.json` under `excluded`.
+
+Cities that can't be coloured are excluded by a `filter` step (no usable density; on the
+men/women map also no country sex ratio). The "No data" legend entry appears only if some
+dot is still uncoloured.
+
+Shipped: `world-city-population-density` (hue = the **country's** sex majority, because
+open data has a city-level split for only ~8% of cities; intensity = the city's own density)
+and `world-city-population-density-heat` (spectral by city density). Both cover every
+city of **≥ 100,000** people from Wikidata (`sparql` source). The `lookup` step adds the
+country columns from the World Bank to each city row. Parameters:
+`CITY_MIN_POPULATION` (default 100000) and `CITY_OVERPOPULATED_PER_KM2` (default 10000;
+cities are much denser than countries, median ≈ 1,400/km²).
+
 ---
 
 ## Configuration — `.env` (secrets) + `config.yaml` (app settings)
@@ -220,8 +271,11 @@ always win** — the loader never overwrites an already-set variable.
   `DATAVIBES_OUTPUT_DIR` (see below).
 
 ### `config.yaml` — app-level, non-secret
-Committed with documented defaults. String values support `${VAR}` and `${VAR:-default}`
-interpolation. **Secrets never go here.**
+Optional and **not committed** (gitignored). Copy the template:
+`cp config.yaml.dist config.yaml`. The template itself is never read; without a
+`config.yaml` the built-in defaults apply. Note that the template turns on LLM
+reports (`llm.enabled: true`). String values support `${VAR}` and
+`${VAR:-default}` interpolation. **Secrets never go here.**
 
 ```yaml
 paths:   { datasets_root: datasets, output_root: output, store_root: store }
@@ -267,15 +321,21 @@ catalog of datasets is authorable as config, not code:
 - **Source adapters** — `static`, `http_json`, `http_csv`, `paged_http_json` (page /
   offset / cursor paging + an env-var bearer token), `multi_http_json` (fan out over a
   declared item list, one request each), `columnar_http_json` (transpose an API's
-  parallel arrays into rows), `jsonstat` (Eurostat / e-Stat cubes) and
-  `worldbank-indicator`. A per-dataset `sources.py` is the exception (~30 lines), only
-  when a source's auth/paging/shape is unique.
-- **Processing steps** — `normalize`, `rename`, `dedupe`, `filter`, `sort`, `join`,
-  `derive`, `aggregate`, `age_days`, `score`, `flag`, `classify`, `forecast`, `validate`.
+  parallel arrays into rows), `jsonstat` (Eurostat / e-Stat cubes),
+  `worldbank-indicator` (country-year panels), `worldbank-latest` (latest value per
+  country) and `sparql` (Wikidata or any SPARQL endpoint). A per-dataset `sources.py`
+  is the exception (~30 lines), only when a source's auth/paging/shape is unique.
+- **Processing steps** — `normalize`, `rename`, `dedupe`, `filter` (with an optional
+  `reason`), `sort`, `join`, `lookup`, `derive`, `aggregate`, `age_days`, `score`,
+  `flag`, `classify`, `forecast`, `validate`.
 - **Derive helpers** — `yoy`, `pct_change`, `cagr`, `rolling_avg`, `anomaly`, `corr` /
   `rolling_corr`, `ratio`, `add`, `subtract`, `share` / `penetration`, `share_of_total`,
   `gini`, `hhi`, `minmax_normalize`, `zscore`, `volatility`, `seasonal_index`,
-  `linear_forecast`.
+  `linear_forecast`, `scale_to_range`, `complement`, `sex_majority`, `at_least`,
+  `null_outside`, `round_to`.
+- **Output writers** — `csv`, `json`, `parquet`, `svg-map` (country choropleth) and
+  `svg-dot-map` (one dot per row), with the colour scales `sex-ratio-bivariate` and
+  `spectral-density`. Full options: [docs/reference.md](docs/reference.md).
 
 Every "statistical preprocessing" requirement in the product catalog (aggregates,
 anomalies, rolling averages, correlations, growth rates, inequality metrics, geographic
@@ -289,3 +349,25 @@ the primitives that report called for were completed in
 > World Bank) is reachable through `jsonstat` or `worldbank-indicator`, and the one
 > SDMX-JSON endpoint worth adding it for (the ECB Data Portal) blocks non-browser
 > clients — so there is nothing to test it against yet.
+
+---
+
+## License
+
+datavibes is licensed under the **[Business Source License 1.1](LICENSE)**.
+
+- **Free:** reading, modifying, forking, experimenting, research, teaching, and any
+  other **non-production** use.
+- **Free for production and commercial use** while you (with your affiliates) earn
+  **less than 1 BTC in annual revenue**, valued at the BTC/USD rate on the last day
+  of the preceding 12 months.
+- **Above that threshold,** production use needs a commercial licence from the
+  Licensor.
+- **On the Change Date (2030-11-06),** or four years after a version's first public
+  release, whichever comes first, that version becomes available under the
+  **Apache License 2.0**.
+
+The licence covers this software. **Generated datasets carry the licences of
+their sources** (World Bank CC BY 4.0, Wikidata CC0, Natural Earth public domain,
+OWID CC BY 4.0, …). Each dataset states them in `metadata.license` and
+`metadata.attribution`; keep that attribution when you redistribute the data.
