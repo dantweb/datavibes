@@ -107,22 +107,28 @@ class FileStore:
         return self.read_raw(latest) if latest is not None else []
 
     # ----------------------------------------------------------------- output io
-    def latest_output(self, category: str, slug: str) -> Path | None:
+    def latest_output(
+        self, category: str, slug: str, extension: str | None = None
+    ) -> Path | None:
         """The most recent snapshot for ``category``/``slug`` (or ``None``).
 
         Only timestamp-named files count — report artifacts sharing the folder
-        are ignored.
+        are ignored. ``extension`` (e.g. ``"csv"``) narrows it to one format, for
+        datasets that write several outputs per run (csv + svg map + join report).
         """
-        return _latest_snapshot(self.dataset_output_dir(category, slug))
+        return _latest_snapshot(self.dataset_output_dir(category, slug), extension)
 
 
-def _latest_snapshot(folder: str | Path) -> Path | None:
+def _latest_snapshot(folder: str | Path, extension: str | None = None) -> Path | None:
     directory = Path(folder)
     if not directory.is_dir():
         return None
+    suffix = f".{extension}" if extension else ""
     files = sorted(
         child
         for child in directory.iterdir()
-        if child.is_file() and _SNAPSHOT_NAME.match(child.name)
+        if child.is_file()
+        and _SNAPSHOT_NAME.match(child.name)
+        and child.name.endswith(suffix)
     )
     return files[-1] if files else None

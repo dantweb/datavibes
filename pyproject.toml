@@ -34,6 +34,7 @@ include = ["datavibes*"]
 # Ship the default HTML report template inside the wheel so a pip-only
 # install renders the full report (no working tree required).
 "datavibes.report" = ["templates/*.html"]
+"datavibes.maps" = ["geometry/*.geojson", "geometry/*.yaml"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

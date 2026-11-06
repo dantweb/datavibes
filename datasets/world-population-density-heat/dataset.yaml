@@ -1,0 +1,69 @@
+# colored-geostats #1b — World population density on the spectral heat scale.
+# Same data and CSV as world-population-density; only the map colouring differs:
+#   dark blue (lowest) → sky blue → green (set average, log scale) → yellow → orange → red (highest)
+
+parameters:
+  # Density (people/km²) at or above which a country counts as OVERPOPULATED.
+  # Feeds the CSV `overpopulated` flag and the red end of the heat map.
+  # Try other values without editing: OVERPOPULATED_PER_KM2=500 datavibes run <slug>
+  overpopulated_per_km2: &overpopulated_per_km2 "${OVERPOPULATED_PER_KM2:-1000}"
+
+metadata:
+  slug: world-population-density-heat
+  title: World Population Density — Heat Map
+  category: colored-geostats
+  license: "CC BY 4.0 (World Bank WDI); map geometry public domain (Natural Earth)"
+  update_frequency: monthly
+  attribution: &attribution "Data: World Bank World Development Indicators (EN.POP.DNST, SP.POP.TOTL.FE.ZS), latest available year per country"
+
+schema:
+  - { name: iso3,               dtype: str }
+  - { name: country,            dtype: str }
+  - { name: density_per_km2,    dtype: float, unit: "people/km2", nullable: true }
+  - { name: density_year,       dtype: int,   nullable: true }
+  - { name: female_share_pct,   dtype: float, unit: "%", nullable: true }
+  - { name: male_share_pct,     dtype: float, unit: "%", nullable: true }
+  - { name: sex_year,           dtype: int,   nullable: true }
+  - { name: majority,           dtype: str,   nullable: true, description: "male | female | equal (±0.05 pp)" }
+  - { name: density_saturation, dtype: float, nullable: true, description: "log-normalised density in [0.1, 1.0] — the map intensity" }
+  - { name: overpopulated,      dtype: bool,  nullable: true, description: "density_per_km2 >= parameters.overpopulated_per_km2" }
+
+sources:
+  - type: worldbank-latest
+    indicators:
+      EN.POP.DNST:       { value: density_per_km2,  year: density_year }
+      SP.POP.TOTL.FE.ZS: { value: female_share_pct, year: sex_year }
+    most_recent_non_empty: true
+    exclude_aggregates: true
+
+processing:
+  - normalize
+  - derive: { column: male_share_pct,     expr: "complement(female_share_pct, total=100)" }
+  - derive: { column: majority,           expr: "sex_majority(male_share_pct, tolerance=0.05)" }
+  - derive: { column: density_saturation, expr: "scale_to_range(density_per_km2, method=log, floor=0.1, ceil=1.0)" }
+  - derive: { column: overpopulated,      expr: "at_least(density_per_km2)", params: { threshold: *overpopulated_per_km2 } }
+  - derive: { column: density_per_km2,    expr: "round_to(density_per_km2, digits=2)" }
+  - derive: { column: female_share_pct,   expr: "round_to(female_share_pct, digits=3)" }
+  - derive: { column: male_share_pct,     expr: "round_to(male_share_pct, digits=3)" }
+  - derive: { column: density_saturation, expr: "round_to(density_saturation, digits=4)" }
+  - validate
+
+outputs:
+  - csv
+  - svg-map:
+      geometry: natural-earth-admin0-110m
+      scope: world
+      projection: equal-earth
+      exclude: [ATA]                       # Antarctica: no population data, a third of the canvas
+      key_column: iso3
+      key_aliases: { SSD: SDS, PSE: PSX, XKX: KOS }   # World Bank ISO3 → Natural Earth ADM0_A3
+      label_columns: [density_per_km2, overpopulated, density_year]
+      title: "Population density by country"
+      footer: *attribution
+      color_scale:
+        type: spectral-density
+        value_column: density_per_km2
+        value_label: "Population density (people/km², log scale)"
+        normalize: log
+        center: mean                       # green = average of the set
+        saturate_above: *overpopulated_per_km2   # red = overpopulated and above

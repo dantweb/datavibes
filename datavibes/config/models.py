@@ -92,6 +92,18 @@ class ChartSpec:
 
 
 @dataclass
+class OutputSpec:
+    """A declared output: a registered writer ``name`` + its ``options``."""
+
+    name: str
+    options: dict = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        if not self.name:
+            raise ConfigError("output writer name must be non-empty")
+
+
+@dataclass
 class DatasetConfig:
     """The fully parsed ``dataset.yaml``."""
 
@@ -100,12 +112,16 @@ class DatasetConfig:
     sources: list[SourceSpec] = field(default_factory=list)
     processing: list[StepSpec] = field(default_factory=list)
     charts: list[ChartSpec] = field(default_factory=list)
+    outputs: list[OutputSpec] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         if not self.schema.fields:
             raise ConfigError("schema must declare at least one field")
         if not self.sources:
             raise ConfigError("at least one source is required")
+        names = [spec.name for spec in self.outputs]
+        if len(names) != len(set(names)):
+            raise ConfigError("outputs must not repeat a writer (they would overwrite each other)")
 
     @property
     def slug(self) -> str:

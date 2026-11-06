@@ -149,6 +149,60 @@ in the shape the plugin reads.**
 
 ---
 
+## Map datasets (`colored-geostats`)
+
+A dataset can declare several **outputs**. All of them share one timestamp stem. The
+`svg-map` writer renders the processed rows as a thermomap (choropleth) next to the CSV:
+
+```yaml
+outputs:
+  - csv
+  - svg-map:
+      geometry: natural-earth-admin0-110m   # vendored, sha256-checked (datavibes/maps/geometry/manifest.yaml)
+      scope: world                          # world | region (+ region: {iso3: [...]} or {continent: ...}, clip_bbox) | country (admin1 geometry)
+      projection: equal-earth               # default for world; equirectangular otherwise
+      exclude: [ATA]
+      key_column: iso3
+      key_aliases: { SSD: SDS }             # data code → geometry code
+      label_columns: [density_per_km2]      # tooltip contents
+      title: "…"
+      footer: "…"
+      color_scale: { type: sex-ratio-bivariate, ratio_column: male_share_pct, value_column: density_per_km2 }
+```
+
+```
+output/world-population-density/<ts>.csv        # the numbers
+output/world-population-density/<ts>.svg        # the map
+output/world-population-density/<ts>.join.json  # unmatched keys, both directions
+```
+
+**Colour scales** (registry: `register_color_scale`):
+
+| `type` | Meaning |
+|---|---|
+| `sex-ratio-bivariate` | hue = blue (more men) / red (more women) / grey (within `tie_tolerance_pct`); intensity = white blended toward the full hue by density, normalised to `saturation_range` (default 0.1 ≈ white … 1.0 = full colour) |
+| `spectral-density` | dark blue (lowest) → sky blue → **green (set average)** → yellow → orange → red (highest); `center: mean \| median`; `saturate_above: <value>` pins red to a threshold (everything ≥ it is red) |
+
+**Dataset parameters.** Both World Population Density datasets declare
+`parameters.overpopulated_per_km2` (default **1000**). One YAML anchor feeds the CSV
+`overpopulated` flag (via `derive … params:`) and the heat map's `saturate_above`. Try another
+value without editing: `OVERPOPULATED_PER_KM2=500 datavibes run world-population-density-heat`.
+
+Both normalise with `normalize: log` (default) or `linear`. They use the same
+`scale_to_range` helper as the CSV's `density_saturation` column, so the map and the CSV
+always agree. The colour domain is **every row of the dataset**.
+
+**Adding a scale** means one class implementing `ColorScale.paint(rows) -> Painting`,
+decorated with `@register_color_scale("name")`. The writer doesn't change.
+
+**Adding a geometry** means vendoring the file and adding a manifest entry with its
+sha256. `make geometry` refreshes the Natural Earth file.
+
+Shipped datasets: `world-population-density` (bivariate) and
+`world-population-density-heat` (spectral, same CSV).
+
+---
+
 ## Configuration — `.env` (secrets) + `config.yaml` (app settings)
 
 Two project-root files configure a run. Both are **optional** — with neither present the

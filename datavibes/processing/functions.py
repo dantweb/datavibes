@@ -8,6 +8,7 @@ No helper reads the clock, the network, or disk.
 
 from __future__ import annotations
 
+import math
 from typing import Optional, Sequence
 
 Number = Optional[float]
@@ -388,3 +389,131 @@ def _pearson(values_a: Sequence[Number], values_b: Sequence[Number]) -> Number:
     if variance_a == 0 or variance_b == 0:
         return None
     return covariance / ((variance_a * variance_b) ** 0.5)
+
+
+# ---------------------------------------------------------------------------
+# Map helpers (S13) — one home for density normalisation, shared by the CSV
+# ``derive`` step and every map colour scale so the two can never drift.
+# ---------------------------------------------------------------------------
+
+NORMALIZATION_METHODS = ("log", "linear")
+
+
+def normalization_domain(
+    series: Sequence[Number], method: str = "log", upper: Number = None
+) -> tuple[float, float] | None:
+    """``(low, high)`` of the *transformed* valid values, or ``None`` if none are valid.
+
+    ``upper`` (in real units) pins ``high`` to that value instead of the data
+    maximum — e.g. an "overpopulated" threshold that should read as the top of
+    the scale. ``high`` may then sit below ``low`` (threshold under every value).
+    """
+    transformed = [
+        value for value in (_transform(item, method) for item in series) if value is not None
+    ]
+    if not transformed:
+        return None
+    if upper is not None:
+        pinned = _transform(float(upper), method)
+        if pinned is None:
+            raise ValueError(f"upper bound {upper!r} is not valid for '{method}' normalisation")
+        return min(transformed), pinned
+    return min(transformed), max(transformed)
+
+
+def unit_normalize(
+    series: Sequence[Number], method: str = "log", upper: Number = None
+) -> list[Number]:
+    """Map each value onto ``[0, 1]`` over the series' own (transformed) domain.
+
+    Invalid values (``None``, NaN, and ``<= 0`` for ``log``) become ``None`` and
+    are excluded from the domain. If every valid value is equal, they all map
+    to ``0.5``. With ``upper``, values at or above it map to ``1.0`` (clamped).
+    """
+    domain = normalization_domain(series, method, upper=upper)
+    result: list[Number] = []
+    for item in series:
+        transformed = _transform(item, method)
+        if transformed is None or domain is None:
+            result.append(None)
+            continue
+        low, high = domain
+        if upper is not None and high <= low:
+            result.append(1.0 if transformed >= high else 0.0)
+        elif high == low:
+            result.append(0.5)
+        else:
+            result.append(min(1.0, max(0.0, (transformed - low) / (high - low))))
+    return result
+
+
+def scale_to_range(
+    series: Sequence[Number],
+    method: str = "log",
+    floor: float = 0.1,
+    ceil: float = 1.0,
+) -> list[Number]:
+    """Normalise ``series`` (log or linear min–max) onto ``[floor, ceil]``."""
+    return [
+        None if unit is None else floor + (ceil - floor) * unit
+        for unit in unit_normalize(series, method)
+    ]
+
+
+def value_at_unit(unit: float, domain: tuple[float, float], method: str = "log") -> float:
+    """Invert :func:`unit_normalize`: the real value sitting at ``unit`` in ``domain``."""
+    low, high = domain
+    transformed = low + (high - low) * unit
+    return 10.0 ** transformed if method == "log" else transformed
+
+
+def complement(series: Sequence[Number], total: float = 100.0) -> list[Number]:
+    """``total - value`` per element (e.g. male share from female share)."""
+    return [None if value is None else float(total) - float(value) for value in series]
+
+
+def sex_majority(male_share_pct: Sequence[Number], tolerance: float = 0.05) -> list:
+    """``"male"`` / ``"female"`` / ``"equal"`` from the male share in percent.
+
+    A majority needs a share strictly beyond ``50 ± tolerance``.
+    """
+    result: list = []
+    for value in male_share_pct:
+        if value is None or _is_nan(value):
+            result.append(None)
+        elif float(value) > 50.0 + tolerance:
+            result.append("male")
+        elif float(value) < 50.0 - tolerance:
+            result.append("female")
+        else:
+            result.append("equal")
+    return result
+
+
+def at_least(series: Sequence[Number], threshold: Number = 0.0) -> list:
+    """``True`` where the value is ``>= threshold`` (e.g. overpopulated); ``None`` stays ``None``."""
+    limit = float(threshold)
+    return [None if value is None or _is_nan(value) else float(value) >= limit for value in series]
+
+
+def round_to(series: Sequence[Number], digits: int = 2) -> list[Number]:
+    """Round each present value to ``digits`` decimals (for publishable columns)."""
+    return [None if value is None else round(float(value), int(digits)) for value in series]
+
+
+def _transform(value: Number, method: str) -> Number:
+    if method not in NORMALIZATION_METHODS:
+        raise ValueError(
+            f"unknown normalisation method '{method}' "
+            f"(expected one of {', '.join(NORMALIZATION_METHODS)})"
+        )
+    if value is None or _is_nan(value):
+        return None
+    number = float(value)
+    if method == "log":
+        return math.log10(number) if number > 0 else None
+    return number
+
+
+def _is_nan(value: object) -> bool:
+    return isinstance(value, float) and math.isnan(value)

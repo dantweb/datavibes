@@ -10,7 +10,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Callable, Type, TypeVar
 
 from datavibes.errors import DuplicateStrategyError, UnknownStrategyError
-from datavibes.interfaces import ProcessingStep, Source, Writer
+from datavibes.interfaces import ColorScale, ProcessingStep, Source, Writer
 
 if TYPE_CHECKING:
     from datavibes.config.models import SourceSpec, StepSpec
@@ -18,6 +18,7 @@ if TYPE_CHECKING:
 SOURCE_REGISTRY: dict[str, Type[Source]] = {}
 STEP_REGISTRY: dict[str, Type[ProcessingStep]] = {}
 WRITER_REGISTRY: dict[str, Type[Writer]] = {}
+COLOR_SCALE_REGISTRY: dict[str, Type[ColorScale]] = {}
 
 _RegisteredType = TypeVar("_RegisteredType")
 
@@ -52,6 +53,13 @@ def register_writer(name: str) -> Callable[[Type[Writer]], Type[Writer]]:
     return _register(WRITER_REGISTRY, "writer", name)
 
 
+def register_color_scale(
+    name: str,
+) -> Callable[[Type[ColorScale]], Type[ColorScale]]:
+    """Register a :class:`ColorScale` subclass under ``name``."""
+    return _register(COLOR_SCALE_REGISTRY, "color scale", name)
+
+
 def resolve_source(spec: "SourceSpec") -> Source:
     """Construct the source for ``spec`` from its options."""
     cls = SOURCE_REGISTRY.get(spec.type)
@@ -74,12 +82,25 @@ def resolve_step(spec: "StepSpec") -> ProcessingStep:
     return cls(**spec.options)
 
 
-def resolve_writer(name: str) -> Writer:
-    """Construct the writer registered under ``name``."""
+def resolve_writer(name: str, options: dict | None = None) -> Writer:
+    """Construct the writer registered under ``name`` from its ``options``."""
     cls = WRITER_REGISTRY.get(name)
     if cls is None:
         raise UnknownStrategyError(
             f"unknown writer '{name}' "
             f"(known: {', '.join(sorted(WRITER_REGISTRY)) or 'none'})"
         )
-    return cls()
+    return cls(**(options or {}))
+
+
+def resolve_color_scale(spec: dict) -> ColorScale:
+    """Construct the colour scale for ``spec`` (its ``type`` + options)."""
+    options = dict(spec or {})
+    name = options.pop("type", None)
+    cls = COLOR_SCALE_REGISTRY.get(name or "")
+    if cls is None:
+        raise UnknownStrategyError(
+            f"unknown color scale '{name}' "
+            f"(known: {', '.join(sorted(COLOR_SCALE_REGISTRY)) or 'none'})"
+        )
+    return cls(**options)

@@ -1,0 +1,13 @@
+# Vendored map geometries. Each file is verified against its sha256 on load.
+# Refresh with `make geometry` (downloads the pinned version, slims it, prints the sha256).
+natural-earth-admin0-110m:
+  file: ne_110m_admin_0_countries.geojson
+  level: admin0
+  key_property: ADM0_A3
+  name_property: NAME
+  continent_property: CONTINENT
+  source_url: https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_110m_admin_0_countries.geojson
+  version: v5.1.2
+  license: Public domain (Natural Earth)
+  attribution: Made with Natural Earth
+  sha256: 231e76b93e243210b4043fab1991f94e25bc0363c2c58ce0ba21e2a889f580d1

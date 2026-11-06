@@ -18,6 +18,7 @@ from datavibes.config.models import (
     ChartSpec,
     DatasetConfig,
     DatasetMetadata,
+    OutputSpec,
     SourceSpec,
     StepSpec,
 )
@@ -43,12 +44,14 @@ def load_config(path: str | Path) -> DatasetConfig:
     sources = _parse_sources(raw.get("sources"), config_path)
     processing = _parse_processing(raw.get("processing") or [], config_path)
     charts = _parse_charts(raw.get("charts") or [], config_path)
+    outputs = _parse_outputs(raw.get("outputs") or [], config_path)
     return DatasetConfig(
         metadata=metadata,
         schema=schema,
         sources=sources,
         processing=processing,
         charts=charts,
+        outputs=outputs,
     )
 
 
@@ -162,7 +165,17 @@ def _parse_charts(block: object, config_path: Path) -> list[ChartSpec]:
     return specs
 
 
-def _parse_step(entry: object, config_path: Path) -> StepSpec:
+def _parse_outputs(block: object, config_path: Path) -> list[OutputSpec]:
+    """``outputs:`` entries share the step syntax: a name or ``{name: {options}}``."""
+    if not isinstance(block, list):
+        raise ConfigError(f"{config_path}: 'outputs' must be a list")
+    return [
+        OutputSpec(name=step.name, options=step.options)
+        for step in (_parse_step(entry, config_path, kind="output") for entry in block)
+    ]
+
+
+def _parse_step(entry: object, config_path: Path, kind: str = "processing step") -> StepSpec:
     if isinstance(entry, str):
         return StepSpec(name=entry, options={})
     if isinstance(entry, dict) and len(entry) == 1:
@@ -171,9 +184,9 @@ def _parse_step(entry: object, config_path: Path) -> StepSpec:
             options = {}
         if not isinstance(options, dict):
             raise ConfigError(
-                f"{config_path}: options for step '{name}' must be a mapping"
+                f"{config_path}: options for {kind} '{name}' must be a mapping"
             )
         return StepSpec(name=name, options=interpolate_env(options))
     raise ConfigError(
-        f"{config_path}: a processing step must be a name or a single-key mapping"
+        f"{config_path}: a {kind} must be a name or a single-key mapping"
     )

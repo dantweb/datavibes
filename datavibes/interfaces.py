@@ -12,6 +12,7 @@ from typing import TYPE_CHECKING, Iterable
 
 if TYPE_CHECKING:
     from datavibes.context import FetchContext, RunContext
+    from datavibes.maps.painting import Painting
     from datavibes.schema.field import Schema
 
 
@@ -37,3 +38,11 @@ class Writer(ABC):
     @abstractmethod
     def write(self, rows: list[dict], schema: "Schema", dest: Path) -> Path:
         """Write ``rows`` to ``dest`` and return the written path."""
+
+
+class ColorScale(ABC):
+    """Maps rows to fill colours. Pure: rows in, :class:`Painting` out."""
+
+    @abstractmethod
+    def paint(self, rows: list[dict]) -> "Painting":
+        """Return per-row fills (hex, or ``None`` = no data) aligned to ``rows`` + a legend."""

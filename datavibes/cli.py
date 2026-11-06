@@ -135,8 +135,8 @@ def _cmd_export(sdk: DatasetSDK, args: argparse.Namespace) -> int:
 
 
 def _cmd_run(sdk: DatasetSDK, args: argparse.Namespace) -> int:
-    path = sdk.run(args.slug)
-    print(f"snapshot: {path}")
+    for path in sdk.run_outputs(args.slug):
+        print(f"snapshot: {path}")
     return 0
 
 

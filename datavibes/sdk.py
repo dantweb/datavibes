@@ -28,8 +28,9 @@ from datavibes.store.filestore import FileStore
 import datavibes.sources as _builtin_sources
 import datavibes.processing as _builtin_processing
 import datavibes.export as _builtin_export
+import datavibes.maps as _builtin_maps
 
-_ = (_builtin_sources, _builtin_processing, _builtin_export)
+_ = (_builtin_sources, _builtin_processing, _builtin_export, _builtin_maps)
 
 CONFIG_FILENAME = "dataset.yaml"
 DEFAULT_ENV_FILE = ".env"
@@ -126,6 +127,10 @@ class DatasetSDK:
 
         for spec in config.processing:
             resolve_step(spec)
+        from datavibes.registry import resolve_writer
+
+        for output in config.outputs:
+            resolve_writer(output.name, output.options)
         return config
 
     def info(self, slug: str) -> DatasetInfo:
@@ -136,8 +141,8 @@ class DatasetSDK:
 
     def latest_rows(self, slug: str) -> list[dict]:
         config = self._load(slug)
-        latest = self.store.latest_output(config.category, config.slug)
-        if latest is None or latest.suffix != ".csv":
+        latest = self.store.latest_output(config.category, config.slug, extension="csv")
+        if latest is None:
             return []
         return _read_csv(latest)
 
@@ -159,10 +164,20 @@ class DatasetSDK:
     def run(self, slug: str, fmt: str | None = None, http=None) -> Path:
         """The cron target: generate → process → export, composed in-memory.
 
+        With an explicit ``fmt`` exactly that format is written; otherwise every
+        declared output is written and the first one's path is returned.
+
         When ``llm.enabled`` is set, the dataset's reports (analytics.md /
         statistics.md / report.pdf) are authored afterwards. Report failures are
         logged and swallowed — a report problem must never fail a data run.
         """
+        return self._run(slug, fmt=fmt, http=http)[0]
+
+    def run_outputs(self, slug: str, http=None) -> list[Path]:
+        """Like :meth:`run`, returning every declared output (one shared timestamp)."""
+        return self._run(slug, fmt=None, http=http)
+
+    def _run(self, slug: str, fmt: str | None, http) -> list[Path]:
         config = self._load(slug)
         snapshot = self.generator.generate(config, http=http)
         # A source that fails degrades to zero rows by design (LSP), which makes a
@@ -170,13 +185,18 @@ class DatasetSDK:
         for failure in snapshot.failed_sources:
             print(f"warning: source failed -> {failure}", file=sys.stderr)
         processed = self.processor.process(config, snapshot.records)
-        path = self.exporter.export(config, processed, fmt=self._format(fmt))
+        if fmt is not None:
+            paths = [self.exporter.export(config, processed, fmt=fmt)]
+        else:
+            paths = self.exporter.export_outputs(
+                config, processed, default_format=self._format(None)
+            )
         if self.app_config.llm.enabled:
             try:
                 self._write_reports(config, processed)
             except Exception as error:  # degrade: never fail the run over a report
                 print(f"warning: report generation failed: {error}", file=sys.stderr)
-        return path
+        return paths
 
     def report(self, slug: str, llm=None):
         """Author the dataset's reports from its latest processed rows.
@@ -226,9 +246,9 @@ class DatasetSDK:
         return load_config(config_path)
 
     def _info_for(self, config: DatasetConfig) -> DatasetInfo:
-        latest = self.store.latest_output(config.category, config.slug)
+        latest = self.store.latest_output(config.category, config.slug, extension="csv")
         row_count = 0
-        if latest is not None and latest.suffix == ".csv":
+        if latest is not None:
             row_count = max(0, len(_read_csv(latest)))
         return DatasetInfo(
             slug=config.slug,

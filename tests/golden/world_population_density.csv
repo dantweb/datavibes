@@ -1,0 +1,9 @@
+iso3,country,density_per_km2,density_year,female_share_pct,male_share_pct,sex_year,majority,density_saturation,overpopulated
+BGD,Bangladesh,1301.0,2024,50.4,49.6,2025,female,0.791,True
+DEU,Germany,238.2,2024,50.6,49.4,2025,female,0.6626,False
+GRL,Greenland,0.14,2024,47.1,52.9,2025,male,0.1,False
+MAC,"Macao SAR, China",20630.6,2024,53.9,46.1,2025,female,1.0,True
+QAT,Qatar,245.4,2024,28.4,71.6,2025,male,0.6649,False
+RUS,Russian Federation,8.8,2024,53.6,46.4,2025,female,0.4132,False
+SSD,South Sudan,18.7,2023,50.02,49.98,2025,equal,0.4702,False
+XKX,Kosovo,,,50.2,49.8,2025,female,,

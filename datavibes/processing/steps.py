@@ -42,6 +42,11 @@ DERIVE_FUNCTIONS: dict[str, Callable] = {
     "zscore": functions.zscore,
     "seasonal_index": functions.seasonal_index,
     "linear_forecast": functions.linear_forecast,
+    "scale_to_range": functions.scale_to_range,
+    "complement": functions.complement,
+    "sex_majority": functions.sex_majority,
+    "round_to": functions.round_to,
+    "at_least": functions.at_least,
 }
 
 
@@ -93,7 +98,13 @@ class DeriveStep(ProcessingStep):
     e.g. a 5-year CAGR per country never spans two countries.
     """
 
-    def __init__(self, column: str, expr: str, by: list[str] | None = None):
+    def __init__(
+        self,
+        column: str,
+        expr: str,
+        by: list[str] | None = None,
+        params: dict | None = None,
+    ):
         if not column:
             raise ConfigError("derive requires a 'column'")
         if not expr:
@@ -101,6 +112,9 @@ class DeriveStep(ProcessingStep):
         self.column = column
         self.by = by or []
         self.func_name, self.positional, self.keywords = _parse_expr(expr)
+        # ``params`` carry keyword values that can't live inside the expr string,
+        # e.g. a YAML-anchored dataset parameter shared with a map colour scale.
+        self.keywords.update(params or {})
 
     def apply(self, rows: list[dict], ctx: RunContext) -> list[dict]:
         helper = DERIVE_FUNCTIONS.get(self.func_name)

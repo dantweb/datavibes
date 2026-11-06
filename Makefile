@@ -11,7 +11,7 @@ STAGE_DIR ?= /tmp/dv
 EXCLUDES  := --exclude='./.venv' --exclude='./.git' --exclude='./output' \
              --exclude='./store' --exclude='./data_out' --exclude='./__pycache__'
 
-.PHONY: run generate process stage config list test help
+.PHONY: run generate process stage config list test geometry help
 
 ## run: stage into the container and run the full generator (generate → process → export)
 run: stage
@@ -52,6 +52,15 @@ list: stage
 ## test: run the unit suite locally in the project venv (no network)
 test:
 	.venv/bin/pytest -q
+
+## geometry: re-vendor the pinned Natural Earth 110m countries (then update the sha256 in the manifest)
+NE_VERSION ?= v5.1.2
+NE_URL     := https://raw.githubusercontent.com/nvkelso/natural-earth-vector/$(NE_VERSION)/geojson/ne_110m_admin_0_countries.geojson
+geometry:
+	mkdir -p .cache
+	curl -sSfL -o .cache/ne_110m_admin_0_countries.geojson $(NE_URL)
+	.venv/bin/python -I scripts/vendor_natural_earth.py .cache/ne_110m_admin_0_countries.geojson \
+	  datavibes/maps/geometry/ne_110m_admin_0_countries.geojson
 
 ## help: list targets
 help:

@@ -2,7 +2,7 @@
 #
 # dev_log_day bootstrap — scaffold today's dev-log day.
 #
-# Creates docs/dev_log/<YYYYMMDD>/ with the canonical subfolders, seeds the
+# Creates docs/dev_log_day/<YYYYMMDD>/ with the canonical subfolders, seeds the
 # sprints/_engineering_requirements.md anchor, and drafts status.md by carrying
 # the previous day's status.md forward (re-dated, with a back-link).
 #
@@ -16,7 +16,7 @@ set -euo pipefail
 # Resolve repo root from this script's location (.claude/skills/dev_log_day/).
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
-LOG_DIR="$REPO_ROOT/docs/dev_log"
+LOG_DIR="$REPO_ROOT/docs/dev_log_day"
 
 TODAY="${1:-$(date +%Y%m%d)}"
 if ! [[ "$TODAY" =~ ^[0-9]{8}$ ]]; then

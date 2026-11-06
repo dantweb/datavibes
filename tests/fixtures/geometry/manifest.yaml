@@ -1,0 +1,22 @@
+fixture-countries:
+  file: countries.geojson
+  level: admin0
+  key_property: KEY
+  name_property: NAME
+  continent_property: CONTINENT
+  attribution: Fixture geometry
+  sha256: 58d2d935a8e17e67c95a587ff52bb4da790c0a446a7531e3f0e59b9601fffd6d
+fixture-admin1:
+  file: admin1.geojson
+  level: admin1
+  key_property: KEY
+  name_property: NAME
+  country_property: ADM0
+  attribution: Fixture geometry
+  sha256: 2a01d71cb64e7c1a92e1a580f4e5681c970dd5928ba127ed1cac1d60af3b65d8
+broken-checksum:
+  file: countries.geojson
+  level: admin0
+  key_property: KEY
+  name_property: NAME
+  sha256: 0000000000000000000000000000000000000000000000000000000000000000

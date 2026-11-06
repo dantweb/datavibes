@@ -1,17 +1,17 @@
 ---
 name: dev_log_day
-description: Scaffold today's dev-log day under docs/dev_log/<YYYYMMDD>/ — create the canonical subfolders (done/ reports/ sprints/ walkthrough/), seed the sprints/_engineering_requirements.md anchor, and draft status.md by carrying the previous day's backlog forward. Use when the user asks to "start the dev log", "create today's dev log / day log", "roll the dev log forward", or invokes /dev_log_day.
+description: Scaffold today's dev-log day under docs/dev_log_day/<YYYYMMDD>/ — create the canonical subfolders (done/ reports/ sprints/ walkthrough/), seed the sprints/_engineering_requirements.md anchor, and draft status.md by carrying the previous day's backlog forward. Use when the user asks to "start the dev log", "create today's dev log / day log", "roll the dev log forward", or invokes /dev_log_day.
 ---
 
 # dev_log_day
 
-Bootstraps the day-log structure this repo uses under `docs/dev_log/YYYYMMDD/`,
+Bootstraps the day-log structure this repo uses under `docs/dev_log_day/YYYYMMDD/`,
 then curates the carried-forward `status.md` into a clean draft.
 
 ## Layout this produces
 
 ```
-docs/dev_log/<YYYYMMDD>/
+docs/dev_log_day/<YYYYMMDD>/
 ├── status.md                         # forward backlog (carried from the last day that had one)
 ├── done/                             # finished sprint docs get moved here
 ├── reports/                          # per-feature reports authored during the day
