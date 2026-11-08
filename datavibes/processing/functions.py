@@ -514,6 +514,39 @@ def round_to(series: Sequence[Number], digits: int = 2) -> list[Number]:
     return [None if value is None else round(float(value), int(digits)) for value in series]
 
 
+def extend_with_index(observed: dict[int, float], index: dict[int, float]) -> dict[int, float]:
+    """Prices for index years without an observed price, chained from the nearest anchor.
+
+    The anchor is the closest year that has both a price and an index value
+    (an earlier year wins a tie), so a series is extended forward from its last
+    observation and backward from its first.
+    """
+    anchors = sorted(year for year in observed if year in index and index[year])
+    if not anchors:
+        return {}
+    extended: dict[int, float] = {}
+    for year, value in index.items():
+        if year in observed or value is None:
+            continue
+        anchor = min(anchors, key=lambda candidate: (abs(candidate - year), candidate))
+        extended[year] = observed[anchor] * value / index[anchor]
+    return extended
+
+
+def product(series_a: Sequence[Number], series_b: Sequence[Number]) -> list[Number]:
+    """Elementwise ``a × b`` (a USD amount × LCU per USD); ``None`` if either is missing."""
+    _require_equal_length(series_a, series_b, "product")
+    return [None if a is None or b is None else float(a) * float(b) for a, b in zip(series_a, series_b)]
+
+
+def scale(series: Sequence[Number], factor: float = 1.0, divisor: float = 1.0) -> list[Number]:
+    """Elementwise ``x × factor ÷ divisor`` — unit conversion (per tonne → per egg,
+    per year → per month); ``None`` stays ``None``."""
+    if not divisor:
+        raise ValueError("scale: divisor must be non-zero")
+    return [None if value is None else value * float(factor) / float(divisor) for value in series]
+
+
 def _transform(value: Number, method: str) -> Number:
     if method not in NORMALIZATION_METHODS:
         raise ValueError(

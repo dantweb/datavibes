@@ -48,6 +48,8 @@ DERIVE_FUNCTIONS: dict[str, Callable] = {
     "round_to": functions.round_to,
     "at_least": functions.at_least,
     "null_outside": functions.null_outside,
+    "scale": functions.scale,
+    "product": functions.product,
 }
 
 
@@ -565,17 +567,119 @@ class LookupStep(ProcessingStep):
         targets: list[dict] = []
         for row in rows:
             if str(row.get("_source", "")).startswith(self.prefix):
-                table.setdefault(row.get(self.on), row)
+                table.setdefault(_lookup_key(row.get(self.on)), row)
             else:
                 targets.append(row)
         result: list[dict] = []
         for row in targets:
             enriched = dict(row)
-            match = table.get(row.get(self.on), {})
+            match = table.get(_lookup_key(row.get(self.on)), {})
             for source_column, target_column in self.columns.items():
                 enriched[target_column] = match.get(source_column)
             result.append(enriched)
         return result
+
+
+def _lookup_key(value):
+    """Keys compare as text: before ``normalize`` one source's year is ``"1990"``, another's ``1990``."""
+    return None if value is None else str(value)
+
+
+@register_step("map")
+class MapStep(ProcessingStep):
+    """Set ``column`` from ``key`` through a fixed ``mapping`` (ISO3 → display name).
+
+    Rows whose key is not in the mapping keep their current value, so one
+    consistent label wins over whatever each source called the entity.
+    """
+
+    def __init__(self, column: str = "", key: str = "", mapping: dict | None = None):
+        if not column or not key or not mapping:
+            raise ConfigError("map requires 'column', 'key' and a non-empty 'mapping'")
+        self.column, self.key, self.mapping = column, key, dict(mapping)
+
+    def apply(self, rows: list[dict], ctx: RunContext) -> list[dict]:
+        for row in rows:
+            if row.get(self.key) in self.mapping:
+                row[self.column] = self.mapping[row[self.key]]
+        return rows
+
+
+@register_step("chain_index")
+class ChainIndexStep(ProcessingStep):
+    """Fill a level column's gaps from an index, per group.
+
+    With one ``index`` column, a row without a ``column`` value gets
+    ``level(anchor) × index(year) ÷ index(anchor)``, the anchor being the nearest
+    year that has both (an earlier year wins a tie): one known price plus an
+    index becomes a price series.
+
+    With a **list** of indices (best first), the series is extended outward one
+    year at a time from the known levels, and each link uses the first index
+    that covers both years: the indices are spliced. A UK new-car index that
+    stops in 2020 then carries 1996–2019 even though the anchor is 2025 (CPI
+    bridges 2020–2025). ``chained_label`` may then be a list, one label per index.
+    Filled rows get ``basis_column = <label>``.
+    """
+
+    def __init__(self, column: str = "", index=None, time: str = "year",
+                 by: list[str] | None = None, basis_column: str | None = None,
+                 chained_label="index-chained"):
+        if not column or not index:
+            raise ConfigError("chain_index requires 'column' and 'index'")
+        self.indices = [index] if isinstance(index, str) else list(index)
+        labels = [chained_label] if isinstance(chained_label, str) else list(chained_label)
+        if len(labels) == 1:
+            labels = labels * len(self.indices)
+        if len(labels) != len(self.indices):
+            raise ConfigError("chain_index: give one chained_label, or one per index")
+        self.labels = labels
+        self.spliced = not isinstance(index, str)
+        self.column, self.time = column, time
+        self.by = list(by or [])
+        self.basis_column = basis_column
+
+    def apply(self, rows: list[dict], ctx: RunContext) -> list[dict]:
+        groups: dict[tuple, list[dict]] = {}
+        for row in rows:
+            groups.setdefault(tuple(row.get(name) for name in self.by), []).append(row)
+        for members in groups.values():
+            levels = {row[self.time]: float(row[self.column]) for row in members
+                      if row.get(self.column) is not None and row.get(self.time) is not None}
+            indices = [{row[self.time]: float(row[name]) for row in members
+                        if row.get(name) is not None and row.get(self.time) is not None}
+                       for name in self.indices]
+            filled = (_splice_chain(levels, indices, self.labels) if self.spliced else
+                      {year: (value, self.labels[0])
+                       for year, value in functions.extend_with_index(levels, indices[0]).items()})
+            for row in members:
+                if row.get(self.column) is None and row.get(self.time) in filled:
+                    row[self.column], label = filled[row[self.time]]
+                    if self.basis_column:
+                        row[self.basis_column] = label
+        return rows
+
+
+def _splice_chain(levels: dict, indices: list[dict], labels: list[str]) -> dict:
+    """Grow ``levels`` year by year; each link uses the first index covering both years."""
+    known = dict(levels)
+    filled: dict = {}
+    frontier = sorted(known)
+    while frontier:
+        grown = []
+        for year in frontier:
+            for step in (-1, 1):
+                target = year + step
+                if target in known:
+                    continue
+                for index, label in zip(indices, labels):
+                    if index.get(year) and index.get(target) is not None:
+                        known[target] = known[year] * index[target] / index[year]
+                        filled[target] = (known[target], label)
+                        grown.append(target)
+                        break
+        frontier = grown
+    return filled
 
 
 @register_step("validate")

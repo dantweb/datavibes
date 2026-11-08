@@ -55,8 +55,8 @@ def test_json_keys_are_schema_ordered(tmp_path):
 
 def test_unknown_writer_names_the_format():
     with pytest.raises(UnknownStrategyError) as info:
-        resolve_writer("xlsx")
-    assert "xlsx" in str(info.value)
+        resolve_writer("ods")
+    assert "ods" in str(info.value)
 
 
 def test_exporter_writes_to_contract_path(store, fixed_clock):

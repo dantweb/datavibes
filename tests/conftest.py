@@ -51,6 +51,11 @@ class RecordingSession:
         )
         return self._responder(url, params, headers)
 
+    def post(self, url, json=None, headers=None, timeout=None):
+        """POST bodies reach the responder as ``params`` (BLS takes its query as JSON)."""
+        self.calls.append({"url": url, "json": json, "headers": headers, "timeout": timeout})
+        return self._responder(url, json, headers)
+
 
 @pytest.fixture
 def make_session():

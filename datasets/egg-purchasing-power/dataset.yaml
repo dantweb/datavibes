@@ -1,0 +1,593 @@
+# Egg purchasing power — how many hen eggs an average income buys, 1950–2025.
+#
+#   eggs per year = GNI per capita [current LCU] ÷ price of one egg [current LCU]
+#
+# Both sides are nominal and in the same currency in the same year, so no
+# deflator and no exchange rate are needed. The egg price is FAO's farm-gate
+# (producer) price; a retail egg typically costs 1.5–3× that, which shifts every
+# line down by about the same factor but leaves trends and rankings intact.
+# FAO prices start in 1966: the 1950–1965 stretch of the axis is an honest gap.
+#
+# Second chart: the same egg price against the average monthly earnings of
+# employees with ADVANCED (tertiary) education, from ILOSTAT. No source crosses
+# education with urban/rural residence, so "graduates in cities" is approximated
+# by graduates nationwide; most tertiary-educated employees work in cities anyway.
+# ILOSTAT has no education breakdown for Russia, China or Japan (empty panels).
+#
+# Seventh chart: an average middle-class car priced in eggs. The car is a
+# compact family sedan — the Toyota Corolla where it is the mainstream choice,
+# else the local equivalent (Lada Vesta, Maruti Dzire, Saipa Shahin). One
+# researched 2025 list price per country (Norway: 2019), chained back with the
+# best index available: new-car CPI (US BLS 1953→, Eurostat HICP 07.1.1 1996→
+# for EU + Norway + UK to 2020), then the general CPI (World Bank) for the rest.
+#
+# Fifth chart: grams of sterling silver a month of average income buys —
+# GNI per capita (Atlas method, current USD) ÷ the World Bank Pink Sheet silver
+# price (USD/troy oz) × 0.925. All in dollars: the World Bank's official
+# exchange rate is in pre-euro / pre-reform currencies before redenominations,
+# so converting silver into local currency would be wrong by 1.96× (DM) to 1000× (rubles).
+#
+# Fourth chart: a new 100 m² home priced in eggs. No open dataset has price
+# LEVELS per m² across these countries over time, so: BIS observed levels where
+# they exist (France new flats, Russia new dwellings, Poland flats, Norway all
+# dwellings), otherwise ONE researched anchor price per m² per country (with its
+# definition and confidence) chained through the BIS residential property price
+# index. Israel has an index but no level; Egypt, Iran, Argentina have neither.
+#
+# Third chart: the same egg price against the average monthly earnings of
+# employees living in URBAN areas (ILOSTAT, all education levels).
+# Sprint: docs/dev_log_day/20261108/sprints/s15-egg-purchasing-power.md
+
+parameters:
+  # Average mass of one hen egg in shell, grams (FAO prices are per tonne).
+  egg_weight_grams: &egg_weight_grams "${EGG_WEIGHT_GRAMS:-60}"
+  countries: &countries [USA, GBR, FRA, DEU, RUS, CHN, JPN, EGY, IND, ITA, ARG, MEX, THA,
+                         POL, GRC, ISR, IRN, BRA, CHL, NOR]
+  labels: &labels
+    { USA: United States, GBR: United Kingdom, FRA: France, DEU: Germany, RUS: USSR / Russia,
+      CHN: China, JPN: Japan, EGY: Egypt, IND: India, ITA: Italy, ARG: Argentina, MEX: Mexico,
+      THA: Thailand, POL: Poland, GRC: Greece, ISR: Israel, IRN: Iran, BRA: Brazil, CHL: Chile,
+      NOR: Norway }
+  # Sterling silver is 92.5 % silver; one troy ounce is 31.1034768 g.
+  sterling_fineness: &sterling_fineness 0.925
+  country_order: &country_order
+    [United States, United Kingdom, France, Germany, USSR / Russia, China, Japan,
+     Egypt, India, Italy, Argentina, Mexico, Thailand,
+     Poland, Greece, Israel, Iran, Brazil, Chile, Norway]
+
+metadata:
+  slug: egg-purchasing-power
+  title: Egg Purchasing Power — Eggs an Average Income Buys, 1950–2025
+  category: economy
+  license: &license "CC BY 4.0 (World Bank WDI, ILOSTAT); CC BY-NC-SA 3.0 IGO (FAOSTAT)"
+  update_frequency: annual
+  attribution: &attribution "Data: FAOSTAT Producer Prices (current + old series), hen eggs in shell; World Bank WDI NY.GNP.PCAP.CN (GNI per capita, current LCU); ILOSTAT EAR_EMTA_SEX_EDU_CUR_NB / EAR_EMTA_SEX_GEO_CUR_NB (earnings by education / urban area, USD) × World Bank PA.NUS.FCRF; World Bank Pink Sheet (silver) and NY.GNP.PCAP.CD"
+
+schema:
+  - { name: iso3,                dtype: str }
+  - { name: country,             dtype: str }
+  - { name: year,                dtype: int }
+  - { name: gni_per_capita_lcu,  dtype: float, nullable: true, unit: "current LCU", description: "GNI per capita — the average income, World Bank" }
+  - { name: price_slc_per_tonne, dtype: float, nullable: true, unit: "current LCU/tonne", description: "FAO producer price of hen eggs, in today's currency unit" }
+  - { name: price_basis,         dtype: str, nullable: true, description: "observed | archive-rebased (pre-1991 series in today's currency) | index-extended (FAO price index from the nearest observed year)" }
+  - { name: price_per_egg_lcu,   dtype: float, nullable: true, unit: "current LCU", description: "price_slc_per_tonne × egg_weight_grams ÷ 10⁶" }
+  - { name: eggs_per_year,       dtype: float, nullable: true, unit: "eggs", description: "eggs one year of average income buys" }
+  - { name: eggs_per_month,      dtype: float, nullable: true, unit: "eggs" }
+  - { name: eggs_per_day,        dtype: float, nullable: true, unit: "eggs" }
+  - { name: lcu_per_usd,                 dtype: float, nullable: true, unit: "LCU per USD", description: "official exchange rate, annual average, World Bank PA.NUS.FCRF" }
+  - { name: graduate_earnings_usd_month, dtype: float, nullable: true, unit: "USD/month", description: "average monthly earnings of employees with advanced (tertiary) education, ILOSTAT EAR_EMTA_SEX_EDU_CUR_NB (USD)" }
+  - { name: graduate_earnings_lcu_month, dtype: float, nullable: true, unit: "current LCU/month", description: "graduate_earnings_usd_month × lcu_per_usd" }
+  - { name: graduate_earnings_survey,    dtype: str,   nullable: true, description: "ILOSTAT survey code behind the earnings figure" }
+  - { name: eggs_per_month_graduate,     dtype: float, nullable: true, unit: "eggs", description: "eggs one month of a graduate's average earnings buys" }
+  - { name: urban_earnings_usd_month,    dtype: float, nullable: true, unit: "USD/month", description: "average monthly earnings of employees in urban areas, ILOSTAT EAR_EMTA_SEX_GEO_CUR_NB (USD)" }
+  - { name: urban_earnings_lcu_month,    dtype: float, nullable: true, unit: "current LCU/month", description: "urban_earnings_usd_month × lcu_per_usd" }
+  - { name: urban_earnings_survey,       dtype: str,   nullable: true, description: "ILOSTAT survey code behind the urban earnings figure" }
+  - { name: house_price_index,           dtype: float, nullable: true, description: "BIS residential property price index, nominal, 2010 = 100, annual mean" }
+  - { name: house_price_lcu_m2,          dtype: float, nullable: true, unit: "current LCU/m²", description: "price of one m² of housing: observed (BIS), anchor, or index-chained from them" }
+  - { name: house_price_basis,           dtype: str,   nullable: true, description: "observed | anchor | index-chained" }
+  - { name: house_anchor_note,           dtype: str,   nullable: true, description: "on the anchor row only: confidence — source and definition" }
+  - { name: house_price_100m2_lcu,       dtype: float, nullable: true, unit: "current LCU", description: "house_price_lcu_m2 × 100" }
+  - { name: eggs_per_house,              dtype: float, nullable: true, unit: "eggs", description: "eggs a new 100 m² home costs" }
+  - { name: gni_per_capita_usd,          dtype: float, nullable: true, unit: "current USD", description: "GNI per capita, Atlas method, World Bank NY.GNP.PCAP.CD" }
+  - { name: silver_usd_per_troy_oz,      dtype: float, nullable: true, unit: "USD/troy oz", description: "World Bank Pink Sheet annual silver price (rounded to 0.1 USD by the source)" }
+  - { name: sterling_usd_per_gram,       dtype: float, nullable: true, unit: "USD/g", description: "silver value of one gram of sterling silver (92.5 % Ag)" }
+  - { name: sterling_grams_per_month,    dtype: float, nullable: true, unit: "g", description: "grams of sterling silver one month of average income buys (metal value, no making charge)" }
+  - { name: sterling_lbs_per_year,       dtype: float, nullable: true, unit: "lb (avoirdupois)", description: "pounds of sterling silver one YEAR of average income buys = grams/month × 12 ÷ 453.59237" }
+  - { name: cpi_general,                 dtype: float, nullable: true, description: "consumer price index, 2010 = 100, World Bank FP.CPI.TOTL" }
+  - { name: car_price_index,             dtype: float, nullable: true, description: "new-car price index: US BLS CPI new vehicles (1982–84 = 100) or Eurostat HICP 07.1.1 (2015 = 100)" }
+  - { name: car_price_lcu,               dtype: float, nullable: true, unit: "current LCU", description: "price of a middle-class car: anchor, or chained from it" }
+  - { name: car_price_basis,             dtype: str,   nullable: true, description: "anchor | car-index-chained | CPI-chained" }
+  - { name: car_anchor_note,             dtype: str,   nullable: true, description: "on the anchor row only: confidence — model and source" }
+  - { name: eggs_per_car,                dtype: float, nullable: true, unit: "eggs", description: "eggs a middle-class car costs" }
+  - { name: eggs_per_month_urban,        dtype: float, nullable: true, unit: "eggs", description: "eggs one month of an urban employee's average earnings buys" }
+
+sources:
+  - type: worldbank-indicator
+    date_range: "1950:2025"
+    indicators:
+      NY.GNP.PCAP.CN: gni_per_capita_lcu
+      PA.NUS.FCRF: lcu_per_usd          # official rate, annual average — converts ILOSTAT's USD earnings
+      NY.GNP.PCAP.CD: gni_per_capita_usd  # Atlas method — the silver chart stays in dollars
+      FP.CPI.TOTL: cpi_general            # consumer prices, 2010 = 100 — the car chain's fallback
+
+  - type: bls-series
+    series: { USA: CUUR0000SETA01 }       # CPI-U new vehicles, 1953→
+    value_column: car_price_index
+    start_year: 1953
+
+  - type: jsonstat
+    url: https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_hicp_aind
+    params: { format: JSON, unit: INX_A_AVG, coicop: CP0711, geo: [DE, EL, FR, IT, PL, "NO", UK] }
+    value_column: car_price_index         # HICP new motor cars, annual average index, 1996→
+    dimensions: { geo: geo, time: year }
+
+  # One researched price of a middle-class car per country: "confidence — model and source".
+  - type: static
+    records:
+      - { iso3: USA, year: 2025, car_price_lcu: 22325, car_price_basis: anchor, car_anchor_note: "medium-high — Toyota Corolla LE sedan, MSRP excl. USD 1,135 destination (cars.com, KBB)" }
+      - { iso3: GBR, year: 2025, car_price_lcu: 30505, car_price_basis: anchor, car_anchor_note: "high — Toyota Corolla Icon 1.8 hybrid hatchback, on-the-road, Toyota UK price list Jan 2025" }
+      - { iso3: FRA, year: 2025, car_price_lcu: 34550, car_price_basis: anchor, car_anchor_note: "medium — Toyota Corolla berline 1.8 hybride Dynamic: EUR 30,050 invoiced after a EUR 4,500 discount (toyota.fr)" }
+      - { iso3: DEU, year: 2025, car_price_lcu: 33340, car_price_basis: anchor, car_anchor_note: "low — Toyota Corolla Limousine 1.8 hybrid Comfort list price (autotijd.be, list stamped 2023); new from ~EUR 32,000 (AutoScout24)" }
+      - { iso3: RUS, year: 2025, car_price_lcu: 1281000, car_price_basis: anchor, car_anchor_note: "medium — Lada Vesta Comfort 1.6 MT, 2025 model year, dealer price (Avtogermes); the Corolla left Russia in 2022" }
+      - { iso3: CHN, year: 2025, car_price_lcu: 126800, car_price_basis: anchor, car_anchor_note: "medium — Toyota Corolla (FAW Toyota) guide price after the Dec 2025 refresh; transactions from CNY 99,000 (Autohome)" }
+      - { iso3: JPN, year: 2025, car_price_lcu: 2279200, car_price_basis: anchor, car_anchor_note: "high — Toyota Corolla sedan hybrid, tax included, May 2025 update (car-repo.jp, kuruma-news)" }
+      - { iso3: EGY, year: 2025, car_price_lcu: 1300000, car_price_basis: anchor, car_anchor_note: "medium — Toyota Corolla 1.6 entry trim (Hatla2ee, Yallamotor)" }
+      - { iso3: IND, year: 2025, car_price_lcu: 679000, car_price_basis: anchor, car_anchor_note: "medium — Maruti Suzuki Dzire LXi, ex-showroom launch price (INR 6.26 lakh after the Sep 2025 GST cut)" }
+      - { iso3: ITA, year: 2025, car_price_lcu: 33300, car_price_basis: anchor, car_anchor_note: "medium — Toyota Corolla 1.8 Hybrid Active list price (motorionline.com)" }
+      - { iso3: ARG, year: 2025, car_price_lcu: 32908000, car_price_basis: anchor, car_anchor_note: "medium — Toyota Corolla 2.0 XLI CVT, list price July 2025 (Aire de Santa Fe); ~ARS 38.3 m by October" }
+      - { iso3: MEX, year: 2025, car_price_lcu: 421100, car_price_basis: anchor, car_anchor_note: "high — Toyota Corolla Base 2025 (Motorpasión, AutosNuevos)" }
+      - { iso3: THA, year: 2025, car_price_lcu: 894000, car_price_basis: anchor, car_anchor_note: "high — Toyota Corolla Altis 1.6G (ZigWheels Thailand)" }
+      - { iso3: POL, year: 2025, car_price_lcu: 107900, car_price_basis: anchor, car_anchor_note: "high — Toyota Corolla Sedan 1.5 Active, Toyota Polska list from Oct 2024" }
+      - { iso3: GRC, year: 2025, car_price_lcu: 21570, car_price_basis: anchor, car_anchor_note: "medium — Toyota Corolla Sedan 1.5 Active, after the mid-2025 price revision (gocar.gr)" }
+      - { iso3: ISR, year: 2025, car_price_lcu: 159990, car_price_basis: anchor, car_anchor_note: "medium — Toyota Corolla sedan hybrid, launch price (auto.co.il)" }
+      - { iso3: IRN, year: 2025, car_price_lcu: 8365440000, car_price_basis: anchor, car_anchor_note: "low — Saipa Shahin Automatic G factory price, Aug 2025: 836,544,000 toman = rials ×10 (livingintehran tracker); market ~18 % higher" }
+      - { iso3: BRA, year: 2025, car_price_lcu: 158490, car_price_basis: anchor, car_anchor_note: "high — Toyota Corolla GLi 2.0 list price (vrum.com.br, March 2025)" }
+      - { iso3: CHL, year: 2025, car_price_lcu: 24590000, car_price_basis: anchor, car_anchor_note: "low — Toyota Corolla Sedan XLI 1.8 HEV list price, undated dealer page (Academia Xray)" }
+      - { iso3: NOR, year: 2019, car_price_lcu: 313400, car_price_basis: anchor, car_anchor_note: "low — Toyota Corolla hybrid hatchback Sense, Feb 2019 price list (Nordvik press release); no 2025 list found" }
+
+  - type: worldbank-pinksheet
+    commodities: { Silver: silver_usd_per_troy_oz }
+
+  - type: ilostat
+    # The *_CUR_* variant in USD: ILOSTAT's "local currency" figures from EU
+    # Structure-of-Earnings surveys (UK, Norway, Poland: source BB:…) are really
+    # euros. USD × the World Bank's LCU-per-USD rate gives true local currency for all.
+    indicator: EAR_EMTA_SEX_EDU_CUR_NB_A
+    ref_areas: *countries
+    filters: { sex: SEX_T, classif1: EDU_AGGREGATE_ADV, classif2: CUR_TYPE_USD }
+    value_column: graduate_earnings_usd_month
+    source_column: graduate_earnings_survey
+    exclude_before: &ilostat_egypt_glitch
+      EGY: { year: 2010, reason: "2008–2009 earnings are ~10× below 2010 in every ILOSTAT breakdown — implausible" }
+
+  - type: ilostat
+    indicator: EAR_EMTA_SEX_GEO_CUR_NB_A
+    ref_areas: *countries
+    filters: { sex: SEX_T, classif1: GEO_COV_URB, classif2: CUR_TYPE_USD }
+    value_column: urban_earnings_usd_month
+    source_column: urban_earnings_survey
+    exclude_before: *ilostat_egypt_glitch
+
+  - type: bis-series
+    dataflow: WS_SPP
+    value_column: house_price_index
+    filters: { FREQ: Q, VALUE: N, UNIT_MEASURE: "628" }
+    series:
+      USA: { REF_AREA: US }
+      GBR: { REF_AREA: GB }
+      FRA: { REF_AREA: FR }
+      DEU: { REF_AREA: DE }
+      RUS: { REF_AREA: RU }
+      CHN: { REF_AREA: CN }
+      JPN: { REF_AREA: JP }
+      IND: { REF_AREA: IN }
+      ITA: { REF_AREA: IT }
+      MEX: { REF_AREA: MX }
+      THA: { REF_AREA: TH }
+      POL: { REF_AREA: PL }
+      GRC: { REF_AREA: GR }
+      ISR: { REF_AREA: IL }
+      BRA: { REF_AREA: BR }
+      CHL: { REF_AREA: CL }
+      NOR: { REF_AREA: "NO" }   # quoted: bare NO is YAML for false
+
+  - type: bis-series
+    dataflow: WS_DPP
+    value_column: house_price_lcu_m2
+    basis_column: house_price_basis
+    basis: observed
+    series:   # codes: COVERED_AREA 0 whole country / 9 urban; RE_TYPE 1 all / 8 flats; RE_VINTAGE 0 all / 2 new; PRICED_UNIT 1 per m²
+      FRA: { REF_AREA: FR, FREQ: Q, COVERED_AREA: "0", RE_TYPE: "8", RE_VINTAGE: "2", PRICED_UNIT: "1" }
+      RUS: { REF_AREA: RU, FREQ: Q, COVERED_AREA: "9", RE_TYPE: "1", RE_VINTAGE: "2", PRICED_UNIT: "1" }
+      POL: { REF_AREA: PL, FREQ: A, COVERED_AREA: "0", RE_TYPE: "8", RE_VINTAGE: "0", PRICED_UNIT: "1" }
+      NOR: { REF_AREA: "NO", FREQ: A, COVERED_AREA: "0", RE_TYPE: "1", RE_VINTAGE: "0", PRICED_UNIT: "1", multiplier: 1000 }   # thousand NOK/m²
+
+  # One researched price per m² per country (year, LCU/m²), chained through the
+  # BIS index by the chain_index step. "confidence — source and definition".
+  - type: static
+    records:
+      - { iso3: USA, year: 2025, house_price_lcu_m2: 2048.0, house_price_basis: anchor, house_anchor_note: "medium — Census Survey of Construction 2025: median sales price of new single-family houses sold USD 417,400 ÷ median floor area 2,194 sq ft (incl. land)" }
+      - { iso3: GBR, year: 2021, house_price_lcu_m2: 2971.0, house_price_basis: anchor, house_anchor_note: "medium — ONS regional house price levels per m², 2021 Q1–Q3, unweighted mean of the 9 English regions and Wales (all dwellings)" }
+      - { iso3: DEU, year: 2025, house_price_lcu_m2: 5478.0, house_price_basis: anchor, house_anchor_note: "low — Global Property Guide 2025 H1: primary (new) properties, nationwide average EUR 5,478/m²" }
+      - { iso3: CHN, year: 2024, house_price_lcu_m2: 10419.0, house_price_basis: anchor, house_anchor_note: "high — NBS 2024: residential sales CNY 8,486.4 bn ÷ 814.50 mn m² sold (new commercial housing)" }
+      - { iso3: JPN, year: 2024, house_price_lcu_m2: 943000.0, house_price_basis: anchor, house_anchor_note: "high — Real Estate Economic Institute 2024: nationwide new condominiums, JPY 943,000/m²" }
+      - { iso3: IND, year: 2024, house_price_lcu_m2: 92463.0, house_price_basis: anchor, house_anchor_note: "low — ANAROCK end-2024: top-7-city average INR 8,590/sq ft (built-up area)" }
+      - { iso3: ITA, year: 2024, house_price_lcu_m2: 1500.0, house_price_basis: anchor, house_anchor_note: "medium — OMI/ABI Rapporto Immobiliare 2025: ~EUR 114 bn ÷ ~76 mn m² of dwellings sold in 2024 (all dwellings)" }
+      - { iso3: MEX, year: 2025, house_price_lcu_m2: 31397.0, house_price_basis: anchor, house_anchor_note: "low — Banorte INBAPREVI, November 2025: national average MXN 31,397/m² (all housing)" }
+      - { iso3: THA, year: 2024, house_price_lcu_m2: 106094.0, house_price_basis: anchor, house_anchor_note: "low — REIC 2024: condominium units transferred to foreigners nationwide, THB 4.7 m ÷ 44.1 m²" }
+      - { iso3: GRC, year: 2024, house_price_lcu_m2: 3000.0, house_price_basis: anchor, house_anchor_note: "low — RE/MAX Hellas 2024: newly built properties nationwide above EUR 3,000/m² (listing prices)" }
+      - { iso3: BRA, year: 2024, house_price_lcu_m2: 9366.0, house_price_basis: anchor, house_anchor_note: "medium — FipeZap December 2024: BRL 9,366/m², apartments for sale in 56 cities (listing prices)" }
+      - { iso3: CHL, year: 2024, house_price_lcu_m2: 2957000.0, house_price_basis: anchor, house_anchor_note: "low — CChC Q4 2024: new apartments 77.3 UF/m² (Gran Santiago) × UF ≈ CLP 38,250" }
+
+  # Listed last so its country labels ("USSR / Russia") win the join.
+  - type: faostat-prices
+    item: "Hen eggs in shell, fresh"
+    value_column: price_slc_per_tonne
+    basis_column: price_basis
+    areas:
+      USA: { label: United States,  names: ["United States of America"] }
+      GBR: { label: United Kingdom, names: ["United Kingdom of Great Britain and Northern Ireland"] }
+      FRA: { label: France,         names: [France] }
+      DEU: { label: Germany,        names: [Germany] }
+      RUS: { label: USSR / Russia,  names: ["Russian Federation"], archive_names: [USSR] }
+      CHN: { label: China,          names: ["China, mainland"], archive_names: [China] }
+      JPN: { label: Japan,          names: [Japan] }
+      EGY: { label: Egypt,          names: [Egypt] }
+      IND: { label: India,          names: [India] }
+      ITA: { label: Italy,          names: [Italy] }
+      ARG: { label: Argentina,      names: [Argentina] }
+      MEX: { label: Mexico,         names: [Mexico] }
+      THA: { label: Thailand,       names: [Thailand] }
+      POL: { label: Poland,         names: [Poland] }
+      GRC: { label: Greece,         names: [Greece] }
+      ISR: { label: Israel,         names: [Israel] }
+      IRN: { label: Iran,           names: ["Iran (Islamic Republic of)"] }
+      BRA: { label: Brazil,         names: [Brazil] }
+      CHL: { label: Chile,          names: [Chile] }
+      NOR: { label: Norway,         names: [Norway] }
+    archive_rescale:
+      # FAO's old series switches Mexico from old pesos to new pesos (1 000 : 1) in 1982.
+      MEX: { before: 1982, factor: 0.001, reason: "old pesos until 1981, new pesos from 1982" }
+      # …and Poland to new złoty (1 : 10 000) already in 1989–1990; the current series
+      # starts in old złoty, so those two years go back to old złoty before the rebase.
+      POL: { from: 1989, factor: 10000, reason: "1989–1990 in new złoty, 1966–1988 and 1991 in old" }
+    archive_exclude:
+      BRA: { before: 1983, reason: "1973–1982 prices are rounded to 0.01–0.17 cruzeiros/tonne — too few digits" }
+      CHN: "the 1966–1990 'China' series is ~10× the 1991+ 'China, mainland' series at the seam — inconsistent units"
+    index_exclude:
+      IRN: "one observed price (2002) in 1991–2025; chaining FAO's index 22 years from it gives ~4× too many eggs by 2024"
+
+processing:
+  # Broadcast the world silver price onto every country-year (before the iso3
+  # filter, which would drop the country-less Pink Sheet rows).
+  - lookup: { from_source: worldbank-pinksheet, "on": year, columns: { silver_usd_per_troy_oz: silver_usd_per_troy_oz } }
+  # Eurostat rows carry a 'geo' code, not ISO3.
+  - map: { column: iso3, key: geo, mapping: { DE: DEU, EL: GRC, FR: FRA, IT: ITA, PL: POL, "NO": NOR, UK: GBR } }
+  - filter: { when: { column: iso3, in: *countries } }
+  - normalize                     # World Bank years arrive as text, FAO years as ints
+  - join:   { "on": [iso3, year] }
+  - chain_index:
+      column: house_price_lcu_m2
+      index: house_price_index
+      by: [iso3]
+      time: year
+      basis_column: house_price_basis
+      chained_label: index-chained
+  - map: { column: country, key: iso3, mapping: *labels }
+  # Car price: new-car index first, the general CPI only where no car index exists.
+  - chain_index:
+      column: car_price_lcu
+      index: [car_price_index, cpi_general]          # spliced year by year, best index first
+      chained_label: [car-index-chained, CPI-chained]
+      by: [iso3]
+      time: year
+      basis_column: car_price_basis
+  - derive:
+      column: price_per_egg_lcu
+      expr: "scale(price_slc_per_tonne, divisor=1000000)"
+      params: { factor: *egg_weight_grams }
+  - derive: { column: eggs_per_year,  expr: "ratio(gni_per_capita_lcu, price_per_egg_lcu)" }
+  - derive: { column: eggs_per_month, expr: "scale(eggs_per_year, divisor=12)" }
+  - derive: { column: eggs_per_day,   expr: "scale(eggs_per_year, divisor=365)" }
+  - derive: { column: graduate_earnings_lcu_month, expr: "product(graduate_earnings_usd_month, lcu_per_usd)" }
+  - derive: { column: urban_earnings_lcu_month,    expr: "product(urban_earnings_usd_month, lcu_per_usd)" }
+  - derive: { column: eggs_per_month_graduate, expr: "ratio(graduate_earnings_lcu_month, price_per_egg_lcu)" }
+  - derive: { column: eggs_per_month_urban,    expr: "ratio(urban_earnings_lcu_month, price_per_egg_lcu)" }
+  - derive: { column: eggs_per_car,            expr: "ratio(car_price_lcu, price_per_egg_lcu)" }
+  - derive: { column: house_price_100m2_lcu,   expr: "scale(house_price_lcu_m2, factor=100)" }
+  - derive: { column: eggs_per_house,          expr: "ratio(house_price_100m2_lcu, price_per_egg_lcu)" }
+  - derive:
+      column: sterling_usd_per_gram
+      expr: "scale(silver_usd_per_troy_oz, divisor=31.1034768)"
+      params: { factor: *sterling_fineness }
+  - derive: { column: sterling_grams_per_month, expr: "ratio(gni_per_capita_usd, sterling_usd_per_gram)" }
+  - derive: { column: sterling_grams_per_month, expr: "scale(sterling_grams_per_month, divisor=12)" }
+  - derive: { column: sterling_lbs_per_year,    expr: "scale(sterling_grams_per_month, factor=12, divisor=453.59237)" }
+  # Keep a country-year only if at least one chart can use it.
+  - filter:
+      any:
+        - { column: eggs_per_month,          not_null: true }
+        - { column: eggs_per_month_graduate, not_null: true }
+        - { column: eggs_per_month_urban,    not_null: true }
+        - { column: eggs_per_house,          not_null: true }
+        - { column: sterling_grams_per_month, not_null: true }
+        - { column: eggs_per_car,             not_null: true }
+      reason: "nothing to chart (no egg price, income or silver data)"
+  - derive: { column: sterling_grams_per_month, expr: "round_to(sterling_grams_per_month, digits=0)" }
+  - derive: { column: sterling_lbs_per_year,    expr: "round_to(sterling_lbs_per_year, digits=1)" }
+  - derive: { column: eggs_per_year,  expr: "round_to(eggs_per_year, digits=0)" }
+  - derive: { column: eggs_per_month, expr: "round_to(eggs_per_month, digits=0)" }
+  - derive: { column: eggs_per_day,   expr: "round_to(eggs_per_day, digits=1)" }
+  - derive: { column: eggs_per_month_graduate, expr: "round_to(eggs_per_month_graduate, digits=0)" }
+  - derive: { column: eggs_per_month_urban,    expr: "round_to(eggs_per_month_urban, digits=0)" }
+  - derive: { column: eggs_per_house,          expr: "round_to(eggs_per_house, digits=0)" }
+  - derive: { column: eggs_per_car,            expr: "round_to(eggs_per_car, digits=0)" }
+  - sort:   { by: [iso3, year] }
+  - validate
+
+charts:
+  - type: line
+    title: "Eggs a month of average income buys"
+    x: year
+    y: eggs_per_month
+    series: country
+
+outputs:
+  - csv
+  - xlsx:                              # needs: pip install "datavibes[xlsx]"
+      title: "Egg purchasing power, 1950–2025"
+      attribution: *attribution
+      license: *license
+      notes:
+        - "eggs_per_year = GNI per capita (current LCU) ÷ (FAO producer price per tonne × egg weight ÷ 1,000,000 g)."
+        - "Producer (farm-gate) prices, not retail: a shop egg typically costs 1.5–3× more."
+        - "FAO prices begin in 1966; 1950–1965 has no source. The World Bank has no USSR income, so USSR/Russia starts in 1988."
+        - "price_basis = archive-rebased: 1966–1990 FAO old series converted to today's currency with FAO's own SLC/LCU ratio."
+        - "price_basis = index-extended: missing years chained from the nearest observed price with FAO's producer price index."
+        - "Graduates: average monthly earnings of employees with advanced (tertiary) education, ILOSTAT EAR_EMTA_SEX_EDU_CUR_NB (sex: total, USD × World Bank rate). One survey per country (the longest), so survey switches never create jumps."
+        - "Graduates: no source crosses education with urban/rural, so this is graduates nationwide, not only in cities. No ILOSTAT education data for Russia, China, Japan."
+        - "Urban: average monthly earnings of employees in urban areas, all education levels, ILOSTAT EAR_EMTA_SEX_GEO_CUR_NB (sex: total, USD × World Bank rate), one survey per country. None for Russia, China, Japan; Argentina has one year (2005)."
+        - "ILOSTAT earnings are taken in USD and converted with the World Bank's official annual LCU-per-USD rate: ILOSTAT's own 'local currency' figures for the UK, Norway and Poland (EU Structure-of-Earnings surveys) are in euros."
+        - "Egypt 2008–2009 ILOSTAT earnings are dropped in both breakdowns: ~10× below 2010, implausible."
+        - "Poland 1989–1990 (new złoty in FAO's old series) and Brazil before 1983 (prices rounded to 0.01 cruzeiros/tonne) are corrected / dropped; Iran has one observed FAO price after 1990 (2002), so its later years are not estimated."
+        - "Home: price of 100 m² = price per m² × 100. Observed BIS levels for France (new flats, national), Russia (new dwellings, urban), Poland (flats, national) and Norway (all dwellings, national); every other country has ONE anchor price chained through the BIS nominal residential property price index (all dwellings) — those years are 'index-chained'. Israel has an index but no level; Egypt, Iran and Argentina have neither."
+        - "Home anchor USA 2025: 2,048 LCU/m² — medium confidence — Census Survey of Construction 2025: median sales price of new single-family houses sold USD 417,400 ÷ median floor area 2,194 sq ft (incl. land)"
+        - "Home anchor GBR 2021: 2,971 LCU/m² — medium confidence — ONS regional house price levels per m², 2021 Q1–Q3, unweighted mean of the 9 English regions and Wales (all dwellings)"
+        - "Home anchor DEU 2025: 5,478 LCU/m² — low confidence — Global Property Guide 2025 H1: primary (new) properties, nationwide average EUR 5,478/m²"
+        - "Home anchor CHN 2024: 10,419 LCU/m² — high confidence — NBS 2024: residential sales CNY 8,486.4 bn ÷ 814.50 mn m² sold (new commercial housing)"
+        - "Home anchor JPN 2024: 943,000 LCU/m² — high confidence — Real Estate Economic Institute 2024: nationwide new condominiums, JPY 943,000/m²"
+        - "Home anchor IND 2024: 92,463 LCU/m² — low confidence — ANAROCK end-2024: top-7-city average INR 8,590/sq ft (built-up area)"
+        - "Home anchor ITA 2024: 1,500 LCU/m² — medium confidence — OMI/ABI Rapporto Immobiliare 2025: ~EUR 114 bn ÷ ~76 mn m² of dwellings sold in 2024 (all dwellings)"
+        - "Home anchor MEX 2025: 31,397 LCU/m² — low confidence — Banorte INBAPREVI, November 2025: national average MXN 31,397/m² (all housing)"
+        - "Home anchor THA 2024: 106,094 LCU/m² — low confidence — REIC 2024: condominium units transferred to foreigners nationwide, THB 4.7 m ÷ 44.1 m²"
+        - "Home anchor GRC 2024: 3,000 LCU/m² — low confidence — RE/MAX Hellas 2024: newly built properties nationwide above EUR 3,000/m² (listing prices)"
+        - "Home anchor BRA 2024: 9,366 LCU/m² — medium confidence — FipeZap December 2024: BRL 9,366/m², apartments for sale in 56 cities (listing prices)"
+        - "Home anchor CHL 2024: 2,957,000 LCU/m² — low confidence — CChC Q4 2024: new apartments 77.3 UF/m² (Gran Santiago) × UF ≈ CLP 38,250"
+        - "Sterling silver: grams = (GNI per capita, Atlas method, current USD ÷ 12) ÷ (World Bank Pink Sheet silver USD/troy oz × 0.925 ÷ 31.1034768). Metal value only — finished sterling items carry a making charge. Pink Sheet prices are rounded to 0.1 USD (≈4–10 % in the 1960s, when silver was ~1 USD/oz). Income starts 1962 (Atlas)."
+        - "Sterling silver in pounds: avoirdupois pounds (453.59237 g) per YEAR of income = grams per month × 12 ÷ 453.59237. A troy pound (373.24 g) would read 21.5 % higher."
+        - "Car: a compact family sedan (Toyota Corolla class; Lada Vesta in Russia, Maruti Dzire in India, Saipa Shahin in Iran). One 2025 list price per country (Norway 2019), chained back with the new-car CPI where one exists (US BLS CUUR0000SETA01 from 1953; Eurostat HICP CP0711 from 1996 for EU members, Norway and the UK to 2020), then the general CPI (World Bank FP.CPI.TOTL). The Corolla of 1970 is not the Corolla of 2025: the index tracks the price of 'a new car' with quality adjustment, not one model."
+        - "Car anchor USA 2025: 22,325 LCU — medium-high confidence — Toyota Corolla LE sedan, MSRP excl. USD 1,135 destination (cars.com, KBB)"
+        - "Car anchor GBR 2025: 30,505 LCU — high confidence — Toyota Corolla Icon 1.8 hybrid hatchback, on-the-road, Toyota UK price list Jan 2025"
+        - "Car anchor FRA 2025: 34,550 LCU — medium confidence — Toyota Corolla berline 1.8 hybride Dynamic: EUR 30,050 invoiced after a EUR 4,500 discount (toyota.fr)"
+        - "Car anchor DEU 2025: 33,340 LCU — low confidence — Toyota Corolla Limousine 1.8 hybrid Comfort list price (autotijd.be, list stamped 2023); new from ~EUR 32,000 (AutoScout24)"
+        - "Car anchor RUS 2025: 1,281,000 LCU — medium confidence — Lada Vesta Comfort 1.6 MT, 2025 model year, dealer price (Avtogermes); the Corolla left Russia in 2022"
+        - "Car anchor CHN 2025: 126,800 LCU — medium confidence — Toyota Corolla (FAW Toyota) guide price after the Dec 2025 refresh; transactions from CNY 99,000 (Autohome)"
+        - "Car anchor JPN 2025: 2,279,200 LCU — high confidence — Toyota Corolla sedan hybrid, tax included, May 2025 update (car-repo.jp, kuruma-news)"
+        - "Car anchor EGY 2025: 1,300,000 LCU — medium confidence — Toyota Corolla 1.6 entry trim (Hatla2ee, Yallamotor)"
+        - "Car anchor IND 2025: 679,000 LCU — medium confidence — Maruti Suzuki Dzire LXi, ex-showroom launch price (INR 6.26 lakh after the Sep 2025 GST cut)"
+        - "Car anchor ITA 2025: 33,300 LCU — medium confidence — Toyota Corolla 1.8 Hybrid Active list price (motorionline.com)"
+        - "Car anchor ARG 2025: 32,908,000 LCU — medium confidence — Toyota Corolla 2.0 XLI CVT, list price July 2025 (Aire de Santa Fe); ~ARS 38.3 m by October"
+        - "Car anchor MEX 2025: 421,100 LCU — high confidence — Toyota Corolla Base 2025 (Motorpasión, AutosNuevos)"
+        - "Car anchor THA 2025: 894,000 LCU — high confidence — Toyota Corolla Altis 1.6G (ZigWheels Thailand)"
+        - "Car anchor POL 2025: 107,900 LCU — high confidence — Toyota Corolla Sedan 1.5 Active, Toyota Polska list from Oct 2024"
+        - "Car anchor GRC 2025: 21,570 LCU — medium confidence — Toyota Corolla Sedan 1.5 Active, after the mid-2025 price revision (gocar.gr)"
+        - "Car anchor ISR 2025: 159,990 LCU — medium confidence — Toyota Corolla sedan hybrid, launch price (auto.co.il)"
+        - "Car anchor IRN 2025: 8,365,440,000 LCU — low confidence — Saipa Shahin Automatic G factory price, Aug 2025: 836,544,000 toman = rials ×10 (livingintehran tracker); market ~18 % higher"
+        - "Car anchor BRA 2025: 158,490 LCU — high confidence — Toyota Corolla GLi 2.0 list price (vrum.com.br, March 2025)"
+        - "Car anchor CHL 2025: 24,590,000 LCU — low confidence — Toyota Corolla Sedan XLI 1.8 HEV list price, undated dealer page (Academia Xray)"
+        - "Car anchor NOR 2019: 313,400 LCU — low confidence — Toyota Corolla hybrid hatchback Sense, Feb 2019 price list (Nordvik press release); no 2025 list found"
+        - "Mexico 1966–1981: FAO's old series is in old pesos there; rescaled ÷1000 to match 1982+."
+        - "China 1966–1990 is left out: FAO's old 'China' series is inconsistent with the current 'China, mainland' series."
+      pivots:
+        - sheet: eggs per month
+          index: year
+          columns: country
+          values: eggs_per_month
+          order: *country_order
+          index_range: [1950, 2025]
+          chart: { title: "Eggs a month of average income buys", y_title: "eggs per month (log scale)", x_title: year, x_range: [1950, 2025], log_y: true }
+        - sheet: graduates eggs per month
+          index: year
+          columns: country
+          values: eggs_per_month_graduate
+          order: *country_order
+          index_range: [1950, 2025]
+          chart: { title: "Eggs a month of a graduate's average earnings buys", y_title: "eggs per month (log scale)", x_title: year, x_range: [1950, 2025], log_y: true }
+        - sheet: urban eggs per month
+          index: year
+          columns: country
+          values: eggs_per_month_urban
+          order: *country_order
+          index_range: [1950, 2025]
+          chart: { title: "Eggs a month of an urban employee's average earnings buys", y_title: "eggs per month (log scale)", x_title: year, x_range: [1950, 2025], log_y: true }
+        - sheet: 100 m2 home in eggs
+          index: year
+          columns: country
+          values: eggs_per_house
+          order: *country_order
+          index_range: [1950, 2025]
+          chart: { title: "A new 100 m² home, priced in eggs", y_title: "eggs (log scale)", x_title: year, x_range: [1950, 2025], log_y: true }
+        - sheet: home price basis
+          index: year
+          columns: country
+          values: house_price_basis
+          order: *country_order
+        - sheet: sterling silver grams
+          index: year
+          columns: country
+          values: sterling_grams_per_month
+          order: *country_order
+          index_range: [1950, 2025]
+          chart: { title: "Grams of sterling silver a month of average income buys", y_title: "grams (log scale)", x_title: year, x_range: [1950, 2025], log_y: true }
+        - sheet: sterling silver lbs per year
+          index: year
+          columns: country
+          values: sterling_lbs_per_year
+          order: *country_order
+          index_range: [1950, 2025]
+          chart: { title: "Pounds of sterling silver a year of average income buys", y_title: "lb per year (log scale)", x_title: year, x_range: [1950, 2025], log_y: true }
+        - sheet: car in eggs
+          index: year
+          columns: country
+          values: eggs_per_car
+          order: *country_order
+          index_range: [1950, 2025]
+          chart: { title: "A middle-class car, priced in eggs", y_title: "eggs (log scale)", x_title: year, x_range: [1950, 2025], log_y: true }
+        - sheet: car price basis
+          index: year
+          columns: country
+          values: car_price_basis
+          order: *country_order
+        - sheet: eggs per year
+          index: year
+          columns: country
+          values: eggs_per_year
+          order: *country_order
+          index_range: [1950, 2025]
+        - sheet: price per egg (LCU)
+          index: year
+          columns: country
+          values: price_per_egg_lcu
+          order: *country_order
+        - sheet: price basis
+          index: year
+          columns: country
+          values: price_basis
+          order: *country_order
+  - svg-small-multiples:
+      x: year
+      y: eggs_per_month
+      facet: country
+      facet_order: *country_order
+      x_range: [1950, 2025]
+      y_scale: log
+      basis_column: price_basis
+      estimated: [index-extended]
+      unit: eggs/month
+      title: "How many eggs does a month of average income buy?"
+      subtitle: "GNI per capita ÷ farm-gate price of one hen egg (${EGG_WEIGHT_GRAMS:-60} g), 1950–2025 · shared log scale"
+      y_label: "eggs per month"
+      footer:
+        - *attribution
+        - "Farm-gate prices (retail ≈ 1.5–3× higher). FAO prices begin 1966; no USSR income before 1988, no Polish income before 1990; China before 1991 and Brazil before 1983 omitted (inconsistent / too coarse FAO units); Iran has no reliable FAO price after 1990 except 2002."
+  - svg-small-multiples:
+      suffix: graduates
+      x: year
+      y: eggs_per_month_graduate
+      facet: country
+      facet_order: *country_order
+      show_empty: true
+      empty_note: "no ILOSTAT earnings by education"
+      x_range: [1950, 2025]
+      y_scale: log
+      basis_column: price_basis
+      estimated: [index-extended]
+      reference_y: eggs_per_month
+      reference_label: "everyone (GNI per capita)"
+      unit: eggs/month
+      title: "How many eggs does a month of a graduate's pay buy?"
+      subtitle: "Average monthly earnings of employees with tertiary education ÷ farm-gate price of one hen egg (${EGG_WEIGHT_GRAMS:-60} g) · shared log scale"
+      y_label: "eggs per month"
+      footer:
+        - "Data: ILOSTAT EAR_EMTA_SEX_EDU_CUR_NB (advanced education, both sexes, USD × World Bank PA.NUS.FCRF); FAOSTAT Producer Prices; World Bank NY.GNP.PCAP.CN"
+        - "Graduates nationwide: no source splits earnings by education AND urban/rural. Farm-gate prices (retail ≈ 1.5–3× higher)."
+  - svg-small-multiples:
+      suffix: urban
+      x: year
+      y: eggs_per_month_urban
+      facet: country
+      facet_order: *country_order
+      show_empty: true
+      empty_note: "no ILOSTAT urban earnings"
+      x_range: [1950, 2025]
+      y_scale: log
+      basis_column: price_basis
+      estimated: [index-extended]
+      reference_y: eggs_per_month
+      reference_label: "everyone (GNI per capita)"
+      unit: eggs/month
+      title: "How many eggs does a month of a city worker's pay buy?"
+      subtitle: "Average monthly earnings of employees in urban areas ÷ farm-gate price of one hen egg (${EGG_WEIGHT_GRAMS:-60} g) · shared log scale"
+      y_label: "eggs per month"
+      footer:
+        - "Data: ILOSTAT EAR_EMTA_SEX_GEO_CUR_NB (urban areas, all education levels, both sexes, USD × World Bank PA.NUS.FCRF); FAOSTAT Producer Prices; World Bank NY.GNP.PCAP.CN"
+        - "Employees only (no self-employed); one survey per country; Argentina has a single year (2005). Farm-gate prices (retail ≈ 1.5–3× higher)."
+  - svg-small-multiples:
+      suffix: house
+      x: year
+      y: eggs_per_house
+      facet: country
+      facet_order: *country_order
+      show_empty: true
+      empty_note: "no national price level"
+      x_range: [1950, 2025]
+      y_scale: log
+      basis_column: house_price_basis
+      estimated: [index-chained]
+      unit: eggs
+      title: "How many eggs does a new 100 m² home cost?"
+      subtitle: "Price per m² × 100 ÷ farm-gate price of one hen egg (${EGG_WEIGHT_GRAMS:-60} g) · shared log scale"
+      y_label: "eggs for 100 m²"
+      footer:
+        - "Data: BIS residential property prices (WS_DPP levels, WS_SPP indices); researched anchor prices per m² (listed with sources and confidence in the spreadsheet's About sheet); FAOSTAT Producer Prices"
+        - "Solid: observed BIS price levels (France, Russia, Poland, Norway) or the anchor year; dashed: chained from one anchor with the BIS index. Anchor definitions differ (new vs all dwellings, national vs big cities) — compare trends more than levels."
+  - svg-small-multiples:
+      suffix: silver
+      x: year
+      y: sterling_grams_per_month
+      facet: country
+      facet_order: *country_order
+      show_empty: true
+      x_range: [1950, 2025]
+      y_scale: log
+      unit: g/month
+      title: "How much sterling silver does a month of average income buy?"
+      subtitle: "GNI per capita (Atlas, USD) ÷ silver price × 0.925 (sterling = 92.5 % silver), grams per month · shared log scale"
+      y_label: "grams of sterling silver per month"
+      footer:
+        - "Data: World Bank Commodity Price Data (Pink Sheet), silver USD/troy oz; World Bank WDI NY.GNP.PCAP.CD (GNI per capita, Atlas method)"
+        - "Metal value only (no making charge). Silver prices are rounded to 0.1 USD by the source — up to ~10 % in the 1960s. No USSR income in USD; Russia from 1991, Poland from 1992."
+  - svg-small-multiples:
+      suffix: silver-lbs
+      x: year
+      y: sterling_lbs_per_year
+      facet: country
+      facet_order: *country_order
+      show_empty: true
+      x_range: [1950, 2025]
+      y_scale: log
+      unit: lb/year
+      title: "How many pounds of sterling silver does a year of average income buy?"
+      subtitle: "GNI per capita (Atlas, USD) ÷ silver price × 0.925, in avoirdupois pounds (453.6 g) per year · shared log scale"
+      y_label: "lb of sterling silver per year"
+      footer:
+        - "Data: World Bank Commodity Price Data (Pink Sheet), silver USD/troy oz; World Bank WDI NY.GNP.PCAP.CD (GNI per capita, Atlas method)"
+        - "Same data as the grams-per-month chart × 12 ÷ 453.59237. Metal value only (no making charge); silver prices rounded to 0.1 USD by the source. No USSR income in USD; Russia from 1991, Poland from 1992."
+  - svg-small-multiples:
+      suffix: car
+      x: year
+      y: eggs_per_car
+      facet: country
+      facet_order: *country_order
+      show_empty: true
+      x_range: [1950, 2025]
+      y_scale: log
+      basis_column: car_price_basis
+      estimated: [car-index-chained, CPI-chained]
+      unit: eggs
+      title: "How many eggs does a middle-class car cost?"
+      subtitle: "Price of a compact family sedan (Toyota Corolla class) ÷ farm-gate price of one hen egg (${EGG_WEIGHT_GRAMS:-60} g) · shared log scale"
+      y_label: "eggs per car"
+      footer:
+        - "Data: researched 2025 list prices (models and sources in the spreadsheet's About sheet); US BLS CPI new vehicles; Eurostat HICP new motor cars; World Bank CPI; FAOSTAT Producer Prices"
+        - "The dot is the anchor year; dashed years are chained back with a new-car price index (US, EU, Norway, UK) or the general CPI elsewhere. Russia: Lada Vesta; India: Maruti Dzire; Iran: Saipa Shahin."

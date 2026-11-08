@@ -169,10 +169,12 @@ def _parse_outputs(block: object, config_path: Path) -> list[OutputSpec]:
     """``outputs:`` entries share the step syntax: a name or ``{name: {options}}``."""
     if not isinstance(block, list):
         raise ConfigError(f"{config_path}: 'outputs' must be a list")
-    return [
-        OutputSpec(name=step.name, options=step.options)
-        for step in (_parse_step(entry, config_path, kind="output") for entry in block)
-    ]
+    specs = []
+    for step in (_parse_step(entry, config_path, kind="output") for entry in block):
+        options = dict(step.options)
+        suffix = str(options.pop("suffix", "") or "")
+        specs.append(OutputSpec(name=step.name, options=options, suffix=suffix))
+    return specs
 
 
 def _parse_step(entry: object, config_path: Path, kind: str = "processing step") -> StepSpec:

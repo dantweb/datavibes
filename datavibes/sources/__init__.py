@@ -1,5 +1,9 @@
 """Built-in source adapters. Importing this package registers them all."""
 
+from datavibes.sources.bis import BisSeriesSource
+from datavibes.sources.bls import BlsSeriesSource
+from datavibes.sources.faostat import FaostatPricesSource
+from datavibes.sources.ilostat import IlostatSource
 from datavibes.sources.columnar_http_json import ColumnarHttpJsonSource
 from datavibes.sources.http_csv import HttpCsvSource
 from datavibes.sources.http_json import HttpJsonSource
@@ -10,6 +14,7 @@ from datavibes.sources.static import StaticSource
 from datavibes.sources.worldbank import WorldBankIndicatorSource
 from datavibes.sources.sparql import SparqlSource
 from datavibes.sources.worldbank_latest import WorldBankLatestSource
+from datavibes.sources.worldbank_pinksheet import WorldBankPinkSheetSource
 
 __all__ = [
     "StaticSource",
@@ -22,4 +27,9 @@ __all__ = [
     "WorldBankIndicatorSource",
     "WorldBankLatestSource",
     "SparqlSource",
+    "FaostatPricesSource",
+    "BisSeriesSource",
+    "BlsSeriesSource",
+    "WorldBankPinkSheetSource",
+    "IlostatSource",
 ]

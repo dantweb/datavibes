@@ -58,6 +58,8 @@ class Exporter:
         writer = resolve_writer(spec.name, spec.options)
         writer.attach_provenance(provenance or Provenance())
         extension = getattr(writer, "extension", None) or _FORMAT_EXTENSIONS.get(spec.name, spec.name)
+        if spec.suffix:
+            extension = f"{spec.suffix}.{extension}"
         dest = self.store.output_path(
             config.category, config.slug, timestamp, extension=extension
         )

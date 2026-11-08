@@ -93,14 +93,21 @@ class ChartSpec:
 
 @dataclass
 class OutputSpec:
-    """A declared output: a registered writer ``name`` + its ``options``."""
+    """A declared output: a registered writer ``name`` + its ``options``.
+
+    ``suffix`` lets one writer appear twice (two charts): the file becomes
+    ``<timestamp>.<suffix>.<extension>``.
+    """
 
     name: str
     options: dict = field(default_factory=dict)
+    suffix: str = ""
 
     def __post_init__(self) -> None:
         if not self.name:
             raise ConfigError("output writer name must be non-empty")
+        if self.suffix and not re.fullmatch(r"[a-z0-9][a-z0-9-]*", self.suffix):
+            raise ConfigError(f"output suffix '{self.suffix}' must be lowercase letters, digits and dashes")
 
 
 @dataclass
@@ -119,9 +126,11 @@ class DatasetConfig:
             raise ConfigError("schema must declare at least one field")
         if not self.sources:
             raise ConfigError("at least one source is required")
-        names = [spec.name for spec in self.outputs]
+        names = [(spec.name, spec.suffix) for spec in self.outputs]
         if len(names) != len(set(names)):
-            raise ConfigError("outputs must not repeat a writer (they would overwrite each other)")
+            raise ConfigError(
+                "outputs must not repeat a writer without distinct 'suffix' options "
+                "(they would overwrite each other)")
 
     @property
     def slug(self) -> str:
