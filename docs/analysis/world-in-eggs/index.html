@@ -1,0 +1,437 @@
+<title>The World Priced in Eggs</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column (~66ch) with full-width figures; findings as numbered sections because the order is the argument. */
+:root {
+  --bg: #fafaf7;          /* shell white, slightly cool */
+  --fg: #1c2120;          /* ink */
+  --muted: #5d6461;       /* secondary text */
+  --rule: #dfe0da;        /* hairlines */
+  --panel: #f0f1ec;       /* table and callout fill */
+  --yolk: #b97f00;        /* accent: yolk amber, used for numbers that matter */
+  --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --font-data: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #161918; --fg: #e9ebe6; --muted: #a4aaa6; --rule: #2e3331; --panel: #1f2321; --yolk: #e6b23c;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #161918; --fg: #e9ebe6; --muted: #a4aaa6; --rule: #2e3331; --panel: #1f2321; --yolk: #e6b23c;
+  color-scheme: dark;
+}
+body { background: var(--bg); color: var(--fg); font: 17px/1.6 var(--font-body); }
+.wrap {
+  max-width: 1180px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 40px 64px;
+}
+.col { max-width: 68ch; }
+header { display: grid; gap: 14px; padding-bottom: 28px; border-bottom: 1px solid var(--rule); margin-bottom: 36px; }
+.kicker { font: 500 12px/1.4 var(--font-data); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1 { font: 600 clamp(34px, 5.4vw, 58px)/1.05 var(--font-display); margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+.lede { font-size: 20px; line-height: 1.55; color: var(--fg); margin: 0; max-width: 62ch; }
+.meta { font: 13px/1.5 var(--font-data); color: var(--muted); }
+h2 { font: 600 clamp(24px, 3vw, 32px)/1.2 var(--font-display); margin: 0; text-wrap: balance; }
+h3 { font: 600 19px/1.3 var(--font-body); margin: 0; }
+p { margin: 0; }
+section { display: grid; gap: 18px; padding-block: 34px; border-bottom: 1px solid var(--rule); }
+.num { font: 500 13px/1 var(--font-data); color: var(--yolk); letter-spacing: .06em; }
+.flow { display: grid; gap: 14px; }
+strong.k { color: var(--yolk); font-weight: 600; font-variant-numeric: tabular-nums; }
+figure { margin: 6px 0 0; display: grid; gap: 8px; }
+figure .frame { overflow-x: auto; border: 1px solid var(--rule); border-radius: 4px; background: var(--panel); }
+figure img { display: block; width: 100%; height: auto; min-width: 720px; }
+figcaption { font-size: 14px; color: var(--muted); max-width: 90ch; }
+figcaption a { color: inherit; }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; font: 14px/1.4 var(--font-body); font-variant-numeric: tabular-nums; min-width: 520px; }
+th, td { padding: 7px 12px; text-align: right; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+thead th { font: 500 12px/1.3 var(--font-data); letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+td.hi { color: var(--yolk); font-weight: 600; }
+.grid2 { display: grid; gap: 28px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.grid2 > div { min-width: 0; display: grid; gap: 12px; align-content: start; }
+.ledger { display: grid; gap: 22px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.ledger > div { min-width: 0; background: var(--panel); padding: 20px 22px; border-radius: 4px; display: grid; gap: 10px; align-content: start; }
+.ledger ul { margin: 0; padding-left: 18px; display: grid; gap: 8px; }
+.note { font-size: 15px; color: var(--muted); }
+ul.plain { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+a { color: var(--yolk); }
+a:focus-visible { outline: 2px solid var(--yolk); outline-offset: 2px; }
+</style>
+
+<div class="wrap">
+<header>
+  <div class="kicker">Egg purchasing power · 20 countries · 1950–2025</div>
+  <h1>The World Priced in Eggs</h1>
+  <p class="lede">For seventy years the hen's egg has been the same object in Washington, Cairo and Bangkok. That makes it a rare yardstick: price income, homes, cars and silver in eggs and you can compare 1966 with 2025, and India with Norway, without exchange rates or inflation adjustments. Here is what the seven charts say about the world economy.</p>
+  <p class="meta">Built from FAOSTAT, World Bank, ILOSTAT, BIS, US BLS and Eurostat data · dataset <code>egg-purchasing-power</code> · November 2026</p>
+</header>
+
+<section class="col" aria-labelledby="h-short">
+  <h2 id="h-short">The short version</h2>
+  <ul class="plain">
+    <li><strong>Food got about four times cheaper.</strong> The median country's average monthly income bought 4,100 eggs in 1970 and 16,600 in 2024.</li>
+    <li><strong>Poorer countries closed half the gap but not the gap.</strong> The richest country's income buys 27 times as many eggs as the poorest's, down from 64 times.</li>
+    <li><strong>Factory goods got cheaper for everyone.</strong> A family car cost 15 months of US income in 1970 and 3 months now; in India, 189 months then and 37 now.</li>
+    <li><strong>Homes did not.</strong> A 100 m² flat still costs about ten years of average income in France, as it did in 1975, and more than it did then in Britain, Norway and Poland.</li>
+    <li><strong>Silver stood still.</strong> An average month's income buys about 2 kg of sterling silver, the same as in 1970, after swinging between 0.65 kg (1980) and nearly 4 kg (around 2000).</li>
+    <li><strong>The outlook:</strong> silver and some housing markets are at historic extremes, the same readings seen before past crises, while poorer countries keep catching up. The data cannot give a date; the outlook chapter sets out three scenarios and the signals to watch.</li>
+    <li><strong>The rich world stopped getting richer in eggs around 2005.</strong> Most advanced economies now buy fewer eggs per month than at their peak.</li>
+  </ul>
+</section>
+
+<section aria-labelledby="h-1">
+  <div class="col flow">
+    <span class="num">FINDING 1</span>
+    <h2 id="h-1">Food became four times cheaper, and fastest where people were poorest</h2>
+    <p>In the median country, one month of average income bought <strong class="k">4,136</strong> eggs around 1970, <strong class="k">12,069</strong> around 2000 and <strong class="k">16,592</strong> in 2024. That fourfold gain is a measure of farm productivity as much as of income. Industrial poultry, cheap feed grain and refrigerated logistics turned the egg from a luxury into the cheapest animal protein on earth.</p>
+    <p>The gains were largest where incomes started lowest. Between 1970 and 2024 egg purchasing power rose <strong class="k">25×</strong> in Chile, <strong class="k">14×</strong> in India and <strong class="k">11×</strong> in Thailand, against <strong class="k">4.4×</strong> in France and <strong class="k">2.4×</strong> in the United States. China went from 640 eggs a month in 1991 to over 12,000.</p>
+  </div>
+  <figure>
+    <div class="frame"><img src="charts/eggs.svg" alt="Small multiples: eggs one month of average income buys, 20 countries, 1950–2025, log scale"></div>
+    <figcaption>Eggs one month of GNI per capita buys, at farm-gate prices. Dashed years are estimated from FAO's egg price index. <a href="charts/eggs.svg">Full size</a></figcaption>
+  </figure>
+</section>
+
+<section aria-labelledby="h-2">
+  <div class="col flow">
+    <span class="num">FINDING 2</span>
+    <h2 id="h-2">The gap between nations halved, but the order barely moved</h2>
+    <p>In 1970 the best-placed country (the United States) bought <strong class="k">64</strong> times as many eggs per month as the worst (India). By 2024 the ratio between top and bottom was <strong class="k">27</strong>. The middle of the distribution compressed even more: the ratio between the 75th and 25th percentile countries fell from 6.3 to <strong class="k">2.8</strong>.</p>
+    <p>The ranking at the top, however, held. Norway, the United States, Britain and Western Europe stayed above everyone else for the whole period. The countries that climbed were in East Asia and Eastern Europe: China, Thailand and Poland moved from the bottom third toward the middle. India and Egypt remain at the bottom of every chart that includes them.</p>
+  </div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Eggs per month, average income</th><th>1970</th><th>1990</th><th>2010</th><th>2024</th></tr></thead>
+      <tbody>
+        <tr><td>Median of the countries with data</td><td>4,136</td><td>5,512</td><td>13,395</td><td class="hi">16,592</td></tr>
+        <tr><td>Richest ÷ poorest country</td><td>64×</td><td>67×</td><td>36×</td><td class="hi">27×</td></tr>
+        <tr><td>75th ÷ 25th percentile</td><td>6.3×</td><td>6.3×</td><td>3.9×</td><td class="hi">2.8×</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section aria-labelledby="h-3">
+  <div class="col flow">
+    <span class="num">FINDING 3</span>
+    <h2 id="h-3">The rich world's egg plateau since about 2005</h2>
+    <p>Most advanced economies peaked between 2003 and 2007 and are now below that level. Measured against its peak year, the United States stands at <strong class="k">22%</strong>, Greece at 53%, Japan at 56%, Germany at 59% and France at 62%. Three forces combine:</p>
+    <ul class="plain">
+      <li><strong>Eggs themselves got dearer.</strong> The US farm price per egg rose from $0.038 in 2000 to $0.22 in 2024, nearly six times, while income per head rose 2.3 times. Avian influenza (2015 and 2022–25) culled flocks; the EU's 2012 battery-cage ban and feed-grain spikes raised European costs.</li>
+      <li><strong>Income growth slowed.</strong> Rich-country income per head grew far more slowly after the 2008 crisis than before it.</li>
+      <li><strong>Crises cut deep.</strong> Greece lost almost half its egg purchasing power between 2006 and 2013 and has not recovered.</li>
+    </ul>
+    <p>The countries still at a record in 2025 are almost all catching up from lower levels: India, Egypt, Thailand, Chile and Russia. Britain and Israel are the exceptions among rich countries.</p>
+  </div>
+</section>
+
+<section aria-labelledby="h-4">
+  <div class="col flow">
+    <span class="num">FINDING 4</span>
+    <h2 id="h-4">Manufactured goods: the great deflation</h2>
+    <p>Price a compact family car (a Toyota Corolla or its local equivalent) in months of average income, and it got cheaper in every country, without exception. This is what global supply chains, automation and competition among carmakers bought ordinary households.</p>
+  </div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Months of average income for a car</th><th>1970</th><th>1990</th><th>2005</th><th>2024</th></tr></thead>
+      <tbody>
+        <tr><td>United States</td><td>15.2</td><td>7.7</td><td>4.6</td><td class="hi">3.1</td></tr>
+        <tr><td>Japan</td><td>9.9</td><td>5.7</td><td>5.4</td><td class="hi">4.9</td></tr>
+        <tr><td>Germany</td><td>18.6</td><td>11.0</td><td>9.4</td><td class="hi">7.2</td></tr>
+        <tr><td>United Kingdom</td><td>35.9</td><td>22.7</td><td>11.6</td><td class="hi">8.5</td></tr>
+        <tr><td>Poland</td><td>—</td><td>114.5</td><td>58.5</td><td class="hi">14.2</td></tr>
+        <tr><td>China</td><td>—</td><td>—</td><td>68.6</td><td class="hi">16.0</td></tr>
+        <tr><td>Chile</td><td>172.5</td><td>66.5</td><td>34.5</td><td class="hi">18.9</td></tr>
+        <tr><td>India</td><td>188.6</td><td>122.1</td><td>73.9</td><td class="hi">36.8</td></tr>
+        <tr><td>Thailand</td><td>272.8</td><td>111.0</td><td>68.9</td><td class="hi">42.6</td></tr>
+        <tr><td>Egypt</td><td>391.8</td><td>262.6</td><td>191.2</td><td class="hi">120.1</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col flow">
+    <p>A car is also the most equal of all the measures. Across countries, the egg price of a car varies only about <strong class="k">6×</strong>, and has for fifty years, while income in eggs varies 27×. A car is traded on world markets, so its price converges. Eggs, wages and land are local, so theirs do not.</p>
+  </div>
+  <figure>
+    <div class="frame"><img src="charts/car.svg" alt="Small multiples: eggs a middle-class car costs, 20 countries"></div>
+    <figcaption>Eggs a compact family car costs. 2025 list prices, chained back with new-car price indices (US, EU, Norway, UK) or the general CPI. <a href="charts/car.svg">Full size</a></figcaption>
+  </figure>
+</section>
+
+<section aria-labelledby="h-5">
+  <div class="col flow">
+    <span class="num">FINDING 5</span>
+    <h2 id="h-5">Housing is the one big thing that did not get cheaper</h2>
+    <p>Measured in years of average income, a 100 m² home cost about the same in 2024 as a generation ago, or more. France is the clearest case: <strong class="k">10.6</strong> years in 1975, <strong class="k">10.8</strong> in 2024, through two property booms. Britain went from 5.2 to <strong class="k">7.9</strong> years, Norway from 3.7 to <strong class="k">5.0</strong>, Poland from 5.4 (2005) to <strong class="k">9.3</strong>.</p>
+    <p>It fell only where a bubble burst or incomes outran everything: Japan from about 31 years in 1975–1990 to <strong class="k">17</strong>, Germany from 21 to <strong class="k">10</strong>, China from 44 (2005) to <strong class="k">11</strong>. A car factory can double its output; a city cannot double its land. As incomes rose, buyers bid more for the same location, so income gains were absorbed into land prices instead of making homes cheaper.</p>
+  </div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Years of average income for 100 m²</th><th>1975</th><th>1990</th><th>2005</th><th>2024</th></tr></thead>
+      <tbody>
+        <tr><td>France</td><td>10.6</td><td>10.4</td><td>10.0</td><td class="hi">10.8</td></tr>
+        <tr><td>United Kingdom</td><td>5.2</td><td>6.2</td><td>7.7</td><td class="hi">7.9</td></tr>
+        <tr><td>Norway</td><td>3.7</td><td>3.8</td><td>4.3</td><td class="hi">5.0</td></tr>
+        <tr><td>Poland</td><td>—</td><td>—</td><td>5.4</td><td class="hi">9.3</td></tr>
+        <tr><td>Germany</td><td>21.1</td><td>14.3</td><td>10.4</td><td class="hi">9.9</td></tr>
+        <tr><td>Japan</td><td>31.3</td><td>30.8</td><td>17.2</td><td class="hi">17.4</td></tr>
+        <tr><td>China</td><td>—</td><td>—</td><td>43.7</td><td class="hi">11.0</td></tr>
+        <tr><td>India</td><td>—</td><td>—</td><td>—</td><td class="hi">42.7</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="col note">Level comparisons between countries are rough: the anchor prices mix new and existing dwellings, national and big-city figures. Trends within a country are more reliable. The US figure (about 2.4 years) uses the median new single-family house including land.</p>
+  <figure>
+    <div class="frame"><img src="charts/house.svg" alt="Small multiples: eggs a new 100 square metre home costs"></div>
+    <figcaption>Eggs a 100 m² home costs. Solid lines are observed BIS price levels; dashed lines are one anchor price chained with the BIS house-price index. <a href="charts/house.svg">Full size</a></figcaption>
+  </figure>
+</section>
+
+<section aria-labelledby="h-6">
+  <div class="col flow">
+    <span class="num">FINDING 6</span>
+    <h2 id="h-6">Silver: seventy years without a trend</h2>
+    <p>Average monthly income in the median country bought <strong class="k">2.2 kg</strong> of sterling silver in 1970 and <strong class="k">2.0 kg</strong> in 2024. In between it collapsed to 0.65 kg in 1980, the year of the silver spike, climbed to nearly 4 kg around 2000 when silver sat near $5 an ounce, and fell again in the 2011 and 2025 rallies.</p>
+    <p>Incomes multiplied many times over in dollar terms, and silver kept pace with them. Unlike eggs or cars, silver is not made cheaper by productivity: it is a store of value whose price rises with money and wealth. The silver charts also show the clearest single global event in the data. Every country dips in 1980 at the same moment, because the silver price is one world price.</p>
+  </div>
+  <figure>
+    <div class="frame"><img src="charts/silver.svg" alt="Small multiples: grams of sterling silver one month of average income buys"></div>
+    <figcaption>Grams of sterling silver (92.5% silver, metal value only) per month of GNI per capita, Atlas method, USD. The same data in pounds per year: <a href="charts/silver-lbs.svg">silver-lbs.svg</a>. <a href="charts/silver.svg">Full size</a></figcaption>
+  </figure>
+</section>
+
+<section aria-labelledby="h-7">
+  <div class="col flow">
+    <span class="num">FINDING 7</span>
+    <h2 id="h-7">Degrees pay most where they are rare, and the premium is shrinking</h2>
+    <p>Comparing employees with tertiary education to all urban employees in the same national survey, a graduate earns <strong class="k">2.3×</strong> as much in Chile, 1.5× in Mexico and Thailand, 1.4× in India, 1.3× in the United States and 1.1× in Norway. Education pays most where educated workers are scarce.</p>
+    <p>In nearly every country the premium narrowed over the last twenty years: Mexico from 2.05× to <strong class="k">1.50×</strong>, France from 1.43× to <strong class="k">1.21×</strong>, Poland from 1.33× to 1.14×, Greece from 1.31× to 1.13×. Germany is the exception (1.27× to 1.36×). As higher education became common, a degree became less of a scarcity and more of an entry ticket.</p>
+  </div>
+  <div class="grid2">
+    <figure>
+      <div class="frame"><img src="charts/graduates.svg" alt="Small multiples: eggs one month of a graduate's pay buys"></div>
+      <figcaption>Graduates' monthly pay in eggs, with the all-population line for reference. <a href="charts/graduates.svg">Full size</a></figcaption>
+    </figure>
+    <figure>
+      <div class="frame"><img src="charts/urban.svg" alt="Small multiples: eggs one month of a city worker's pay buys"></div>
+      <figcaption>Urban employees' monthly pay in eggs. <a href="charts/urban.svg">Full size</a></figcaption>
+    </figure>
+  </div>
+  <p class="col note">Italy and the UK are left out of the premium comparison because their graduate and urban figures come from different surveys. The reference line in these charts is GNI per capita, not take-home pay, so graduate lines below it (France, Mexico) reflect that definitional gap rather than graduates earning less than average.</p>
+</section>
+
+<section aria-labelledby="h-8">
+  <div class="col flow">
+    <span class="num">FINDING 8</span>
+    <h2 id="h-8">Every crisis leaves a fingerprint</h2>
+    <p>The egg yardstick records national crises clearly:</p>
+    <ul class="plain">
+      <li><strong>Argentina:</strong> egg purchasing power peaked in 2021, then fell to 31% of that peak by 2025 through devaluation and inflation.</li>
+      <li><strong>Greece:</strong> down 47% from 2006 after the debt crisis, still near the bottom.</li>
+      <li><strong>Russia:</strong> halved between 1992 and 1996 (5,300 to 2,800 eggs a month), rose almost fivefold to 2012, dipped after the 2014–15 rouble crash, and reached 19,000 in 2025.</li>
+      <li><strong>Egypt:</strong> drops after the 2016 devaluation (2,000 to 1,700 eggs a month) and the 2023 one (4,000 to 1,800), each followed by recovery.</li>
+      <li><strong>Japan:</strong> the late-1980s land bubble, when a 100 m² home cost 31 years of income, and three decades of deflation after it.</li>
+    </ul>
+  </div>
+</section>
+
+<section aria-labelledby="h-catchup">
+  <div class="col flow">
+    <span class="num">WHY</span>
+    <h2 id="h-catchup">What powered the developing world's catch-up since 1990</h2>
+    <p>Over the last 35 years the gap between rich and developing countries narrowed faster than at any time in the data. Income per head in US dollars grew <strong class="k">41×</strong> in China, <strong class="k">10×</strong> in Poland, <strong class="k">6.8×</strong> in Chile and <strong class="k">6.5×</strong> in India, against 3.4× in the United States, 2.2× in France and 1.3× in Japan. The data shows the outcome; the causes below come from the economic history of the period, and each one leaves a mark in the charts.</p>
+  </div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>1990 → 2024</th><th>Income per head, USD</th><th>Growth</th><th>Eggs per month</th><th>Growth</th></tr></thead>
+      <tbody>
+        <tr><td>China</td><td>330 → 13,660</td><td class="hi">41×</td><td>643 → 12,166</td><td class="hi">19×</td></tr>
+        <tr><td>Poland</td><td>2,080 → 21,590</td><td class="hi">10×</td><td>3,391 → 17,999</td><td class="hi">5.3×</td></tr>
+        <tr><td>Chile</td><td>2,340 → 15,840</td><td>6.8×</td><td>3,452 → 17,190</td><td>5.0×</td></tr>
+        <tr><td>India</td><td>390 → 2,550</td><td>6.5×</td><td>892 → 3,035</td><td>3.4×</td></tr>
+        <tr><td>Russia</td><td>3,440 → 15,330</td><td>4.5×</td><td>3,179 → 18,397</td><td>5.8×</td></tr>
+        <tr><td>Thailand</td><td>1,540 → 7,130</td><td>4.6×</td><td>3,108 → 7,599</td><td>2.4×</td></tr>
+        <tr><td>Argentina</td><td>3,180 → 13,530</td><td>4.3×</td><td>6,608 → 9,628</td><td>1.5×</td></tr>
+        <tr><td>United States</td><td>24,060 → 82,910</td><td>3.4×</td><td>37,151 → 31,850</td><td>0.9×</td></tr>
+        <tr><td>Japan</td><td>28,990 → 37,170</td><td>1.3×</td><td>23,924 → 29,318</td><td>1.2×</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="col note">Income is GNI per capita, Atlas method (Poland from 1992, Russia from 1991, China's eggs from 1991). Egg growth is lower than dollar growth where egg prices rose with development or the currency gained against the dollar.</p>
+  <div class="col flow">
+    <h3>1. The end of closed and planned economies (1989–1992)</h3>
+    <p>Within three years the world's largest closed economies opened. China deepened its market reforms in 1992, Poland and the rest of Central Europe left central planning in 1990, the Soviet Union dissolved in 1991, and India's balance-of-payments crisis that year forced the end of its licence system and high tariffs. Hundreds of millions of workers joined the world market at once. In the charts, China's and Poland's lines begin their steep climbs just after these dates.</p>
+    <h3>2. Trade and the global factory</h3>
+    <p>The Uruguay Round created the WTO in 1995, China joined it in 2001, tariffs fell worldwide, and container shipping made distance cheap. Manufacturing moved to where labour cost less, bringing foreign investment, factory jobs and know-how. The car chart is the clearest trace: a car fell from 115 to 14 months of income in Poland (1990–2024), from 69 to 16 in China (2005–2024) and from 111 to 43 in Thailand. All three became major car producers inside global supply chains.</p>
+    <h3>3. Borrowed technology</h3>
+    <p>A follower country can adopt technology far more cheaply than the leader invented it. Mobile phones skipped the landline era, and modern farming spread fast. The egg itself is an example: industrial poultry, with improved breeds, compound feed and cold chains, reached China, India and Thailand in the 1990s and 2000s. That is a large part of why eggs became affordable fastest where people were poorest.</p>
+    <h3>4. Macroeconomic stability: the end of hyperinflation</h3>
+    <p>In the 1980s many developing economies lived with triple- or quadruple-digit inflation. That decade ended with Poland's 1990 stabilisation, Argentina's 1991 convertibility plan, Brazil's 1994 Real Plan and Mexico's recovery after 1995, followed by independent central banks targeting inflation (Chile 1990, Poland 1998, Brazil 1999, Thailand 2000, Mexico 2001). Our own sources show the change: FAO's price series for Mexico, Poland and Brazil are full of currency switches and redenominations before the mid-1990s, and stable afterwards. Predictable money made long-term investment and saving possible again.</p>
+    <h3>5. The commodity supercycle (about 2003–2014)</h3>
+    <p>China's industrialisation pulled up the prices of copper, iron ore, oil and soybeans, and exporters of those goods boomed. Russia's egg purchasing power more than tripled between 2000 and 2012 (3,900 to 13,200 eggs a month). Brazil peaked in 2010 and Chile kept climbing on copper. The end of the cycle is visible too: Russia dipped after the 2014–15 rouble crash and Brazil fell back from its 2010 peak.</p>
+    <h3>6. People: cities, demographics and schooling</h3>
+    <p>Workers moved from low-productivity farming into urban factories and services; China went from about a quarter urban in 1990 to about two thirds today. Falling birth rates left a large working-age generation with fewer dependants, and mass schooling made skills abundant. The graduate premium in our data shrank accordingly: from 2.05× to 1.50× in Mexico and from 1.33× to 1.14× in Poland. More graduates competing for jobs is a sign of development.</p>
+    <h3>7. Anchors and capital: EU accession and cheap money</h3>
+    <p>For Central Europe, the prospect of EU membership, and from 2004 the single market and structural funds, imported institutions as well as investment. Poland's income in dollars grew tenfold. For developing economies generally, low world interest rates in the 2000s and 2010s made foreign capital cheap.</p>
+    <h3>Why some countries lagged</h3>
+    <p>The same tailwinds blew for everyone, and the results differed. Argentina's dollar income grew 4.3×, but its egg purchasing power only 1.5×, through the 2001 default and repeated bouts of inflation and devaluation. Iran's dollar income only doubled under sanctions. Egypt gained 5.5× in eggs but from the lowest base in the set, with growth interrupted by the 2016 and 2023 devaluations. Greece, already rich in 1990, lost a decade to its debt crisis. The countries that converged combined openness to trade with stable money and lasting reforms. Openness alone, as Argentina shows, was not enough.</p>
+  </div>
+</section>
+
+<section aria-labelledby="h-next">
+  <div class="col flow">
+    <span class="num">OUTLOOK</span>
+    <h2 id="h-next">What the data say about what comes next</h2>
+    <p>First, what these data cannot do: give a date. Seventy annual readings contain only a handful of global crises, and crises arrive when debts, policy and confidence break together, which a yardstick of prices cannot time. What the data can do is show where today's readings sit against their own history, and what followed the last time they were there. Four readings stand out in 2025–26.</p>
+
+    <h3>Warning light 1: silver is at a historic extreme</h3>
+    <p>In 2025 a month of average income in the median country bought <strong class="k">1.49 kg</strong> of sterling silver, the 12th percentile of 65 years. Silver then averaged <strong class="k">$72</strong> an ounce over January–October 2026, against $39.8 in 2025. Unless incomes jump, 2026 will come in near <strong class="k">0.9 kg</strong>, the second-lowest reading on record. The only lower years cluster around two dates: 1979–83 and 2011–12.</p>
+  </div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Silver trough</th><th>Median g/month at the trough</th><th>Four to five years later</th><th>What was happening</th></tr></thead>
+      <tbody>
+        <tr><td>1980</td><td>649</td><td>1,884 (1985)</td><td style="text-align:left">Double-digit inflation, Volcker's interest-rate shock, recessions of 1980–82, Latin American debt crisis of 1982</td></tr>
+        <tr><td>2011</td><td>986</td><td>2,445 (2015)</td><td style="text-align:left">After the 2008 crisis: euro-area debt crisis, US credit downgrade, emergency money printing</td></tr>
+        <tr><td>2026 (est.)</td><td class="hi">≈ 890</td><td>—</td><td style="text-align:left">Silver peaked at $92 in January 2026 and fell to $57 by October</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col flow">
+    <p>Both earlier extremes were moments of fear about money and debt, when people bought metal to protect their savings. Both were followed by a fall in the silver price and a recovery of silver purchasing power by 2.5–3× within about five years. The 2026 fall from $92 to $57 has the same shape as the 1980 and 2011 unwinds. Two cases are a pattern, not a law.</p>
+
+    <h3>Warning light 2: housing is stretched in some countries, cheap in others</h3>
+    <p>Years of average income needed for a 100 m² home, measured against each country's own history:</p>
+  </div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Stretched (above 3 in 4 past years)</th><th>Years now</th><th>Cheap (below 1 in 4 past years)</th><th>Years now</th></tr></thead>
+      <tbody>
+        <tr><td>Mexico (record)</td><td class="hi">12.1</td><td>China</td><td>9.9 (peak 43.7 in 2005)</td></tr>
+        <tr><td>Norway</td><td class="hi">5.1</td><td>Italy</td><td>4.1</td></tr>
+        <tr><td>United States</td><td class="hi">2.3</td><td>India</td><td>41.1</td></tr>
+        <tr><td>United Kingdom</td><td class="hi">7.7</td><td>Germany</td><td>9.9</td></tr>
+        <tr><td>Chile</td><td class="hi">19.4</td><td>Thailand</td><td>41.9</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col flow">
+    <p>In this data set, a country's own housing peak has repeatedly come shortly before its crisis: Japan before 1990, the United States in 2005 before 2008, Greece in 2006 before 2010, Russia in 2007 before 2008–09, Brazil in 2012 before its 2015–16 recession. Mexico, Norway, the United States, Britain and Chile are near their own highs now. China is the opposite case: its housing has already deflated to the cheapest level in its record, so its property crisis is under way rather than ahead.</p>
+
+    <h3>Warning light 3: a food-price squeeze in rich countries</h3>
+    <p>From 2020 to 2025 the farm price of an egg rose faster than income in the United States (×3.5 against ×1.38), Japan (×1.84 against ×1.26), Germany (×1.76 against ×1.30) and France (×1.46 against ×1.26). In most developing countries income won: Egypt (income ×2.68, eggs ×1.44), Russia, Brazil, Chile and China. Rich-country households feel poorer in everyday goods even where official income rose. That kind of squeeze fuels political pressure more than it predicts recessions.</p>
+
+    <h3>The tailwind: goods keep getting cheaper and convergence continues</h3>
+    <p>Between 2014 and 2024 a car got cheaper in months of income in every country: Poland 29 to 14, China 27 to 16, India 52 to 37, Egypt 146 to 120. Manufacturing productivity, now led by Chinese factories, is still exporting lower prices to the world. And in 2025 egg purchasing power hit a record in India, Egypt, Thailand, Chile and Russia, while the United States, Japan, France and Germany sit well below their peaks.</p>
+
+    <h3>Three scenarios</h3>
+    <p>These are judgments built on the readings above, not forecasts, and not investment advice.</p>
+    <ul class="plain">
+      <li><strong>Most likely, 2026–2028: an unwind and a cooling, not a collapse.</strong> The metals spike keeps deflating, as it already has since January 2026, and growth slows where housing is stretched and debt is high: the US, the UK, Norway, Mexico and Chile. In 1980–82 and 2011–13 the equivalent period brought recessions in parts of the world, then a recovery within roughly five years.</li>
+      <li><strong>The global-crisis path: if several lights turn red together.</strong> A sharp housing correction in one of the stretched markets, combined with high interest rates, could turn a slowdown into a financial crisis, as in 2008. A second channel is China: if its property deflation cuts its demand for raw materials further, commodity exporters (Chile, Brazil, Russia) would be hit as they were in 2014–15. The data cannot say whether this happens, only that the preconditions are partly in place.</li>
+      <li><strong>The next prosperity wave, 2030s: led by the catching-up economies.</strong> The fastest falls in the price of goods and the records in egg purchasing power point to India, Southeast Asia and Central Europe (and, beyond this data set, Africa) as the likely engines. A renewed rise in rich countries would need a productivity wave, possibly from AI. If one comes, the first sign would be eggs per month climbing again in the US, Japan and Europe after twenty flat years.</li>
+    </ul>
+
+    <h3>What to watch</h3>
+  </div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Signal</th><th>Now</th><th style="text-align:left">What a change would mean</th></tr></thead>
+      <tbody>
+        <tr><td>Silver purchasing power (median g/month)</td><td>≈ 890 (2026 est.)</td><td style="text-align:left">A rebound toward 1,800–2,000 g, as after 1980 and 2011, means the fear trade has unwound</td></tr>
+        <tr><td>Years of income for 100 m², US / UK / Norway</td><td>2.3 / 7.7 / 5.1</td><td style="text-align:left">A turn down from these highs has preceded crises before; a flat plateau is the benign case</td></tr>
+        <tr><td>Eggs per month, US / Japan / France</td><td>22% / 56% / 62% of peak</td><td style="text-align:left">Rising again would be the first sign of a rich-world productivity revival</td></tr>
+        <tr><td>Months of income for a car, India / Egypt</td><td>37 / 120</td><td style="text-align:left">Continued falls mean convergence is still working</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="col note">The silver estimate for 2026 uses the World Bank's January–October 2026 monthly average ($71.8/oz) and 2025 incomes grown by the 2024–25 median (7.4%). Housing positions use each country's own series, so they say nothing about which country is expensive in absolute terms.</p>
+</section>
+
+<section aria-labelledby="h-ledger">
+  <h2 id="h-ledger" class="col">What changed, and what did not</h2>
+  <div class="ledger">
+    <div>
+      <h3>Changed</h3>
+      <ul>
+        <li>Basic food got about four times cheaper relative to income, and far more in Asia and Latin America.</li>
+        <li>The income gap between countries halved (64× to 27× in eggs).</li>
+        <li>Cars and other manufactured goods fell to a fraction of their 1970 cost in months of income, in every country.</li>
+        <li>China, Thailand and Poland moved from the bottom of the distribution toward the middle, driven by market reforms, trade, borrowed technology and stable money after 1990.</li>
+        <li>The education premium narrowed as degrees became common.</li>
+        <li>Since about 2005, rich-country gains stalled, and eggs got dearer in the US and EU.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Did not change</h3>
+      <ul>
+        <li>The cost of a home in years of income: flat in France, up in Britain, Norway and Poland.</li>
+        <li>Silver's purchasing power: about 2 kg a month in 1970 and in 2024.</li>
+        <li>The leaders: Norway, the US, Britain and Western Europe on top throughout.</li>
+        <li>The tail: India and Egypt at the bottom of every measure.</li>
+        <li>Local goods stay unequal and traded goods converge: income varies 27× between countries, a car about 6×.</li>
+        <li>World prices hit everyone at once: the 1980 silver spike and the 2022–25 egg shock show in every panel.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="col" aria-labelledby="h-method">
+  <h2 id="h-method">How the numbers were made, and how far to trust them</h2>
+  <ul class="plain note">
+    <li><strong>Eggs:</strong> FAO producer (farm-gate) prices for hen eggs, 1966–2024, plus FAO's price index to 2025, at 60 g per egg. Shop prices are typically 1.5–3× higher; this shifts levels, not trends. 1950–1965 has no source and is left blank.</li>
+    <li><strong>Income:</strong> World Bank GNI per capita (local currency for eggs, Atlas USD for silver). This is income per person, children included, not a wage.</li>
+    <li><strong>Graduates and city workers:</strong> ILOSTAT average monthly employee earnings, read in USD and converted with the World Bank exchange rate. ILOSTAT's own "local currency" figures for EU-survey countries turned out to be in euros.</li>
+    <li><strong>Homes:</strong> BIS observed price levels for France, Russia, Poland and Norway. Elsewhere, one researched price per m², chained with the BIS house-price index; several anchors are low-confidence. No data for Israel, Egypt, Iran or Argentina.</li>
+    <li><strong>Cars:</strong> one researched 2025 list price per country, chained back with new-car price indices (US BLS, Eurostat) or the general CPI. The CPI overstates old car prices somewhat, so early years in countries without a car index are rough.</li>
+    <li><strong>Silver:</strong> World Bank commodity price data, rounded by the source to $0.10 an ounce.</li>
+    <li>Several sources contain unit breaks that were corrected or excluded with stated reasons, for example Mexico and Poland currency switches in FAO's old series, and China's pre-1991 egg prices.</li>
+  </ul>
+  <h3>The engine: the datavibes package</h3>
+  <p>Every number in this report was produced by <strong>datavibes</strong>, an open, config-driven Python toolkit for building datasets. Nothing was edited by hand in a spreadsheet. The whole study is one file, <code>datasets/egg-purchasing-power/dataset.yaml</code>, which declares four things:</p>
+  <ul class="plain">
+    <li><strong>Sources:</strong> where the data come from. Here, 11 sources: FAOSTAT bulk files, the World Bank indicators API and commodity price file, ILOSTAT, BIS bulk files, the US BLS API, Eurostat (JSON-stat), and two small tables of researched prices typed into the YAML with their citations.</li>
+    <li><strong>Processing:</strong> an ordered list of steps that turn raw rows into the final table: join on country and year, normalise types, chain price levels through indices, convert units, compute ratios, filter with a stated reason, sort, validate against the schema.</li>
+    <li><strong>Schema:</strong> every output column with its type, unit and description, checked on every run.</li>
+    <li><strong>Outputs:</strong> the CSV, the Excel workbook with its pivot sheets and native charts, and the seven SVG charts.</li>
+  </ul>
+  <p>One command, <code>datavibes run egg-purchasing-power</code>, fetches everything, processes it and writes all outputs with one shared timestamp. Several properties make the results checkable:</p>
+  <ul class="plain">
+    <li><strong>Provenance in the data:</strong> every estimated value is labelled in its own column (<code>price_basis</code>, <code>house_price_basis</code>, <code>car_price_basis</code>: observed, archive-rebased, index-chained, anchor), and every anchor row carries its source and confidence.</li>
+    <li><strong>Corrections are declared, not hidden:</strong> each unit fix or exclusion is a line in the YAML with its reason, and it is printed as a warning on every run.</li>
+    <li><strong>Parameters:</strong> assumptions such as egg weight are variables. <code>EGG_WEIGHT_GRAMS=50 datavibes run egg-purchasing-power</code> reruns the study with 50 g eggs.</li>
+    <li><strong>Tests:</strong> 41 automated tests replay the pipeline on recorded sample data with no network, including byte-for-byte comparisons of the CSV and a chart, so a code change that alters a result is caught.</li>
+  </ul>
+</section>
+
+<section class="col" aria-labelledby="h-further">
+  <h2 id="h-further">Using datavibes for further research</h2>
+  <p>Because the study is a declaration rather than a one-off script, extending it is mostly editing YAML. The building blocks written for this report (FAO, ILO, BIS, BLS and World Bank sources; index chaining; the spreadsheet and small-multiples writers) are reusable by any other dataset.</p>
+  <h3>Questions this setup can answer next</h3>
+  <ul class="plain">
+    <li><strong>Change the yardstick.</strong> FAOSTAT carries producer prices for about 200 farm products. Swapping one line (<code>item</code>) prices everything in rice, wheat, milk or chicken. Comparing several yardsticks would separate what is specific to eggs from what is general.</li>
+    <li><strong>Add countries.</strong> Each country is one line in the FAO source plus its code in a list; Nigeria, Indonesia, Turkey, Vietnam or Kenya would test whether the catch-up story holds in Africa and the rest of Asia.</li>
+    <li><strong>Retail instead of farm-gate prices.</strong> A retail egg series (for example US BLS <code>APU0000708111</code>, already reachable through the BLS source) would measure the shop price directly.</li>
+    <li><strong>Wages instead of income per head.</strong> The ILOSTAT source can read minimum wages or earnings by occupation: how many eggs, cars or square metres a nurse, a teacher or a construction worker earns.</li>
+    <li><strong>Hours of work.</strong> Dividing by hourly earnings (ILOSTAT) turns every price into hours of labour, the most intuitive yardstick of all.</li>
+    <li><strong>Turn the outlook into a tracker.</strong> The four signals in the outlook chapter can be a scheduled dataset that recalculates monthly, so the warning lights update themselves.</li>
+    <li><strong>Maps.</strong> The package also draws world and regional maps (country choropleths and city dot maps with colour scales), so any of these measures can be mapped instead of charted.</li>
+  </ul>
+  <h3>How to start</h3>
+  <ul class="plain">
+    <li><code>datavibes new my-study --category economy</code> creates a dataset folder with a working <code>dataset.yaml</code>.</li>
+    <li>Declare sources, steps and outputs, reusing the blocks listed in <code>docs/reference.md</code>. A source the toolkit does not cover yet is a small Python class registered by name.</li>
+    <li><code>datavibes validate my-study</code> checks the configuration; <code>datavibes run my-study</code> produces the outputs; a cron line makes it a living dataset.</li>
+    <li>Better anchor prices for any country (homes, cars) can be contributed as one line each in the YAML, with their source, and the whole chain recalculates.</li>
+  </ul>
+  <p class="note">datavibes is released under the Business Source License 1.1: free to use for research, evaluation and non-commercial work, and for production use by organisations with annual revenue below the value of one bitcoin. The underlying data keep their own licences (FAOSTAT CC BY-NC-SA 3.0 IGO, World Bank and ILOSTAT CC BY 4.0, BIS, BLS and Eurostat terms).</p>
+</section>
+</div>

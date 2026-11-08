@@ -24,6 +24,11 @@ Tutorial: [creating-datasets.md](creating-datasets.md) · Operations:
 | `jsonstat` | _`url`_, _`value_column`_, `dimensions` (`dim: column` for codes), `label_columns` (`dim: column` for labels), `params`, `headers` | JSON-stat 2.0 cubes (Eurostat, e-Stat) |
 | `worldbank-indicator` | `indicators` (`CODE: column`), `date_range` = `2000:2024`, `per_page`, `delay_seconds` = 1.0 | World Bank panels: one row per country-year **per indicator**, then `join` |
 | `worldbank-latest` | _`indicators`_ (`CODE: {value: column, year: column}`), `most_recent_non_empty` = true, `exclude_aggregates` = true, `base_url`, `per_page`, `max_pages` | The **latest** value per country, indicators merged per ISO3; regional/income aggregates dropped |
+| `faostat-prices` | _`item`_ (FAO item name), _`areas`_ (`ISO3: {label, names: [FAO area], archive_names: [FAO area]}`), `value_column` = `price_slc_per_tonne`, `basis_column` = `price_basis`, `archive_rescale` (`ISO3: {before \| from, factor, reason}`), `archive_exclude` (`ISO3: reason` drops the whole archive, `ISO3: {before, reason}` only its early years), `index_exclude` (`ISO3: reason`: no index extension), `current_url`, `archive_url` (null = current only), `timeout_seconds` = 120 | FAOSTAT producer prices for one item, 1966→today, in today's currency. Archive (1966–1990) is converted with FAO's own SLC÷LCU ratio; gaps are filled from FAO's price index; every row has a `price_basis`: `observed` · `archive-rebased` · `index-extended` |
+| `bis-series` | _`dataflow`_ (`WS_SPP` indices, `WS_DPP` detailed incl. per-m² levels, …), _`series`_ (`ISO3: {REF_AREA: XX, <DIMENSION>: code, …, multiplier}`), _`value_column`_, `filters` (shared dimension codes), `basis_column` + `basis` = `observed`, `url`, `timeout_seconds` = 120 | BIS statistics bulk files; dimension cells are matched on their code; quarterly/monthly values averaged per year. Quote `REF_AREA: "NO"` (bare `NO` is YAML false) |
+| `worldbank-pinksheet` | _`commodities`_ (`Sheet name: column`, e.g. `Silver: silver_usd_per_troy_oz`), `url` (pin a file), `page_url`, `timeout_seconds` = 120 | World Bank commodity prices (Pink Sheet), annual nominal USD, 1960→. Follows the current file link on the commodity-markets page. Rows have no country: broadcast them with `lookup: {from_source: worldbank-pinksheet, on: year, …}`. Needs `openpyxl` |
+| `bls-series` | _`series`_ (`ISO3: BLS series id`), _`value_column`_, `start_year` = 1953, `end_year` (default: this year), `url`, `timeout_seconds` = 60, `retries` = 3 | US BLS API v1, keyless: POSTs 10-year windows, averages M01–M12 per year. Keyless quota is 25 requests/day |
+| `ilostat` | _`indicator`_ (e.g. `EAR_EMTA_SEX_EDU_NB_A`), _`ref_areas`_ (ISO3 list), _`value_column`_, `filters` (`sex` sent to the API; `classif1`, … applied locally), `source_column`, `fill_from_other_surveys` = false, `exclude_before` (`ISO3: {year, reason}`), `timeout_seconds` = 120 | ILOSTAT indicators as country-year rows. Keeps each country on its longest-running survey so survey switches don't create jumps |
 | `sparql` | _`query`_, `endpoint` = Wikidata, `strip_uri_prefix` = false, `timeout_seconds` = 90 | Any SPARQL 1.1 endpoint; numeric literals → float; every `SELECT` variable becomes a column |
 
 Dataset-local adapters (`datasets/<slug>/sources.py`): `ncei-climate`
@@ -56,7 +61,9 @@ A step is written as a bare name (`- normalize`) or a one-key mapping
 | `forecast` | _`column`_, _`value`_, `by`, `horizon` = 1, `window` = 5, `method` = `linear` | Least-squares projection per group (sort by time first) |
 | `age_days` | _`column`_, _`value`_ (ISO timestamp column) | Days between the timestamp and the run instant |
 | `sort` | _`by`_ | Stable sort, nulls last. Gives deterministic output and time order for windowed helpers. |
-| `validate` | — | Fail the run if any row breaks the schema. **Put it last.** |
+| `map` | _`column`_, _`key`_, _`mapping`_ (`key value: new value`) | Set a column from a fixed table (ISO3 → display name); rows whose key isn't listed keep their value |
+| `chain_index` | _`column`_ (level), _`index`_ (one column, or a list best-first), `by`, `time` = `year`, `basis_column`, `chained_label` = `index-chained` (or one per index) | Fill a level's missing years per group. One index: level(anchor) × index(year) ÷ index(anchor), nearest anchor. A list: grow year by year, each link using the first index that covers both years (splices a short specific index with a long general one) |
+| `validate` | —  | Fail the run if any row breaks the schema. **Put it last.** |
 
 **Condition syntax** (`filter`, `flag`): `{ column: x, <operator>: value, … }`.
 Every listed operator must hold. Operators: `gt`, `gte`, `lt`, `lte`, `eq`, `ne`,
@@ -95,6 +102,8 @@ With `by:`, the helper runs separately within each group.
 | `sex_majority` | `sex_majority(male_pct, tolerance=0.05)` | `male` / `female` / `equal` |
 | `null_outside` | `null_outside(x, low=…, high=…)` | x if within [low, high], else None |
 | `round_to` | `round_to(x, digits=2)` | Rounded |
+| `product` | `product(a, b)` | a × b (a USD amount × LCU per USD) |
+| `scale` | `scale(x, factor=1, divisor=1)` | x × factor ÷ divisor: unit conversions (per tonne → per egg, per year → per month) |
 
 ---
 
@@ -108,8 +117,43 @@ Each writer may appear only once per dataset.
 | `csv` | — (schema column order; empty cell for null) |
 | `json` | — (array of objects, schema key order) |
 | `parquet` | — (needs `pip install 'datavibes[parquet]'`) |
+| `xlsx` | `pivots`, `title`, `attribution`, `license`, `notes`: see below (needs `pip install 'datavibes[xlsx]'`) |
+| `svg-small-multiples` | see below |
 | `svg-map` | see below |
 | `svg-dot-map` | everything `svg-map` takes except `key_column`, plus the dot options below |
+
+### The same writer twice: `suffix`
+
+Any output takes `suffix: <name>` (lowercase, digits, dashes). The file becomes
+`<timestamp>.<suffix>.<extension>`, so one dataset can write two charts with the
+same writer, e.g. `<ts>.svg` and `<ts>.graduates.svg`.
+
+### `xlsx`: Excel workbook
+
+Sheets: `data` (every schema column), one sheet per pivot, `About` (title, attribution, licence, notes, column dictionary).
+
+| Pivot key | Meaning |
+|---|---|
+| _`sheet`_, _`index`_, _`columns`_, _`values`_ | Sheet name; row key (e.g. `year`); one column per distinct value (e.g. `country`); cell value |
+| `order` | Column order (default: sorted) |
+| `index_range` | `[low, high]`: a row for every integer key, empty where there is no data (honest gaps) |
+| `chart` | `{title, x_title, y_title, x_range: [low, high], log_y, anchor}`: a native Excel scatter-with-lines chart, one line per column |
+
+### `svg-small-multiples`: one time-series panel per entity
+
+For more than about 8 series: each panel draws its entity as the one coloured line, every other entity in grey, on shared axes. Light/dark aware; native `<title>` tooltips; the latest value is labelled.
+
+| Option | Default | Meaning |
+|---|---|---|
+| _`x`_, _`y`_, _`facet`_ | | Time column, value column, entity column |
+| `facet_order` | sorted | Panel order |
+| `x_range` | data range | `[low, high]`: pin the axis (gaps stay visible) |
+| `y_scale` | `linear` | `linear` · `log` |
+| `basis_column` + `estimated` | | Segments touching a row whose basis is in `estimated` are dashed |
+| `columns`, `panel_width`, `panel_height` | 4, 280, 170 | Grid layout |
+| `reference_y`, `reference_label` | | A second column drawn as a thin dark line in every panel (e.g. the whole-population value behind a sub-group) |
+| `show_empty`, `empty_note` | false, `no data` | Draw a panel, with the note, for `facet_order` entries that have no data |
+| `title`, `subtitle`, `y_label`, `unit`, `footer` | | Text; `unit` goes into tooltips |
 
 ### `svg-map`: country / region choropleth
 

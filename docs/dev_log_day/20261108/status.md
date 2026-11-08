@@ -1,0 +1,42 @@
+# 2026-11-08 — Dev day status
+
+> Forward backlog. Planned/unfinished sprints carried from [`../20261106/status.md`](../20261106/status.md) and earlier; everything **done** stays archived under its dev-day `done/`.
+> **Reports (this day):** [r09 — egg purchasing power](reports/r09-egg-purchasing-power.md)
+
+
+---
+
+## Theme
+
+Time-series products join the map products. S15 adds a FAOSTAT price source that harmonises currencies itself, plus two writers: a spreadsheet (`xlsx`) and a faceted chart (`svg-small-multiples`). The first dataset built on them is `egg-purchasing-power`: eggs per month of average income for 13 countries, 1966–2025, on a 1950–2025 axis.
+
+## Done today
+
+- **S15 egg purchasing power** ([sprint](done/s15-egg-purchasing-power.md) · [report](reports/r09-egg-purchasing-power.md)): `faostat-prices`, `scale`, `xlsx`, `svg-small-multiples` and dataset `egg-purchasing-power` (CSV + XLSX + SVG), then a second chart of graduates' pay: the `ilostat` source, output `suffix`, and `reference_y` / `show_empty` on the chart writer; then a third chart of city workers' pay (ILOSTAT urban earnings, `<ts>.urban.svg`); then 7 more countries (POL, GRC, ISR, IRN, BRA, CHL, NOR), with ILOSTAT read in USD × the World Bank rate after finding its "LCU" is euros for EU-survey countries. Then a fourth chart: a new 100 m² home in eggs (BIS price levels / researched anchors chained with BIS indices; `bis-series` source, `chain_index` step). Then a fifth chart: grams of sterling silver per month of average income (World Bank Pink Sheet + Atlas GNI in USD; `worldbank-pinksheet` source, `map` step). Sixth chart: the same in lb per year. Seventh chart: a middle-class car (Corolla class) in eggs — researched 2025 anchors spliced back with new-car CPIs (BLS, Eurostat) and the general CPI (`bls-series`, spliced `chain_index`). Analytical report: [docs/analysis/world-in-eggs/index.html](../../analysis/world-in-eggs/index.html), published as https://claude.ai/artifact/7bkEWQGFehTLJUQ13tDVdK.
+
+## Carried forward
+
+- **Licence parameters to confirm:** Licensor "vbwd", Change Date 2030-11-06, Change
+  License Apache 2.0, and the contact URL were chosen as defaults.
+
+- **City data quality:** wrong Wikidata areas inside the 10–60,000/km² bounds; metro areas
+  typed as cities; XKS/XKX alias for `lookup` ([r08](reports/r08-city-dot-maps.md)).
+
+- **Map colour domain:** the men/women map's intensity still tops out at Macao
+  (20,631/km², not drawn at 110m). Options: cap it at the overpopulation threshold, or add
+  `color_domain: drawn | all` to `svg-map`.
+- **VBWD plugin:** confirm it serves `.svg` + `.join.json` from a snapshot folder.
+- **`test_cli_new_validate_run_flow` fails locally:** it inherits the local `.env`'s
+  container `DATAVIBES_OUTPUT_DIR`. Isolate the test from `.env`.
+- **Region/country map datasets:** the framework supports them; admin-1 geometry
+  (≈ 40 MB at 10m) needs a fetch-and-cache decision.
+- *From 2026-08-11:* #23 Global Hosting Performance (no keyless feed) ·
+  `us-regional-weather` has no data until `NCDC_WEB_SERVICE_TOKEN` is set · #2 US Census
+  needs a key · #16/#30/#13 procurement/regulatory sources need their own sprint · snapshot
+  regression alarm · `sdmx` adapter deferred.
+- **Egg purchasing power, next data:** pre-1966 prices (USDA NASS for the US, needs
+  a key; national yearbooks), a retail-price basis (BLS `APU0000708111`, ILO October
+  Inquiry), USSR wages 1966–1987, and India's flat 1975–1997 FAO price.
+- **Local venv:** `test_reporter_uses_packaged_template_by_default` needs `weasyprint`.
+
+

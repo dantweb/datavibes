@@ -130,7 +130,7 @@ datavibes/
 │   ├── sources/                 #   Source ABC + registry + built-in adapters
 │   ├── generator/               #   Generator (sources → raw snapshot)
 │   ├── processing/              #   Processor + pure, testable steps
-│   ├── export/                  #   writers (csv / json / parquet)
+│   ├── export/                  #   writers (csv / json / parquet / xlsx / svg-small-multiples)
 │   └── store/                   #   on-disk layout + timestamped snapshots
 ├── datasets/                    # DATA, not code — one folder per dataset
 │   └── <slug>/
@@ -323,18 +323,23 @@ catalog of datasets is authorable as config, not code:
   declared item list, one request each), `columnar_http_json` (transpose an API's
   parallel arrays into rows), `jsonstat` (Eurostat / e-Stat cubes),
   `worldbank-indicator` (country-year panels), `worldbank-latest` (latest value per
-  country) and `sparql` (Wikidata or any SPARQL endpoint). A per-dataset `sources.py`
+  country), `sparql` (Wikidata or any SPARQL endpoint), `faostat-prices`
+  (FAOSTAT producer prices, 1966→today, in today's currency) `ilostat`
+  (ILOSTAT indicators, one survey per country) `bis-series` (BIS statistics
+  bulk files: property price indices and levels) `worldbank-pinksheet` (World
+  Bank commodity prices) and `bls-series` (US BLS time series). A per-dataset `sources.py`
   is the exception (~30 lines), only when a source's auth/paging/shape is unique.
 - **Processing steps** — `normalize`, `rename`, `dedupe`, `filter` (with an optional
   `reason`), `sort`, `join`, `lookup`, `derive`, `aggregate`, `age_days`, `score`,
-  `flag`, `classify`, `forecast`, `validate`.
+  `flag`, `classify`, `forecast`, `map`, `chain_index`, `validate`.
 - **Derive helpers** — `yoy`, `pct_change`, `cagr`, `rolling_avg`, `anomaly`, `corr` /
   `rolling_corr`, `ratio`, `add`, `subtract`, `share` / `penetration`, `share_of_total`,
   `gini`, `hhi`, `minmax_normalize`, `zscore`, `volatility`, `seasonal_index`,
   `linear_forecast`, `scale_to_range`, `complement`, `sex_majority`, `at_least`,
-  `null_outside`, `round_to`.
-- **Output writers** — `csv`, `json`, `parquet`, `svg-map` (country choropleth) and
-  `svg-dot-map` (one dot per row), with the colour scales `sex-ratio-bivariate` and
+  `null_outside`, `round_to`, `scale`, `product`.
+- **Output writers** — `csv`, `json`, `parquet`, `xlsx` (data + pivots + native
+  Excel charts), `svg-small-multiples` (one time-series panel per entity),
+  `svg-map` (country choropleth) and `svg-dot-map` (one dot per row), with the colour scales `sex-ratio-bivariate` and
   `spectral-density`. Full options: [docs/reference.md](docs/reference.md).
 
 Every "statistical preprocessing" requirement in the product catalog (aggregates,

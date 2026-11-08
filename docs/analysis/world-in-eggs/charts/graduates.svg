@@ -1,0 +1,1137 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1222.0" height="1314.0" viewBox="0 0 1222.0 1314.0" font-family="Helvetica, Arial, sans-serif">
+<style>.surface{fill:#fcfcfb}.ink{fill:#0b0b0b}.muted{fill:#52514e}
+.grid{stroke:#e6e4dd;stroke-width:1}.axis{stroke:#b5b3ab;stroke-width:1}
+.context{stroke:#cfcdc6;stroke-width:1;fill:none}
+.focus{stroke:#2a78d6;stroke-width:2;fill:none;stroke-linejoin:round;stroke-linecap:round}
+.reference{stroke:#7d7b74;stroke-width:1.25;fill:none}
+.estimated{stroke-dasharray:4 3}.dot{fill:#2a78d6}.hit{fill:transparent}
+@media (prefers-color-scheme: dark){
+.surface{fill:#1a1a19}.ink{fill:#f0efec}.muted{fill:#c3c2b7}
+.grid{stroke:#2e2d2a}.axis{stroke:#5b5a55}.context{stroke:#45443f}
+.focus{stroke:#3987e5}.reference{stroke:#a3a198}.dot{fill:#3987e5}}</style>
+<rect class="surface" width="1222.0" height="1314.0"/>
+<text class="ink" x="24.0" y="34.0" font-size="20" font-weight="bold">How many eggs does a month of a graduate's pay buy?</text>
+<text class="muted" x="24.0" y="56.0" font-size="13">Average monthly earnings of employees with tertiary education ÷ farm-gate price of one hen egg (60 g) · shared log scale</text>
+<line class="focus" x1="24.0" y1="72.0" x2="46.0" y2="72.0"/>
+<text class="muted" x="52.0" y="76.0" font-size="11">this country</text>
+<line class="focus estimated" x1="138.4" y1="72.0" x2="160.4" y2="72.0"/>
+<text class="muted" x="166.4" y="76.0" font-size="11">estimated (index-extended)</text>
+<line class="reference" x1="339.6" y1="72.0" x2="361.6" y2="72.0"/>
+<text class="muted" x="367.6" y="76.0" font-size="11">everyone (GNI per capita)</text>
+<line class="context" x1="534.6" y1="72.0" x2="556.6" y2="72.0"/>
+<text class="muted" x="562.6" y="76.0" font-size="11">other countries</text>
+<text class="muted" x="1198.0" y="76.0" font-size="11" text-anchor="end">eggs per month (log scale)</text>
+<g aria-label="United States">
+<text class="ink" x="24.0" y="106.0" font-size="13" font-weight="bold">United States</text>
+<text class="muted" x="304.0" y="106.0" font-size="11" text-anchor="end">2025: 30.8k</text>
+<line class="grid" x1="68.0" y1="284.0" x2="304.0" y2="284.0"/>
+<text class="muted" x="64.0" y="287.5" font-size="10" text-anchor="end">100</text>
+<line class="grid" x1="68.0" y1="232.5" x2="304.0" y2="232.5"/>
+<text class="muted" x="64.0" y="236.0" font-size="10" text-anchor="end">1k</text>
+<line class="grid" x1="68.0" y1="181.0" x2="304.0" y2="181.0"/>
+<text class="muted" x="64.0" y="184.5" font-size="10" text-anchor="end">10k</text>
+<line class="grid" x1="68.0" y1="129.5" x2="304.0" y2="129.5"/>
+<text class="muted" x="64.0" y="133.0" font-size="10" text-anchor="end">100k</text>
+<line class="axis" x1="68.0" y1="284.0" x2="304.0" y2="284.0"/>
+<text class="muted" x="68.0" y="298.0" font-size="10" text-anchor="middle">1950</text>
+<text class="muted" x="146.7" y="298.0" font-size="10" text-anchor="middle">1975</text>
+<text class="muted" x="225.3" y="298.0" font-size="10" text-anchor="middle">2000</text>
+<text class="muted" x="304.0" y="298.0" font-size="10" text-anchor="middle">2025</text>
+<path class="context" d="M222.2 143.1L225.3 143.4L228.5 142.6L231.6 142.9L234.8 136.8"/>
+<path class="context" d="M241.1 133.6L244.2 134.0L247.4 136.5L250.5 139.5L253.7 140.0L256.8 138.7L259.9 138.4L263.1 143.6L266.2 144.5L269.4 142.8L272.5 141.9L275.7 138.4L278.8 137.3L282.0 136.7"/>
+<path class="context" d="M288.3 135.1L291.4 135.1L294.6 134.1L297.7 133.1L300.9 133.3L304.0 132.7"/>
+<path class="context" d="M241.1 143.4L244.2 146.1L247.4 151.2L250.5 151.2L253.7 152.8L256.8 147.6L259.9 149.7L263.1 158.5L266.2 149.3L269.4 152.0L272.5 153.1L275.7 152.3L278.8 158.8L282.0 157.2L285.1 155.2L288.3 153.1L291.4 154.9L294.6 160.8L297.7 161.7L300.9 159.0L304.0 159.4"/>
+<path class="context" d="M241.1 143.7L244.2 149.6L247.4 151.3L250.5 152.1L253.7 152.9L256.8 155.1L259.9 156.0L263.1 151.9L266.2 145.0L269.4 143.0L272.5 143.3L275.7 141.2L278.8 148.9L282.0 146.7L285.1 144.2L288.3 134.0L291.4 131.8L294.6 141.6"/>
+<path class="context" d="M256.8 229.0L259.9 222.0L263.1 216.3L266.2 217.0"/>
+<path class="context" d="M272.5 215.5L275.7 220.7L278.8 224.9L282.0 220.0"/>
+<path class="context" d="M288.3 219.8L291.4 216.3L294.6 211.9L297.7 231.4L300.9 220.5"/>
+<path class="context" d="M282.0 192.2L285.1 194.0L288.3 190.7L291.4 193.8L294.6 193.4L297.7 192.8L300.9 193.5L304.0 193.4"/>
+<path class="context" d="M250.5 160.5L253.7 161.9L256.8 162.1L259.9 162.1L263.1 168.4L266.2 167.5L269.4 166.0L272.5 163.9L275.7 160.5L278.8 164.3L282.0 165.9L285.1 165.3L288.3 165.2"/>
+<path class="context" d="M237.9 180.2L241.1 177.8L244.2 173.4"/>
+<path class="context" d="M250.5 178.1L253.7 171.3L256.8 165.8L259.9 161.6L263.1 165.1L266.2 166.3L269.4 164.7"/>
+<path class="context" d="M278.8 162.7L282.0 177.3L285.1 177.6L288.3 182.8L291.4 163.4L294.6 171.0L297.7 175.9L300.9 185.4L304.0 187.5"/>
+<path class="context" d="M231.6 168.1L234.8 170.8L237.9 173.3L241.1 168.9L244.2 169.0L247.4 170.2L250.5 175.4L253.7 176.7L256.8 176.2L259.9 176.7L263.1 181.1L266.2 184.9L269.4 185.1L272.5 181.9L275.7 180.7L278.8 181.9L282.0 182.2L285.1 182.8L288.3 182.4L291.4 182.3L294.6 184.7L297.7 184.0L300.9 183.4L304.0 183.5"/>
+<path class="context" d="M269.4 183.7L272.5 186.1L275.7 181.8L278.8 179.8L282.0 180.0L285.1 180.6L288.3 180.4L291.4 182.0L294.6 182.0L297.7 182.0L300.9 181.5L304.0 181.2"/>
+<path class="context" d="M241.1 174.7L244.2 172.7L247.4 168.5L250.5 167.1L253.7 165.7L256.8 166.2L259.9 161.8L263.1 174.3L266.2 167.6L269.4 167.2L272.5 165.9L275.7 161.6L278.8 168.9L282.0 163.3L285.1 161.9L288.3 159.7L291.4 162.5L294.6 171.3L297.7 173.2L300.9 165.8L304.0 163.9"/>
+<path class="context" d="M247.4 160.9L250.5 163.9L253.7 165.0L256.8 165.8L259.9 168.0L263.1 172.6L266.2 173.6L269.4 173.9"/>
+<path class="context" d="M291.4 174.7L294.6 177.0L297.7 180.3L300.9 181.0L304.0 183.1"/>
+<path class="context" d="M209.6 167.8L212.7 170.9L215.9 170.5L219.0 168.6L222.2 170.7"/>
+<path class="context" d="M228.5 171.1L231.6 157.8L234.8 165.9L237.9 165.6L241.1 165.7L244.2 162.8L247.4 164.0L250.5 165.0L253.7 166.2"/>
+<path class="context" d="M237.9 144.2L241.1 145.8L244.2 145.9L247.4 144.1L250.5 142.2L253.7 141.9L256.8 144.7L259.9 143.9L263.1 145.3L266.2 141.8L269.4 139.4L272.5 138.8L275.7 139.0L278.8 140.6L282.0 139.2L285.1 138.2L288.3 137.4L291.4 142.0L294.6 142.3L297.7 140.2L300.9 143.4L304.0 144.8"/>
+<path class="reference" d="M118.3 180.1L121.5 174.1L124.6 174.2L127.8 176.3L130.9 174.8L134.1 168.3L137.2 166.0L140.4 175.6L143.5 174.3L146.7 172.3L149.8 172.6L153.0 169.4L156.1 165.5L159.3 165.8L162.4 163.3L165.5 163.5L168.7 161.2L171.8 160.5L175.0 162.0L178.1 155.4L181.3 156.3L184.4 152.4L187.6 146.0L190.7 152.0L193.9 151.6L197.0 152.9L200.2 148.4L203.3 149.8L206.5 148.0L209.6 147.4L212.7 147.0L215.9 143.8L219.0 140.2L222.2 135.8L225.3 134.2L228.5 134.0L231.6 131.3L234.8 138.1L237.9 136.1L241.1 124.3L244.2 126.3L247.4 142.6L250.5 148.0L253.7 142.3L256.8 137.7L259.9 144.2L263.1 144.0L266.2 145.4L269.4 147.6L272.5 153.2L275.7 135.8L278.8 137.6L282.0 143.1L285.1 135.0L288.3 137.3L291.4 136.8L294.6 153.0L297.7 150.3L300.9 155.1L304.0 158.1"/>
+<path class="focus" d="M206.5 142.5L209.6 142.3L212.7 142.4L215.9 139.6L219.0 135.4L222.2 131.1L225.3 129.9L228.5 129.5L231.6 126.9L234.8 134.0L237.9 132.8L241.1 121.6L244.2 124.3L247.4 140.5L250.5 145.4L253.7 139.0L256.8 135.2L259.9 142.2L263.1 142.5L266.2 144.2L269.4 147.1L272.5 152.8L275.7 135.0L278.8 137.2L282.0 143.1L285.1 135.2"/>
+<path class="focus estimated" d="M285.1 135.2L288.3 136.1L291.4 137.4"/>
+<path class="focus" d="M291.4 137.4L294.6 154.5L297.7 150.2L300.9 152.7"/>
+<path class="focus estimated" d="M300.9 152.7L304.0 155.8"/>
+<circle class="dot" cx="304.0" cy="155.8" r="3"/>
+<circle class="hit" cx="206.5" cy="142.5" r="5"><title>United States 1994: 56,002 eggs/month</title></circle>
+<circle class="hit" cx="209.6" cy="142.3" r="5"><title>United States 1995: 56,546 eggs/month</title></circle>
+<circle class="hit" cx="212.7" cy="142.4" r="5"><title>United States 1996: 56,145 eggs/month</title></circle>
+<circle class="hit" cx="215.9" cy="139.6" r="5"><title>United States 1997: 63,732 eggs/month</title></circle>
+<circle class="hit" cx="219.0" cy="135.4" r="5"><title>United States 1998: 76,779 eggs/month</title></circle>
+<circle class="hit" cx="222.2" cy="131.1" r="5"><title>United States 1999: 93,039 eggs/month</title></circle>
+<circle class="hit" cx="225.3" cy="129.9" r="5"><title>United States 2000: 98,168 eggs/month</title></circle>
+<circle class="hit" cx="228.5" cy="129.5" r="5"><title>United States 2001: 99,792 eggs/month</title></circle>
+<circle class="hit" cx="231.6" cy="126.9" r="5"><title>United States 2002: 112,315 eggs/month</title></circle>
+<circle class="hit" cx="234.8" cy="134.0" r="5"><title>United States 2003: 81,896 eggs/month</title></circle>
+<circle class="hit" cx="237.9" cy="132.8" r="5"><title>United States 2004: 86,378 eggs/month</title></circle>
+<circle class="hit" cx="241.1" cy="121.6" r="5"><title>United States 2005: 142,436 eggs/month</title></circle>
+<circle class="hit" cx="244.2" cy="124.3" r="5"><title>United States 2006: 126,363 eggs/month</title></circle>
+<circle class="hit" cx="247.4" cy="140.5" r="5"><title>United States 2007: 61,231 eggs/month</title></circle>
+<circle class="hit" cx="250.5" cy="145.4" r="5"><title>United States 2008: 49,110 eggs/month</title></circle>
+<circle class="hit" cx="253.7" cy="139.0" r="5"><title>United States 2009: 65,464 eggs/month</title></circle>
+<circle class="hit" cx="256.8" cy="135.2" r="5"><title>United States 2010: 77,502 eggs/month</title></circle>
+<circle class="hit" cx="259.9" cy="142.2" r="5"><title>United States 2011: 56,576 eggs/month</title></circle>
+<circle class="hit" cx="263.1" cy="142.5" r="5"><title>United States 2012: 55,843 eggs/month</title></circle>
+<circle class="hit" cx="266.2" cy="144.2" r="5"><title>United States 2013: 51,895 eggs/month</title></circle>
+<circle class="hit" cx="269.4" cy="147.1" r="5"><title>United States 2014: 45,469 eggs/month</title></circle>
+<circle class="hit" cx="272.5" cy="152.8" r="5"><title>United States 2015: 35,321 eggs/month</title></circle>
+<circle class="hit" cx="275.7" cy="135.0" r="5"><title>United States 2016: 78,209 eggs/month</title></circle>
+<circle class="hit" cx="278.8" cy="137.2" r="5"><title>United States 2017: 70,762 eggs/month</title></circle>
+<circle class="hit" cx="282.0" cy="143.1" r="5"><title>United States 2018: 54,341 eggs/month</title></circle>
+<circle class="hit" cx="285.1" cy="135.2" r="5"><title>United States 2019: 77,588 eggs/month</title></circle>
+<circle class="hit" cx="288.3" cy="136.1" r="5"><title>United States 2020: 74,573 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="291.4" cy="137.4" r="5"><title>United States 2021: 70,256 eggs/month</title></circle>
+<circle class="hit" cx="294.6" cy="154.5" r="5"><title>United States 2022: 32,698 eggs/month</title></circle>
+<circle class="hit" cx="297.7" cy="150.2" r="5"><title>United States 2023: 39,641 eggs/month</title></circle>
+<circle class="hit" cx="300.9" cy="152.7" r="5"><title>United States 2024: 35,405 eggs/month</title></circle>
+<circle class="hit" cx="304.0" cy="155.8" r="5"><title>United States 2025: 30,792 eggs/month (estimated)</title></circle>
+</g>
+<g aria-label="United Kingdom">
+<text class="ink" x="322.0" y="106.0" font-size="13" font-weight="bold">United Kingdom</text>
+<text class="muted" x="602.0" y="106.0" font-size="11" text-anchor="end">2025: 86.6k</text>
+<line class="grid" x1="366.0" y1="284.0" x2="602.0" y2="284.0"/>
+<text class="muted" x="362.0" y="287.5" font-size="10" text-anchor="end">100</text>
+<line class="grid" x1="366.0" y1="232.5" x2="602.0" y2="232.5"/>
+<text class="muted" x="362.0" y="236.0" font-size="10" text-anchor="end">1k</text>
+<line class="grid" x1="366.0" y1="181.0" x2="602.0" y2="181.0"/>
+<text class="muted" x="362.0" y="184.5" font-size="10" text-anchor="end">10k</text>
+<line class="grid" x1="366.0" y1="129.5" x2="602.0" y2="129.5"/>
+<text class="muted" x="362.0" y="133.0" font-size="10" text-anchor="end">100k</text>
+<line class="axis" x1="366.0" y1="284.0" x2="602.0" y2="284.0"/>
+<text class="muted" x="366.0" y="298.0" font-size="10" text-anchor="middle">1950</text>
+<text class="muted" x="444.7" y="298.0" font-size="10" text-anchor="middle">1975</text>
+<text class="muted" x="523.3" y="298.0" font-size="10" text-anchor="middle">2000</text>
+<text class="muted" x="602.0" y="298.0" font-size="10" text-anchor="middle">2025</text>
+<path class="context" d="M504.5 142.5L507.6 142.3L510.7 142.4L513.9 139.6L517.0 135.4L520.2 131.1L523.3 129.9L526.5 129.5L529.6 126.9L532.8 134.0L535.9 132.8L539.1 121.6L542.2 124.3L545.4 140.5L548.5 145.4L551.7 139.0L554.8 135.2L557.9 142.2L561.1 142.5L564.2 144.2L567.4 147.1L570.5 152.8L573.7 135.0L576.8 137.2L580.0 143.1L583.1 135.2L586.3 136.1L589.4 137.4L592.6 154.5L595.7 150.2L598.9 152.7L602.0 155.8"/>
+<path class="context" d="M539.1 143.4L542.2 146.1L545.4 151.2L548.5 151.2L551.7 152.8L554.8 147.6L557.9 149.7L561.1 158.5L564.2 149.3L567.4 152.0L570.5 153.1L573.7 152.3L576.8 158.8L580.0 157.2L583.1 155.2L586.3 153.1L589.4 154.9L592.6 160.8L595.7 161.7L598.9 159.0L602.0 159.4"/>
+<path class="context" d="M539.1 143.7L542.2 149.6L545.4 151.3L548.5 152.1L551.7 152.9L554.8 155.1L557.9 156.0L561.1 151.9L564.2 145.0L567.4 143.0L570.5 143.3L573.7 141.2L576.8 148.9L580.0 146.7L583.1 144.2L586.3 134.0L589.4 131.8L592.6 141.6"/>
+<path class="context" d="M554.8 229.0L557.9 222.0L561.1 216.3L564.2 217.0"/>
+<path class="context" d="M570.5 215.5L573.7 220.7L576.8 224.9L580.0 220.0"/>
+<path class="context" d="M586.3 219.8L589.4 216.3L592.6 211.9L595.7 231.4L598.9 220.5"/>
+<path class="context" d="M580.0 192.2L583.1 194.0L586.3 190.7L589.4 193.8L592.6 193.4L595.7 192.8L598.9 193.5L602.0 193.4"/>
+<path class="context" d="M548.5 160.5L551.7 161.9L554.8 162.1L557.9 162.1L561.1 168.4L564.2 167.5L567.4 166.0L570.5 163.9L573.7 160.5L576.8 164.3L580.0 165.9L583.1 165.3L586.3 165.2"/>
+<path class="context" d="M535.9 180.2L539.1 177.8L542.2 173.4"/>
+<path class="context" d="M548.5 178.1L551.7 171.3L554.8 165.8L557.9 161.6L561.1 165.1L564.2 166.3L567.4 164.7"/>
+<path class="context" d="M576.8 162.7L580.0 177.3L583.1 177.6L586.3 182.8L589.4 163.4L592.6 171.0L595.7 175.9L598.9 185.4L602.0 187.5"/>
+<path class="context" d="M529.6 168.1L532.8 170.8L535.9 173.3L539.1 168.9L542.2 169.0L545.4 170.2L548.5 175.4L551.7 176.7L554.8 176.2L557.9 176.7L561.1 181.1L564.2 184.9L567.4 185.1L570.5 181.9L573.7 180.7L576.8 181.9L580.0 182.2L583.1 182.8L586.3 182.4L589.4 182.3L592.6 184.7L595.7 184.0L598.9 183.4L602.0 183.5"/>
+<path class="context" d="M567.4 183.7L570.5 186.1L573.7 181.8L576.8 179.8L580.0 180.0L583.1 180.6L586.3 180.4L589.4 182.0L592.6 182.0L595.7 182.0L598.9 181.5L602.0 181.2"/>
+<path class="context" d="M539.1 174.7L542.2 172.7L545.4 168.5L548.5 167.1L551.7 165.7L554.8 166.2L557.9 161.8L561.1 174.3L564.2 167.6L567.4 167.2L570.5 165.9L573.7 161.6L576.8 168.9L580.0 163.3L583.1 161.9L586.3 159.7L589.4 162.5L592.6 171.3L595.7 173.2L598.9 165.8L602.0 163.9"/>
+<path class="context" d="M545.4 160.9L548.5 163.9L551.7 165.0L554.8 165.8L557.9 168.0L561.1 172.6L564.2 173.6L567.4 173.9"/>
+<path class="context" d="M589.4 174.7L592.6 177.0L595.7 180.3L598.9 181.0L602.0 183.1"/>
+<path class="context" d="M507.6 167.8L510.7 170.9L513.9 170.5L517.0 168.6L520.2 170.7"/>
+<path class="context" d="M526.5 171.1L529.6 157.8L532.8 165.9L535.9 165.6L539.1 165.7L542.2 162.8L545.4 164.0L548.5 165.0L551.7 166.2"/>
+<path class="context" d="M535.9 144.2L539.1 145.8L542.2 145.9L545.4 144.1L548.5 142.2L551.7 141.9L554.8 144.7L557.9 143.9L561.1 145.3L564.2 141.8L567.4 139.4L570.5 138.8L573.7 139.0L576.8 140.6L580.0 139.2L583.1 138.2L586.3 137.4L589.4 142.0L592.6 142.3L595.7 140.2L598.9 143.4L602.0 144.8"/>
+<path class="reference" d="M416.3 194.2L419.5 191.9L422.6 192.4L425.8 190.8L428.9 192.4L432.1 189.3L435.2 187.9L438.4 195.2L441.5 188.1L444.7 186.3L447.8 186.4L451.0 186.0L454.1 181.5L457.3 181.3L460.4 180.8L463.5 180.8L466.7 178.9L469.8 176.0L473.0 177.4L476.1 174.2L479.3 169.5L482.4 170.2L485.6 165.2L488.7 161.7L491.9 160.0L495.0 158.9L498.2 156.7L501.3 158.9L504.5 158.3L507.6 156.5L510.7 155.1L513.9 151.8L517.0 146.3L520.2 149.5L523.3 149.8L526.5 149.4L529.6 149.2L532.8 142.8L535.9 142.1L539.1 137.8L542.2 138.8L545.4 140.9L548.5 144.3L551.7 145.6L554.8 143.7L557.9 143.1L561.1 148.1L564.2 148.8L567.4 146.4L570.5 145.3L573.7 141.1L576.8 139.5L580.0 138.5L583.1 137.6L586.3 139.2L589.4 137.1L592.6 134.9L595.7 134.2L598.9 134.1L602.0 133.1"/>
+<path class="focus" d="M520.2 143.1L523.3 143.4L526.5 142.6L529.6 142.9L532.8 136.8"/>
+<path class="focus" d="M539.1 133.6L542.2 134.0"/>
+<path class="focus estimated" d="M542.2 134.0L545.4 136.5L548.5 139.5L551.7 140.0L554.8 138.7L557.9 138.4L561.1 143.6L564.2 144.5L567.4 142.8L570.5 141.9L573.7 138.4L576.8 137.3L580.0 136.7"/>
+<path class="focus estimated" d="M586.3 135.1L589.4 135.1L592.6 134.1L595.7 133.1L598.9 133.3L602.0 132.7"/>
+<circle class="dot" cx="602.0" cy="132.7" r="3"/>
+<circle class="hit" cx="520.2" cy="143.1" r="5"><title>United Kingdom 1999: 54,442 eggs/month</title></circle>
+<circle class="hit" cx="523.3" cy="143.4" r="5"><title>United Kingdom 2000: 53,746 eggs/month</title></circle>
+<circle class="hit" cx="526.5" cy="142.6" r="5"><title>United Kingdom 2001: 55,658 eggs/month</title></circle>
+<circle class="hit" cx="529.6" cy="142.9" r="5"><title>United Kingdom 2002: 55,058 eggs/month</title></circle>
+<circle class="hit" cx="532.8" cy="136.8" r="5"><title>United Kingdom 2003: 72,158 eggs/month</title></circle>
+<circle class="hit" cx="539.1" cy="133.6" r="5"><title>United Kingdom 2005: 83,159 eggs/month</title></circle>
+<circle class="hit" cx="542.2" cy="134.0" r="5"><title>United Kingdom 2006: 81,767 eggs/month</title></circle>
+<circle class="hit" cx="545.4" cy="136.5" r="5"><title>United Kingdom 2007: 73,228 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="548.5" cy="139.5" r="5"><title>United Kingdom 2008: 63,993 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="551.7" cy="140.0" r="5"><title>United Kingdom 2009: 62,658 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="554.8" cy="138.7" r="5"><title>United Kingdom 2010: 66,273 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="557.9" cy="138.4" r="5"><title>United Kingdom 2011: 67,250 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="561.1" cy="143.6" r="5"><title>United Kingdom 2012: 53,198 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="564.2" cy="144.5" r="5"><title>United Kingdom 2013: 51,101 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="567.4" cy="142.8" r="5"><title>United Kingdom 2014: 55,254 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="570.5" cy="141.9" r="5"><title>United Kingdom 2015: 57,541 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="573.7" cy="138.4" r="5"><title>United Kingdom 2016: 67,222 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="576.8" cy="137.3" r="5"><title>United Kingdom 2017: 70,548 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="580.0" cy="136.7" r="5"><title>United Kingdom 2018: 72,576 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="586.3" cy="135.1" r="5"><title>United Kingdom 2020: 78,017 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="589.4" cy="135.1" r="5"><title>United Kingdom 2021: 77,723 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="592.6" cy="134.1" r="5"><title>United Kingdom 2022: 81,450 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="595.7" cy="133.1" r="5"><title>United Kingdom 2023: 85,177 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="598.9" cy="133.3" r="5"><title>United Kingdom 2024: 84,439 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="602.0" cy="132.7" r="5"><title>United Kingdom 2025: 86,637 eggs/month (estimated)</title></circle>
+</g>
+<g aria-label="France">
+<text class="ink" x="620.0" y="106.0" font-size="13" font-weight="bold">France</text>
+<text class="muted" x="900.0" y="106.0" font-size="11" text-anchor="end">2025: 26.2k</text>
+<line class="grid" x1="664.0" y1="284.0" x2="900.0" y2="284.0"/>
+<text class="muted" x="660.0" y="287.5" font-size="10" text-anchor="end">100</text>
+<line class="grid" x1="664.0" y1="232.5" x2="900.0" y2="232.5"/>
+<text class="muted" x="660.0" y="236.0" font-size="10" text-anchor="end">1k</text>
+<line class="grid" x1="664.0" y1="181.0" x2="900.0" y2="181.0"/>
+<text class="muted" x="660.0" y="184.5" font-size="10" text-anchor="end">10k</text>
+<line class="grid" x1="664.0" y1="129.5" x2="900.0" y2="129.5"/>
+<text class="muted" x="660.0" y="133.0" font-size="10" text-anchor="end">100k</text>
+<line class="axis" x1="664.0" y1="284.0" x2="900.0" y2="284.0"/>
+<text class="muted" x="664.0" y="298.0" font-size="10" text-anchor="middle">1950</text>
+<text class="muted" x="742.7" y="298.0" font-size="10" text-anchor="middle">1975</text>
+<text class="muted" x="821.3" y="298.0" font-size="10" text-anchor="middle">2000</text>
+<text class="muted" x="900.0" y="298.0" font-size="10" text-anchor="middle">2025</text>
+<path class="context" d="M802.5 142.5L805.6 142.3L808.7 142.4L811.9 139.6L815.0 135.4L818.2 131.1L821.3 129.9L824.5 129.5L827.6 126.9L830.8 134.0L833.9 132.8L837.1 121.6L840.2 124.3L843.4 140.5L846.5 145.4L849.7 139.0L852.8 135.2L855.9 142.2L859.1 142.5L862.2 144.2L865.4 147.1L868.5 152.8L871.7 135.0L874.8 137.2L878.0 143.1L881.1 135.2L884.3 136.1L887.4 137.4L890.6 154.5L893.7 150.2L896.9 152.7L900.0 155.8"/>
+<path class="context" d="M818.2 143.1L821.3 143.4L824.5 142.6L827.6 142.9L830.8 136.8"/>
+<path class="context" d="M837.1 133.6L840.2 134.0L843.4 136.5L846.5 139.5L849.7 140.0L852.8 138.7L855.9 138.4L859.1 143.6L862.2 144.5L865.4 142.8L868.5 141.9L871.7 138.4L874.8 137.3L878.0 136.7"/>
+<path class="context" d="M884.3 135.1L887.4 135.1L890.6 134.1L893.7 133.1L896.9 133.3L900.0 132.7"/>
+<path class="context" d="M837.1 143.7L840.2 149.6L843.4 151.3L846.5 152.1L849.7 152.9L852.8 155.1L855.9 156.0L859.1 151.9L862.2 145.0L865.4 143.0L868.5 143.3L871.7 141.2L874.8 148.9L878.0 146.7L881.1 144.2L884.3 134.0L887.4 131.8L890.6 141.6"/>
+<path class="context" d="M852.8 229.0L855.9 222.0L859.1 216.3L862.2 217.0"/>
+<path class="context" d="M868.5 215.5L871.7 220.7L874.8 224.9L878.0 220.0"/>
+<path class="context" d="M884.3 219.8L887.4 216.3L890.6 211.9L893.7 231.4L896.9 220.5"/>
+<path class="context" d="M878.0 192.2L881.1 194.0L884.3 190.7L887.4 193.8L890.6 193.4L893.7 192.8L896.9 193.5L900.0 193.4"/>
+<path class="context" d="M846.5 160.5L849.7 161.9L852.8 162.1L855.9 162.1L859.1 168.4L862.2 167.5L865.4 166.0L868.5 163.9L871.7 160.5L874.8 164.3L878.0 165.9L881.1 165.3L884.3 165.2"/>
+<path class="context" d="M833.9 180.2L837.1 177.8L840.2 173.4"/>
+<path class="context" d="M846.5 178.1L849.7 171.3L852.8 165.8L855.9 161.6L859.1 165.1L862.2 166.3L865.4 164.7"/>
+<path class="context" d="M874.8 162.7L878.0 177.3L881.1 177.6L884.3 182.8L887.4 163.4L890.6 171.0L893.7 175.9L896.9 185.4L900.0 187.5"/>
+<path class="context" d="M827.6 168.1L830.8 170.8L833.9 173.3L837.1 168.9L840.2 169.0L843.4 170.2L846.5 175.4L849.7 176.7L852.8 176.2L855.9 176.7L859.1 181.1L862.2 184.9L865.4 185.1L868.5 181.9L871.7 180.7L874.8 181.9L878.0 182.2L881.1 182.8L884.3 182.4L887.4 182.3L890.6 184.7L893.7 184.0L896.9 183.4L900.0 183.5"/>
+<path class="context" d="M865.4 183.7L868.5 186.1L871.7 181.8L874.8 179.8L878.0 180.0L881.1 180.6L884.3 180.4L887.4 182.0L890.6 182.0L893.7 182.0L896.9 181.5L900.0 181.2"/>
+<path class="context" d="M837.1 174.7L840.2 172.7L843.4 168.5L846.5 167.1L849.7 165.7L852.8 166.2L855.9 161.8L859.1 174.3L862.2 167.6L865.4 167.2L868.5 165.9L871.7 161.6L874.8 168.9L878.0 163.3L881.1 161.9L884.3 159.7L887.4 162.5L890.6 171.3L893.7 173.2L896.9 165.8L900.0 163.9"/>
+<path class="context" d="M843.4 160.9L846.5 163.9L849.7 165.0L852.8 165.8L855.9 168.0L859.1 172.6L862.2 173.6L865.4 173.9"/>
+<path class="context" d="M887.4 174.7L890.6 177.0L893.7 180.3L896.9 181.0L900.0 183.1"/>
+<path class="context" d="M805.6 167.8L808.7 170.9L811.9 170.5L815.0 168.6L818.2 170.7"/>
+<path class="context" d="M824.5 171.1L827.6 157.8L830.8 165.9L833.9 165.6L837.1 165.7L840.2 162.8L843.4 164.0L846.5 165.0L849.7 166.2"/>
+<path class="context" d="M833.9 144.2L837.1 145.8L840.2 145.9L843.4 144.1L846.5 142.2L849.7 141.9L852.8 144.7L855.9 143.9L859.1 145.3L862.2 141.8L865.4 139.4L868.5 138.8L871.7 139.0L874.8 140.6L878.0 139.2L881.1 138.2L884.3 137.4L887.4 142.0L890.6 142.3L893.7 140.2L896.9 143.4L900.0 144.8"/>
+<path class="reference" d="M714.3 197.2L717.5 194.1L720.6 191.1L723.8 190.2L726.9 185.8L730.1 187.3L733.2 187.1L736.4 187.0L739.5 184.9L742.7 181.2L745.8 182.9L749.0 187.6L752.1 181.2L755.3 177.0L758.4 176.4L761.5 176.4L764.7 170.7L767.8 173.9L771.0 175.4L774.1 171.7L777.3 167.4L780.4 169.8L783.6 158.1L786.7 157.8L789.9 156.2L793.0 157.8L796.2 155.4L799.3 154.8L802.5 151.9L805.6 149.1L808.7 154.9L811.9 153.5L815.0 149.8L818.2 147.1L821.3 150.8L824.5 149.7L827.6 148.1L830.8 152.7L833.9 143.8L837.1 142.5L840.2 144.5L843.4 149.2L846.5 149.0L849.7 151.7L852.8 146.3L855.9 148.1L859.1 157.4L862.2 147.9L865.4 148.4L868.5 149.3L871.7 148.4L874.8 154.7L878.0 152.7L881.1 150.5L884.3 149.9L887.4 149.3L890.6 154.5L893.7 155.1L896.9 152.5L900.0 153.1"/>
+<path class="focus" d="M837.1 143.4L840.2 146.1L843.4 151.2L846.5 151.2L849.7 152.8L852.8 147.6L855.9 149.7L859.1 158.5L862.2 149.3L865.4 152.0L868.5 153.1L871.7 152.3L874.8 158.8L878.0 157.2L881.1 155.2L884.3 153.1L887.4 154.9L890.6 160.8L893.7 161.7L896.9 159.0"/>
+<path class="focus estimated" d="M896.9 159.0L900.0 159.4"/>
+<circle class="dot" cx="900.0" cy="159.4" r="3"/>
+<circle class="hit" cx="837.1" cy="143.4" r="5"><title>France 2005: 53,735 eggs/month</title></circle>
+<circle class="hit" cx="840.2" cy="146.1" r="5"><title>France 2006: 47,593 eggs/month</title></circle>
+<circle class="hit" cx="843.4" cy="151.2" r="5"><title>France 2007: 37,829 eggs/month</title></circle>
+<circle class="hit" cx="846.5" cy="151.2" r="5"><title>France 2008: 37,856 eggs/month</title></circle>
+<circle class="hit" cx="849.7" cy="152.8" r="5"><title>France 2009: 35,263 eggs/month</title></circle>
+<circle class="hit" cx="852.8" cy="147.6" r="5"><title>France 2010: 44,520 eggs/month</title></circle>
+<circle class="hit" cx="855.9" cy="149.7" r="5"><title>France 2011: 40,560 eggs/month</title></circle>
+<circle class="hit" cx="859.1" cy="158.5" r="5"><title>France 2012: 27,294 eggs/month</title></circle>
+<circle class="hit" cx="862.2" cy="149.3" r="5"><title>France 2013: 41,277 eggs/month</title></circle>
+<circle class="hit" cx="865.4" cy="152.0" r="5"><title>France 2014: 36,530 eggs/month</title></circle>
+<circle class="hit" cx="868.5" cy="153.1" r="5"><title>France 2015: 34,775 eggs/month</title></circle>
+<circle class="hit" cx="871.7" cy="152.3" r="5"><title>France 2016: 36,016 eggs/month</title></circle>
+<circle class="hit" cx="874.8" cy="158.8" r="5"><title>France 2017: 26,947 eggs/month</title></circle>
+<circle class="hit" cx="878.0" cy="157.2" r="5"><title>France 2018: 29,010 eggs/month</title></circle>
+<circle class="hit" cx="881.1" cy="155.2" r="5"><title>France 2019: 31,707 eggs/month</title></circle>
+<circle class="hit" cx="884.3" cy="153.1" r="5"><title>France 2020: 34,778 eggs/month</title></circle>
+<circle class="hit" cx="887.4" cy="154.9" r="5"><title>France 2021: 32,094 eggs/month</title></circle>
+<circle class="hit" cx="890.6" cy="160.8" r="5"><title>France 2022: 24,720 eggs/month</title></circle>
+<circle class="hit" cx="893.7" cy="161.7" r="5"><title>France 2023: 23,665 eggs/month</title></circle>
+<circle class="hit" cx="896.9" cy="159.0" r="5"><title>France 2024: 26,694 eggs/month</title></circle>
+<circle class="hit" cx="900.0" cy="159.4" r="5"><title>France 2025: 26,228 eggs/month (estimated)</title></circle>
+</g>
+<g aria-label="Germany">
+<text class="ink" x="918.0" y="106.0" font-size="13" font-weight="bold">Germany</text>
+<text class="muted" x="1198.0" y="106.0" font-size="11" text-anchor="end">2022: 58.1k</text>
+<line class="grid" x1="962.0" y1="284.0" x2="1198.0" y2="284.0"/>
+<text class="muted" x="958.0" y="287.5" font-size="10" text-anchor="end">100</text>
+<line class="grid" x1="962.0" y1="232.5" x2="1198.0" y2="232.5"/>
+<text class="muted" x="958.0" y="236.0" font-size="10" text-anchor="end">1k</text>
+<line class="grid" x1="962.0" y1="181.0" x2="1198.0" y2="181.0"/>
+<text class="muted" x="958.0" y="184.5" font-size="10" text-anchor="end">10k</text>
+<line class="grid" x1="962.0" y1="129.5" x2="1198.0" y2="129.5"/>
+<text class="muted" x="958.0" y="133.0" font-size="10" text-anchor="end">100k</text>
+<line class="axis" x1="962.0" y1="284.0" x2="1198.0" y2="284.0"/>
+<text class="muted" x="962.0" y="298.0" font-size="10" text-anchor="middle">1950</text>
+<text class="muted" x="1040.7" y="298.0" font-size="10" text-anchor="middle">1975</text>
+<text class="muted" x="1119.3" y="298.0" font-size="10" text-anchor="middle">2000</text>
+<text class="muted" x="1198.0" y="298.0" font-size="10" text-anchor="middle">2025</text>
+<path class="context" d="M1100.5 142.5L1103.6 142.3L1106.7 142.4L1109.9 139.6L1113.0 135.4L1116.2 131.1L1119.3 129.9L1122.5 129.5L1125.6 126.9L1128.8 134.0L1131.9 132.8L1135.1 121.6L1138.2 124.3L1141.4 140.5L1144.5 145.4L1147.7 139.0L1150.8 135.2L1153.9 142.2L1157.1 142.5L1160.2 144.2L1163.4 147.1L1166.5 152.8L1169.7 135.0L1172.8 137.2L1176.0 143.1L1179.1 135.2L1182.3 136.1L1185.4 137.4L1188.6 154.5L1191.7 150.2L1194.9 152.7L1198.0 155.8"/>
+<path class="context" d="M1116.2 143.1L1119.3 143.4L1122.5 142.6L1125.6 142.9L1128.8 136.8"/>
+<path class="context" d="M1135.1 133.6L1138.2 134.0L1141.4 136.5L1144.5 139.5L1147.7 140.0L1150.8 138.7L1153.9 138.4L1157.1 143.6L1160.2 144.5L1163.4 142.8L1166.5 141.9L1169.7 138.4L1172.8 137.3L1176.0 136.7"/>
+<path class="context" d="M1182.3 135.1L1185.4 135.1L1188.6 134.1L1191.7 133.1L1194.9 133.3L1198.0 132.7"/>
+<path class="context" d="M1135.1 143.4L1138.2 146.1L1141.4 151.2L1144.5 151.2L1147.7 152.8L1150.8 147.6L1153.9 149.7L1157.1 158.5L1160.2 149.3L1163.4 152.0L1166.5 153.1L1169.7 152.3L1172.8 158.8L1176.0 157.2L1179.1 155.2L1182.3 153.1L1185.4 154.9L1188.6 160.8L1191.7 161.7L1194.9 159.0L1198.0 159.4"/>
+<path class="context" d="M1150.8 229.0L1153.9 222.0L1157.1 216.3L1160.2 217.0"/>
+<path class="context" d="M1166.5 215.5L1169.7 220.7L1172.8 224.9L1176.0 220.0"/>
+<path class="context" d="M1182.3 219.8L1185.4 216.3L1188.6 211.9L1191.7 231.4L1194.9 220.5"/>
+<path class="context" d="M1176.0 192.2L1179.1 194.0L1182.3 190.7L1185.4 193.8L1188.6 193.4L1191.7 192.8L1194.9 193.5L1198.0 193.4"/>
+<path class="context" d="M1144.5 160.5L1147.7 161.9L1150.8 162.1L1153.9 162.1L1157.1 168.4L1160.2 167.5L1163.4 166.0L1166.5 163.9L1169.7 160.5L1172.8 164.3L1176.0 165.9L1179.1 165.3L1182.3 165.2"/>
+<path class="context" d="M1131.9 180.2L1135.1 177.8L1138.2 173.4"/>
+<path class="context" d="M1144.5 178.1L1147.7 171.3L1150.8 165.8L1153.9 161.6L1157.1 165.1L1160.2 166.3L1163.4 164.7"/>
+<path class="context" d="M1172.8 162.7L1176.0 177.3L1179.1 177.6L1182.3 182.8L1185.4 163.4L1188.6 171.0L1191.7 175.9L1194.9 185.4L1198.0 187.5"/>
+<path class="context" d="M1125.6 168.1L1128.8 170.8L1131.9 173.3L1135.1 168.9L1138.2 169.0L1141.4 170.2L1144.5 175.4L1147.7 176.7L1150.8 176.2L1153.9 176.7L1157.1 181.1L1160.2 184.9L1163.4 185.1L1166.5 181.9L1169.7 180.7L1172.8 181.9L1176.0 182.2L1179.1 182.8L1182.3 182.4L1185.4 182.3L1188.6 184.7L1191.7 184.0L1194.9 183.4L1198.0 183.5"/>
+<path class="context" d="M1163.4 183.7L1166.5 186.1L1169.7 181.8L1172.8 179.8L1176.0 180.0L1179.1 180.6L1182.3 180.4L1185.4 182.0L1188.6 182.0L1191.7 182.0L1194.9 181.5L1198.0 181.2"/>
+<path class="context" d="M1135.1 174.7L1138.2 172.7L1141.4 168.5L1144.5 167.1L1147.7 165.7L1150.8 166.2L1153.9 161.8L1157.1 174.3L1160.2 167.6L1163.4 167.2L1166.5 165.9L1169.7 161.6L1172.8 168.9L1176.0 163.3L1179.1 161.9L1182.3 159.7L1185.4 162.5L1188.6 171.3L1191.7 173.2L1194.9 165.8L1198.0 163.9"/>
+<path class="context" d="M1141.4 160.9L1144.5 163.9L1147.7 165.0L1150.8 165.8L1153.9 168.0L1157.1 172.6L1160.2 173.6L1163.4 173.9"/>
+<path class="context" d="M1185.4 174.7L1188.6 177.0L1191.7 180.3L1194.9 181.0L1198.0 183.1"/>
+<path class="context" d="M1103.6 167.8L1106.7 170.9L1109.9 170.5L1113.0 168.6L1116.2 170.7"/>
+<path class="context" d="M1122.5 171.1L1125.6 157.8L1128.8 165.9L1131.9 165.6L1135.1 165.7L1138.2 162.8L1141.4 164.0L1144.5 165.0L1147.7 166.2"/>
+<path class="context" d="M1131.9 144.2L1135.1 145.8L1138.2 145.9L1141.4 144.1L1144.5 142.2L1147.7 141.9L1150.8 144.7L1153.9 143.9L1157.1 145.3L1160.2 141.8L1163.4 139.4L1166.5 138.8L1169.7 139.0L1172.8 140.6L1176.0 139.2L1179.1 138.2L1182.3 137.4L1185.4 142.0L1188.6 142.3L1191.7 140.2L1194.9 143.4L1198.0 144.8"/>
+<path class="reference" d="M1015.5 202.3L1018.6 201.3L1021.8 196.7L1024.9 193.5L1028.1 193.2L1031.2 191.0L1034.4 192.1L1037.5 188.2L1040.7 187.4L1043.8 186.1L1047.0 183.7L1050.1 180.0L1053.3 179.9L1056.4 179.3L1059.5 179.8L1062.7 176.2L1065.8 174.5L1069.0 175.2L1072.1 171.9L1075.3 170.1L1078.4 169.9L1081.6 167.2L1084.7 167.0L1087.9 166.0L1091.0 163.7L1094.2 161.3L1097.3 160.7L1100.5 160.9L1103.6 158.8L1106.7 162.7L1109.9 160.0L1113.0 153.8L1116.2 150.8L1119.3 155.1L1122.5 153.1L1125.6 153.4L1128.8 158.0L1131.9 152.9L1135.1 151.5L1138.2 154.5L1141.4 157.2L1144.5 158.2L1147.7 160.6L1150.8 161.5L1153.9 160.5L1157.1 156.5L1160.2 149.7L1163.4 147.9L1166.5 148.8L1169.7 145.9L1172.8 152.8L1176.0 150.4L1179.1 147.7L1182.3 147.3L1185.4 142.2L1188.6 150.7L1191.7 155.1L1194.9 153.5L1198.0 154.0"/>
+<path class="focus" d="M1135.1 143.7L1138.2 149.6L1141.4 151.3L1144.5 152.1L1147.7 152.9L1150.8 155.1L1153.9 156.0L1157.1 151.9L1160.2 145.0L1163.4 143.0L1166.5 143.3L1169.7 141.2L1172.8 148.9L1176.0 146.7L1179.1 144.2L1182.3 134.0L1185.4 131.8L1188.6 141.6"/>
+<circle class="dot" cx="1188.6" cy="141.6" r="3"/>
+<circle class="hit" cx="1135.1" cy="143.7" r="5"><title>Germany 2005: 53,018 eggs/month</title></circle>
+<circle class="hit" cx="1138.2" cy="149.6" r="5"><title>Germany 2006: 40,797 eggs/month</title></circle>
+<circle class="hit" cx="1141.4" cy="151.3" r="5"><title>Germany 2007: 37,743 eggs/month</title></circle>
+<circle class="hit" cx="1144.5" cy="152.1" r="5"><title>Germany 2008: 36,336 eggs/month</title></circle>
+<circle class="hit" cx="1147.7" cy="152.9" r="5"><title>Germany 2009: 35,162 eggs/month</title></circle>
+<circle class="hit" cx="1150.8" cy="155.1" r="5"><title>Germany 2010: 31,910 eggs/month</title></circle>
+<circle class="hit" cx="1153.9" cy="156.0" r="5"><title>Germany 2011: 30,634 eggs/month</title></circle>
+<circle class="hit" cx="1157.1" cy="151.9" r="5"><title>Germany 2012: 36,778 eggs/month</title></circle>
+<circle class="hit" cx="1160.2" cy="145.0" r="5"><title>Germany 2013: 50,096 eggs/month</title></circle>
+<circle class="hit" cx="1163.4" cy="143.0" r="5"><title>Germany 2014: 54,774 eggs/month</title></circle>
+<circle class="hit" cx="1166.5" cy="143.3" r="5"><title>Germany 2015: 54,056 eggs/month</title></circle>
+<circle class="hit" cx="1169.7" cy="141.2" r="5"><title>Germany 2016: 59,182 eggs/month</title></circle>
+<circle class="hit" cx="1172.8" cy="148.9" r="5"><title>Germany 2017: 42,096 eggs/month</title></circle>
+<circle class="hit" cx="1176.0" cy="146.7" r="5"><title>Germany 2018: 46,364 eggs/month</title></circle>
+<circle class="hit" cx="1179.1" cy="144.2" r="5"><title>Germany 2019: 51,749 eggs/month</title></circle>
+<circle class="hit" cx="1182.3" cy="134.0" r="5"><title>Germany 2020: 81,789 eggs/month</title></circle>
+<circle class="hit" cx="1185.4" cy="131.8" r="5"><title>Germany 2021: 90,259 eggs/month</title></circle>
+<circle class="hit" cx="1188.6" cy="141.6" r="5"><title>Germany 2022: 58,120 eggs/month</title></circle>
+</g>
+<g aria-label="USSR / Russia">
+<text class="ink" x="24.0" y="336.0" font-size="13" font-weight="bold">USSR / Russia</text>
+<line class="grid" x1="68.0" y1="514.0" x2="304.0" y2="514.0"/>
+<text class="muted" x="64.0" y="517.5" font-size="10" text-anchor="end">100</text>
+<line class="grid" x1="68.0" y1="462.5" x2="304.0" y2="462.5"/>
+<text class="muted" x="64.0" y="466.0" font-size="10" text-anchor="end">1k</text>
+<line class="grid" x1="68.0" y1="411.0" x2="304.0" y2="411.0"/>
+<text class="muted" x="64.0" y="414.5" font-size="10" text-anchor="end">10k</text>
+<line class="grid" x1="68.0" y1="359.5" x2="304.0" y2="359.5"/>
+<text class="muted" x="64.0" y="363.0" font-size="10" text-anchor="end">100k</text>
+<line class="axis" x1="68.0" y1="514.0" x2="304.0" y2="514.0"/>
+<text class="muted" x="68.0" y="528.0" font-size="10" text-anchor="middle">1950</text>
+<text class="muted" x="146.7" y="528.0" font-size="10" text-anchor="middle">1975</text>
+<text class="muted" x="225.3" y="528.0" font-size="10" text-anchor="middle">2000</text>
+<text class="muted" x="304.0" y="528.0" font-size="10" text-anchor="middle">2025</text>
+<path class="context" d="M206.5 372.5L209.6 372.3L212.7 372.4L215.9 369.6L219.0 365.4L222.2 361.1L225.3 359.9L228.5 359.5L231.6 356.9L234.8 364.0L237.9 362.8L241.1 351.6L244.2 354.3L247.4 370.5L250.5 375.4L253.7 369.0L256.8 365.2L259.9 372.2L263.1 372.5L266.2 374.2L269.4 377.1L272.5 382.8L275.7 365.0L278.8 367.2L282.0 373.1L285.1 365.2L288.3 366.1L291.4 367.4L294.6 384.5L297.7 380.2L300.9 382.7L304.0 385.8"/>
+<path class="context" d="M222.2 373.1L225.3 373.4L228.5 372.6L231.6 372.9L234.8 366.8"/>
+<path class="context" d="M241.1 363.6L244.2 364.0L247.4 366.5L250.5 369.5L253.7 370.0L256.8 368.7L259.9 368.4L263.1 373.6L266.2 374.5L269.4 372.8L272.5 371.9L275.7 368.4L278.8 367.3L282.0 366.7"/>
+<path class="context" d="M288.3 365.1L291.4 365.1L294.6 364.1L297.7 363.1L300.9 363.3L304.0 362.7"/>
+<path class="context" d="M241.1 373.4L244.2 376.1L247.4 381.2L250.5 381.2L253.7 382.8L256.8 377.6L259.9 379.7L263.1 388.5L266.2 379.3L269.4 382.0L272.5 383.1L275.7 382.3L278.8 388.8L282.0 387.2L285.1 385.2L288.3 383.1L291.4 384.9L294.6 390.8L297.7 391.7L300.9 389.0L304.0 389.4"/>
+<path class="context" d="M241.1 373.7L244.2 379.6L247.4 381.3L250.5 382.1L253.7 382.9L256.8 385.1L259.9 386.0L263.1 381.9L266.2 375.0L269.4 373.0L272.5 373.3L275.7 371.2L278.8 378.9L282.0 376.7L285.1 374.2L288.3 364.0L291.4 361.8L294.6 371.6"/>
+<path class="context" d="M256.8 459.0L259.9 452.0L263.1 446.3L266.2 447.0"/>
+<path class="context" d="M272.5 445.5L275.7 450.7L278.8 454.9L282.0 450.0"/>
+<path class="context" d="M288.3 449.8L291.4 446.3L294.6 441.9L297.7 461.4L300.9 450.5"/>
+<path class="context" d="M282.0 422.2L285.1 424.0L288.3 420.7L291.4 423.8L294.6 423.4L297.7 422.8L300.9 423.5L304.0 423.4"/>
+<path class="context" d="M250.5 390.5L253.7 391.9L256.8 392.1L259.9 392.1L263.1 398.4L266.2 397.5L269.4 396.0L272.5 393.9L275.7 390.5L278.8 394.3L282.0 395.9L285.1 395.3L288.3 395.2"/>
+<path class="context" d="M237.9 410.2L241.1 407.8L244.2 403.4"/>
+<path class="context" d="M250.5 408.1L253.7 401.3L256.8 395.8L259.9 391.6L263.1 395.1L266.2 396.3L269.4 394.7"/>
+<path class="context" d="M278.8 392.7L282.0 407.3L285.1 407.6L288.3 412.8L291.4 393.4L294.6 401.0L297.7 405.9L300.9 415.4L304.0 417.5"/>
+<path class="context" d="M231.6 398.1L234.8 400.8L237.9 403.3L241.1 398.9L244.2 399.0L247.4 400.2L250.5 405.4L253.7 406.7L256.8 406.2L259.9 406.7L263.1 411.1L266.2 414.9L269.4 415.1L272.5 411.9L275.7 410.7L278.8 411.9L282.0 412.2L285.1 412.8L288.3 412.4L291.4 412.3L294.6 414.7L297.7 414.0L300.9 413.4L304.0 413.5"/>
+<path class="context" d="M269.4 413.7L272.5 416.1L275.7 411.8L278.8 409.8L282.0 410.0L285.1 410.6L288.3 410.4L291.4 412.0L294.6 412.0L297.7 412.0L300.9 411.5L304.0 411.2"/>
+<path class="context" d="M241.1 404.7L244.2 402.7L247.4 398.5L250.5 397.1L253.7 395.7L256.8 396.2L259.9 391.8L263.1 404.3L266.2 397.6L269.4 397.2L272.5 395.9L275.7 391.6L278.8 398.9L282.0 393.3L285.1 391.9L288.3 389.7L291.4 392.5L294.6 401.3L297.7 403.2L300.9 395.8L304.0 393.9"/>
+<path class="context" d="M247.4 390.9L250.5 393.9L253.7 395.0L256.8 395.8L259.9 398.0L263.1 402.6L266.2 403.6L269.4 403.9"/>
+<path class="context" d="M291.4 404.7L294.6 407.0L297.7 410.3L300.9 411.0L304.0 413.1"/>
+<path class="context" d="M209.6 397.8L212.7 400.9L215.9 400.5L219.0 398.6L222.2 400.7"/>
+<path class="context" d="M228.5 401.1L231.6 387.8L234.8 395.9L237.9 395.6L241.1 395.7L244.2 392.8L247.4 394.0L250.5 395.0L253.7 396.2"/>
+<path class="context" d="M237.9 374.2L241.1 375.8L244.2 375.9L247.4 374.1L250.5 372.2L253.7 371.9L256.8 374.7L259.9 373.9L263.1 375.3L266.2 371.8L269.4 369.4L272.5 368.8L275.7 369.0L278.8 370.6L282.0 369.2L285.1 368.2L288.3 367.4L291.4 372.0L294.6 372.3L297.7 370.2L300.9 373.4L304.0 374.8"/>
+<path class="reference" d="M187.6 441.0L190.7 439.4L193.9 436.6"/>
+<path class="reference" d="M200.2 425.3L203.3 429.1L206.5 432.4L209.6 438.2L212.7 439.7L215.9 438.3L219.0 438.1L222.2 439.1L225.3 432.3L228.5 432.6L231.6 429.3L234.8 425.7L237.9 424.7L241.1 420.0L244.2 414.4L247.4 413.4L250.5 413.7L253.7 414.3L256.8 410.0L259.9 406.0L263.1 404.7L266.2 407.1L269.4 407.1L272.5 410.4L275.7 409.9L278.8 404.8L282.0 404.0L285.1 404.5L288.3 405.6L291.4 406.2L294.6 402.3L297.7 399.9L300.9 397.4L304.0 396.7"/>
+<rect class="surface" x="75.6" y="416.0" width="220.8" height="20" rx="4"/>
+<text class="muted" x="186.0" y="430.0" font-size="12" text-anchor="middle">no ILOSTAT earnings by education</text>
+</g>
+<g aria-label="China">
+<text class="ink" x="322.0" y="336.0" font-size="13" font-weight="bold">China</text>
+<line class="grid" x1="366.0" y1="514.0" x2="602.0" y2="514.0"/>
+<text class="muted" x="362.0" y="517.5" font-size="10" text-anchor="end">100</text>
+<line class="grid" x1="366.0" y1="462.5" x2="602.0" y2="462.5"/>
+<text class="muted" x="362.0" y="466.0" font-size="10" text-anchor="end">1k</text>
+<line class="grid" x1="366.0" y1="411.0" x2="602.0" y2="411.0"/>
+<text class="muted" x="362.0" y="414.5" font-size="10" text-anchor="end">10k</text>
+<line class="grid" x1="366.0" y1="359.5" x2="602.0" y2="359.5"/>
+<text class="muted" x="362.0" y="363.0" font-size="10" text-anchor="end">100k</text>
+<line class="axis" x1="366.0" y1="514.0" x2="602.0" y2="514.0"/>
+<text class="muted" x="366.0" y="528.0" font-size="10" text-anchor="middle">1950</text>
+<text class="muted" x="444.7" y="528.0" font-size="10" text-anchor="middle">1975</text>
+<text class="muted" x="523.3" y="528.0" font-size="10" text-anchor="middle">2000</text>
+<text class="muted" x="602.0" y="528.0" font-size="10" text-anchor="middle">2025</text>
+<path class="context" d="M504.5 372.5L507.6 372.3L510.7 372.4L513.9 369.6L517.0 365.4L520.2 361.1L523.3 359.9L526.5 359.5L529.6 356.9L532.8 364.0L535.9 362.8L539.1 351.6L542.2 354.3L545.4 370.5L548.5 375.4L551.7 369.0L554.8 365.2L557.9 372.2L561.1 372.5L564.2 374.2L567.4 377.1L570.5 382.8L573.7 365.0L576.8 367.2L580.0 373.1L583.1 365.2L586.3 366.1L589.4 367.4L592.6 384.5L595.7 380.2L598.9 382.7L602.0 385.8"/>
+<path class="context" d="M520.2 373.1L523.3 373.4L526.5 372.6L529.6 372.9L532.8 366.8"/>
+<path class="context" d="M539.1 363.6L542.2 364.0L545.4 366.5L548.5 369.5L551.7 370.0L554.8 368.7L557.9 368.4L561.1 373.6L564.2 374.5L567.4 372.8L570.5 371.9L573.7 368.4L576.8 367.3L580.0 366.7"/>
+<path class="context" d="M586.3 365.1L589.4 365.1L592.6 364.1L595.7 363.1L598.9 363.3L602.0 362.7"/>
+<path class="context" d="M539.1 373.4L542.2 376.1L545.4 381.2L548.5 381.2L551.7 382.8L554.8 377.6L557.9 379.7L561.1 388.5L564.2 379.3L567.4 382.0L570.5 383.1L573.7 382.3L576.8 388.8L580.0 387.2L583.1 385.2L586.3 383.1L589.4 384.9L592.6 390.8L595.7 391.7L598.9 389.0L602.0 389.4"/>
+<path class="context" d="M539.1 373.7L542.2 379.6L545.4 381.3L548.5 382.1L551.7 382.9L554.8 385.1L557.9 386.0L561.1 381.9L564.2 375.0L567.4 373.0L570.5 373.3L573.7 371.2L576.8 378.9L580.0 376.7L583.1 374.2L586.3 364.0L589.4 361.8L592.6 371.6"/>
+<path class="context" d="M554.8 459.0L557.9 452.0L561.1 446.3L564.2 447.0"/>
+<path class="context" d="M570.5 445.5L573.7 450.7L576.8 454.9L580.0 450.0"/>
+<path class="context" d="M586.3 449.8L589.4 446.3L592.6 441.9L595.7 461.4L598.9 450.5"/>
+<path class="context" d="M580.0 422.2L583.1 424.0L586.3 420.7L589.4 423.8L592.6 423.4L595.7 422.8L598.9 423.5L602.0 423.4"/>
+<path class="context" d="M548.5 390.5L551.7 391.9L554.8 392.1L557.9 392.1L561.1 398.4L564.2 397.5L567.4 396.0L570.5 393.9L573.7 390.5L576.8 394.3L580.0 395.9L583.1 395.3L586.3 395.2"/>
+<path class="context" d="M535.9 410.2L539.1 407.8L542.2 403.4"/>
+<path class="context" d="M548.5 408.1L551.7 401.3L554.8 395.8L557.9 391.6L561.1 395.1L564.2 396.3L567.4 394.7"/>
+<path class="context" d="M576.8 392.7L580.0 407.3L583.1 407.6L586.3 412.8L589.4 393.4L592.6 401.0L595.7 405.9L598.9 415.4L602.0 417.5"/>
+<path class="context" d="M529.6 398.1L532.8 400.8L535.9 403.3L539.1 398.9L542.2 399.0L545.4 400.2L548.5 405.4L551.7 406.7L554.8 406.2L557.9 406.7L561.1 411.1L564.2 414.9L567.4 415.1L570.5 411.9L573.7 410.7L576.8 411.9L580.0 412.2L583.1 412.8L586.3 412.4L589.4 412.3L592.6 414.7L595.7 414.0L598.9 413.4L602.0 413.5"/>
+<path class="context" d="M567.4 413.7L570.5 416.1L573.7 411.8L576.8 409.8L580.0 410.0L583.1 410.6L586.3 410.4L589.4 412.0L592.6 412.0L595.7 412.0L598.9 411.5L602.0 411.2"/>
+<path class="context" d="M539.1 404.7L542.2 402.7L545.4 398.5L548.5 397.1L551.7 395.7L554.8 396.2L557.9 391.8L561.1 404.3L564.2 397.6L567.4 397.2L570.5 395.9L573.7 391.6L576.8 398.9L580.0 393.3L583.1 391.9L586.3 389.7L589.4 392.5L592.6 401.3L595.7 403.2L598.9 395.8L602.0 393.9"/>
+<path class="context" d="M545.4 390.9L548.5 393.9L551.7 395.0L554.8 395.8L557.9 398.0L561.1 402.6L564.2 403.6L567.4 403.9"/>
+<path class="context" d="M589.4 404.7L592.6 407.0L595.7 410.3L598.9 411.0L602.0 413.1"/>
+<path class="context" d="M507.6 397.8L510.7 400.9L513.9 400.5L517.0 398.6L520.2 400.7"/>
+<path class="context" d="M526.5 401.1L529.6 387.8L532.8 395.9L535.9 395.6L539.1 395.7L542.2 392.8L545.4 394.0L548.5 395.0L551.7 396.2"/>
+<path class="context" d="M535.9 374.2L539.1 375.8L542.2 375.9L545.4 374.1L548.5 372.2L551.7 371.9L554.8 374.7L557.9 373.9L561.1 375.3L564.2 371.8L567.4 369.4L570.5 368.8L573.7 369.0L576.8 370.6L580.0 369.2L583.1 368.2L586.3 367.4L589.4 372.0L592.6 372.3L595.7 370.2L598.9 373.4L602.0 374.8"/>
+<path class="reference" d="M495.0 472.4L498.2 473.0L501.3 466.2L504.5 462.9L507.6 460.8L510.7 460.5L513.9 452.6L517.0 450.0L520.2 445.4L523.3 438.8L526.5 439.1L529.6 437.6L532.8 434.4L535.9 436.0L539.1 433.6L542.2 428.3L545.4 428.8L548.5 425.6L551.7 424.0L554.8 421.1L557.9 423.0L561.1 418.8L564.2 418.2L567.4 411.2L570.5 406.2L573.7 407.7L576.8 408.3L580.0 409.7L583.1 412.7L586.3 411.0L589.4 400.7L592.6 409.3L595.7 406.8L598.9 406.6L602.0 406.4"/>
+<rect class="surface" x="373.6" y="416.0" width="220.8" height="20" rx="4"/>
+<text class="muted" x="484.0" y="430.0" font-size="12" text-anchor="middle">no ILOSTAT earnings by education</text>
+</g>
+<g aria-label="Japan">
+<text class="ink" x="620.0" y="336.0" font-size="13" font-weight="bold">Japan</text>
+<line class="grid" x1="664.0" y1="514.0" x2="900.0" y2="514.0"/>
+<text class="muted" x="660.0" y="517.5" font-size="10" text-anchor="end">100</text>
+<line class="grid" x1="664.0" y1="462.5" x2="900.0" y2="462.5"/>
+<text class="muted" x="660.0" y="466.0" font-size="10" text-anchor="end">1k</text>
+<line class="grid" x1="664.0" y1="411.0" x2="900.0" y2="411.0"/>
+<text class="muted" x="660.0" y="414.5" font-size="10" text-anchor="end">10k</text>
+<line class="grid" x1="664.0" y1="359.5" x2="900.0" y2="359.5"/>
+<text class="muted" x="660.0" y="363.0" font-size="10" text-anchor="end">100k</text>
+<line class="axis" x1="664.0" y1="514.0" x2="900.0" y2="514.0"/>
+<text class="muted" x="664.0" y="528.0" font-size="10" text-anchor="middle">1950</text>
+<text class="muted" x="742.7" y="528.0" font-size="10" text-anchor="middle">1975</text>
+<text class="muted" x="821.3" y="528.0" font-size="10" text-anchor="middle">2000</text>
+<text class="muted" x="900.0" y="528.0" font-size="10" text-anchor="middle">2025</text>
+<path class="context" d="M802.5 372.5L805.6 372.3L808.7 372.4L811.9 369.6L815.0 365.4L818.2 361.1L821.3 359.9L824.5 359.5L827.6 356.9L830.8 364.0L833.9 362.8L837.1 351.6L840.2 354.3L843.4 370.5L846.5 375.4L849.7 369.0L852.8 365.2L855.9 372.2L859.1 372.5L862.2 374.2L865.4 377.1L868.5 382.8L871.7 365.0L874.8 367.2L878.0 373.1L881.1 365.2L884.3 366.1L887.4 367.4L890.6 384.5L893.7 380.2L896.9 382.7L900.0 385.8"/>
+<path class="context" d="M818.2 373.1L821.3 373.4L824.5 372.6L827.6 372.9L830.8 366.8"/>
+<path class="context" d="M837.1 363.6L840.2 364.0L843.4 366.5L846.5 369.5L849.7 370.0L852.8 368.7L855.9 368.4L859.1 373.6L862.2 374.5L865.4 372.8L868.5 371.9L871.7 368.4L874.8 367.3L878.0 366.7"/>
+<path class="context" d="M884.3 365.1L887.4 365.1L890.6 364.1L893.7 363.1L896.9 363.3L900.0 362.7"/>
+<path class="context" d="M837.1 373.4L840.2 376.1L843.4 381.2L846.5 381.2L849.7 382.8L852.8 377.6L855.9 379.7L859.1 388.5L862.2 379.3L865.4 382.0L868.5 383.1L871.7 382.3L874.8 388.8L878.0 387.2L881.1 385.2L884.3 383.1L887.4 384.9L890.6 390.8L893.7 391.7L896.9 389.0L900.0 389.4"/>
+<path class="context" d="M837.1 373.7L840.2 379.6L843.4 381.3L846.5 382.1L849.7 382.9L852.8 385.1L855.9 386.0L859.1 381.9L862.2 375.0L865.4 373.0L868.5 373.3L871.7 371.2L874.8 378.9L878.0 376.7L881.1 374.2L884.3 364.0L887.4 361.8L890.6 371.6"/>
+<path class="context" d="M852.8 459.0L855.9 452.0L859.1 446.3L862.2 447.0"/>
+<path class="context" d="M868.5 445.5L871.7 450.7L874.8 454.9L878.0 450.0"/>
+<path class="context" d="M884.3 449.8L887.4 446.3L890.6 441.9L893.7 461.4L896.9 450.5"/>
+<path class="context" d="M878.0 422.2L881.1 424.0L884.3 420.7L887.4 423.8L890.6 423.4L893.7 422.8L896.9 423.5L900.0 423.4"/>
+<path class="context" d="M846.5 390.5L849.7 391.9L852.8 392.1L855.9 392.1L859.1 398.4L862.2 397.5L865.4 396.0L868.5 393.9L871.7 390.5L874.8 394.3L878.0 395.9L881.1 395.3L884.3 395.2"/>
+<path class="context" d="M833.9 410.2L837.1 407.8L840.2 403.4"/>
+<path class="context" d="M846.5 408.1L849.7 401.3L852.8 395.8L855.9 391.6L859.1 395.1L862.2 396.3L865.4 394.7"/>
+<path class="context" d="M874.8 392.7L878.0 407.3L881.1 407.6L884.3 412.8L887.4 393.4L890.6 401.0L893.7 405.9L896.9 415.4L900.0 417.5"/>
+<path class="context" d="M827.6 398.1L830.8 400.8L833.9 403.3L837.1 398.9L840.2 399.0L843.4 400.2L846.5 405.4L849.7 406.7L852.8 406.2L855.9 406.7L859.1 411.1L862.2 414.9L865.4 415.1L868.5 411.9L871.7 410.7L874.8 411.9L878.0 412.2L881.1 412.8L884.3 412.4L887.4 412.3L890.6 414.7L893.7 414.0L896.9 413.4L900.0 413.5"/>
+<path class="context" d="M865.4 413.7L868.5 416.1L871.7 411.8L874.8 409.8L878.0 410.0L881.1 410.6L884.3 410.4L887.4 412.0L890.6 412.0L893.7 412.0L896.9 411.5L900.0 411.2"/>
+<path class="context" d="M837.1 404.7L840.2 402.7L843.4 398.5L846.5 397.1L849.7 395.7L852.8 396.2L855.9 391.8L859.1 404.3L862.2 397.6L865.4 397.2L868.5 395.9L871.7 391.6L874.8 398.9L878.0 393.3L881.1 391.9L884.3 389.7L887.4 392.5L890.6 401.3L893.7 403.2L896.9 395.8L900.0 393.9"/>
+<path class="context" d="M843.4 390.9L846.5 393.9L849.7 395.0L852.8 395.8L855.9 398.0L859.1 402.6L862.2 403.6L865.4 403.9"/>
+<path class="context" d="M887.4 404.7L890.6 407.0L893.7 410.3L896.9 411.0L900.0 413.1"/>
+<path class="context" d="M805.6 397.8L808.7 400.9L811.9 400.5L815.0 398.6L818.2 400.7"/>
+<path class="context" d="M824.5 401.1L827.6 387.8L830.8 395.9L833.9 395.6L837.1 395.7L840.2 392.8L843.4 394.0L846.5 395.0L849.7 396.2"/>
+<path class="context" d="M833.9 374.2L837.1 375.8L840.2 375.9L843.4 374.1L846.5 372.2L849.7 371.9L852.8 374.7L855.9 373.9L859.1 375.3L862.2 371.8L865.4 369.4L868.5 368.8L871.7 369.0L874.8 370.6L878.0 369.2L881.1 368.2L884.3 367.4L887.4 372.0L890.6 372.3L893.7 370.2L896.9 373.4L900.0 374.8"/>
+<path class="reference" d="M714.3 437.5L717.5 434.3L720.6 429.6L723.8 426.9L726.9 421.8L730.1 420.6L733.2 420.1L736.4 418.5L739.5 420.4L742.7 417.9L745.8 416.1L749.0 413.0L752.1 407.4L755.3 408.0L758.4 411.0L761.5 408.6L764.7 403.5L767.8 402.3L771.0 400.1L774.1 401.9L777.3 397.9L780.4 387.0L783.6 386.0L786.7 388.3L789.9 391.5L793.0 387.9L796.2 380.2L799.3 379.9L802.5 380.8L805.6 382.4L808.7 384.4L811.9 384.1L815.0 380.6L818.2 384.0L821.3 383.4L824.5 381.0L827.6 382.1L830.8 378.9L833.9 382.0L837.1 385.6L840.2 382.9L843.4 381.8L846.5 385.4L849.7 384.1L852.8 385.4L855.9 387.0L859.1 384.6L862.2 386.6L865.4 388.4L868.5 388.4L871.7 386.5L874.8 386.4L878.0 384.0L881.1 382.5L884.3 383.4L887.4 387.5L890.6 387.2L893.7 393.3L896.9 386.9L900.0 392.0"/>
+<rect class="surface" x="671.6" y="416.0" width="220.8" height="20" rx="4"/>
+<text class="muted" x="782.0" y="430.0" font-size="12" text-anchor="middle">no ILOSTAT earnings by education</text>
+</g>
+<g aria-label="Egypt">
+<text class="ink" x="918.0" y="336.0" font-size="13" font-weight="bold">Egypt</text>
+<text class="muted" x="1198.0" y="336.0" font-size="11" text-anchor="end">2024: 1.7k</text>
+<line class="grid" x1="962.0" y1="514.0" x2="1198.0" y2="514.0"/>
+<text class="muted" x="958.0" y="517.5" font-size="10" text-anchor="end">100</text>
+<line class="grid" x1="962.0" y1="462.5" x2="1198.0" y2="462.5"/>
+<text class="muted" x="958.0" y="466.0" font-size="10" text-anchor="end">1k</text>
+<line class="grid" x1="962.0" y1="411.0" x2="1198.0" y2="411.0"/>
+<text class="muted" x="958.0" y="414.5" font-size="10" text-anchor="end">10k</text>
+<line class="grid" x1="962.0" y1="359.5" x2="1198.0" y2="359.5"/>
+<text class="muted" x="958.0" y="363.0" font-size="10" text-anchor="end">100k</text>
+<line class="axis" x1="962.0" y1="514.0" x2="1198.0" y2="514.0"/>
+<text class="muted" x="962.0" y="528.0" font-size="10" text-anchor="middle">1950</text>
+<text class="muted" x="1040.7" y="528.0" font-size="10" text-anchor="middle">1975</text>
+<text class="muted" x="1119.3" y="528.0" font-size="10" text-anchor="middle">2000</text>
+<text class="muted" x="1198.0" y="528.0" font-size="10" text-anchor="middle">2025</text>
+<path class="context" d="M1100.5 372.5L1103.6 372.3L1106.7 372.4L1109.9 369.6L1113.0 365.4L1116.2 361.1L1119.3 359.9L1122.5 359.5L1125.6 356.9L1128.8 364.0L1131.9 362.8L1135.1 351.6L1138.2 354.3L1141.4 370.5L1144.5 375.4L1147.7 369.0L1150.8 365.2L1153.9 372.2L1157.1 372.5L1160.2 374.2L1163.4 377.1L1166.5 382.8L1169.7 365.0L1172.8 367.2L1176.0 373.1L1179.1 365.2L1182.3 366.1L1185.4 367.4L1188.6 384.5L1191.7 380.2L1194.9 382.7L1198.0 385.8"/>
+<path class="context" d="M1116.2 373.1L1119.3 373.4L1122.5 372.6L1125.6 372.9L1128.8 366.8"/>
+<path class="context" d="M1135.1 363.6L1138.2 364.0L1141.4 366.5L1144.5 369.5L1147.7 370.0L1150.8 368.7L1153.9 368.4L1157.1 373.6L1160.2 374.5L1163.4 372.8L1166.5 371.9L1169.7 368.4L1172.8 367.3L1176.0 366.7"/>
+<path class="context" d="M1182.3 365.1L1185.4 365.1L1188.6 364.1L1191.7 363.1L1194.9 363.3L1198.0 362.7"/>
+<path class="context" d="M1135.1 373.4L1138.2 376.1L1141.4 381.2L1144.5 381.2L1147.7 382.8L1150.8 377.6L1153.9 379.7L1157.1 388.5L1160.2 379.3L1163.4 382.0L1166.5 383.1L1169.7 382.3L1172.8 388.8L1176.0 387.2L1179.1 385.2L1182.3 383.1L1185.4 384.9L1188.6 390.8L1191.7 391.7L1194.9 389.0L1198.0 389.4"/>
+<path class="context" d="M1135.1 373.7L1138.2 379.6L1141.4 381.3L1144.5 382.1L1147.7 382.9L1150.8 385.1L1153.9 386.0L1157.1 381.9L1160.2 375.0L1163.4 373.0L1166.5 373.3L1169.7 371.2L1172.8 378.9L1176.0 376.7L1179.1 374.2L1182.3 364.0L1185.4 361.8L1188.6 371.6"/>
+<path class="context" d="M1176.0 422.2L1179.1 424.0L1182.3 420.7L1185.4 423.8L1188.6 423.4L1191.7 422.8L1194.9 423.5L1198.0 423.4"/>
+<path class="context" d="M1144.5 390.5L1147.7 391.9L1150.8 392.1L1153.9 392.1L1157.1 398.4L1160.2 397.5L1163.4 396.0L1166.5 393.9L1169.7 390.5L1172.8 394.3L1176.0 395.9L1179.1 395.3L1182.3 395.2"/>
+<path class="context" d="M1131.9 410.2L1135.1 407.8L1138.2 403.4"/>
+<path class="context" d="M1144.5 408.1L1147.7 401.3L1150.8 395.8L1153.9 391.6L1157.1 395.1L1160.2 396.3L1163.4 394.7"/>
+<path class="context" d="M1172.8 392.7L1176.0 407.3L1179.1 407.6L1182.3 412.8L1185.4 393.4L1188.6 401.0L1191.7 405.9L1194.9 415.4L1198.0 417.5"/>
+<path class="context" d="M1125.6 398.1L1128.8 400.8L1131.9 403.3L1135.1 398.9L1138.2 399.0L1141.4 400.2L1144.5 405.4L1147.7 406.7L1150.8 406.2L1153.9 406.7L1157.1 411.1L1160.2 414.9L1163.4 415.1L1166.5 411.9L1169.7 410.7L1172.8 411.9L1176.0 412.2L1179.1 412.8L1182.3 412.4L1185.4 412.3L1188.6 414.7L1191.7 414.0L1194.9 413.4L1198.0 413.5"/>
+<path class="context" d="M1163.4 413.7L1166.5 416.1L1169.7 411.8L1172.8 409.8L1176.0 410.0L1179.1 410.6L1182.3 410.4L1185.4 412.0L1188.6 412.0L1191.7 412.0L1194.9 411.5L1198.0 411.2"/>
+<path class="context" d="M1135.1 404.7L1138.2 402.7L1141.4 398.5L1144.5 397.1L1147.7 395.7L1150.8 396.2L1153.9 391.8L1157.1 404.3L1160.2 397.6L1163.4 397.2L1166.5 395.9L1169.7 391.6L1172.8 398.9L1176.0 393.3L1179.1 391.9L1182.3 389.7L1185.4 392.5L1188.6 401.3L1191.7 403.2L1194.9 395.8L1198.0 393.9"/>
+<path class="context" d="M1141.4 390.9L1144.5 393.9L1147.7 395.0L1150.8 395.8L1153.9 398.0L1157.1 402.6L1160.2 403.6L1163.4 403.9"/>
+<path class="context" d="M1185.4 404.7L1188.6 407.0L1191.7 410.3L1194.9 411.0L1198.0 413.1"/>
+<path class="context" d="M1103.6 397.8L1106.7 400.9L1109.9 400.5L1113.0 398.6L1116.2 400.7"/>
+<path class="context" d="M1122.5 401.1L1125.6 387.8L1128.8 395.9L1131.9 395.6L1135.1 395.7L1138.2 392.8L1141.4 394.0L1144.5 395.0L1147.7 396.2"/>
+<path class="context" d="M1131.9 374.2L1135.1 375.8L1138.2 375.9L1141.4 374.1L1144.5 372.2L1147.7 371.9L1150.8 374.7L1153.9 373.9L1157.1 375.3L1160.2 371.8L1163.4 369.4L1166.5 368.8L1169.7 369.0L1172.8 370.6L1176.0 369.2L1179.1 368.2L1182.3 367.4L1185.4 372.0L1188.6 372.3L1191.7 370.2L1194.9 373.4L1198.0 374.8"/>
+<path class="reference" d="M1015.5 481.1L1018.6 478.3L1021.8 478.0L1024.9 478.4L1028.1 475.8L1031.2 474.6L1034.4 474.8L1037.5 477.6L1040.7 476.3L1043.8 484.7L1047.0 484.9L1050.1 490.8L1053.3 484.7L1056.4 485.4L1059.5 492.1L1062.7 491.9L1065.8 495.0L1069.0 491.1L1072.1 492.0L1075.3 489.1L1078.4 486.2L1081.6 482.7L1084.7 479.6L1087.9 475.7L1091.0 461.2L1094.2 458.3L1097.3 458.1L1100.5 453.8L1103.6 450.1L1106.7 451.2L1109.9 449.8L1113.0 457.3L1116.2 456.6L1119.3 454.3L1122.5 455.7L1125.6 454.5L1128.8 455.5L1131.9 456.2L1135.1 458.1L1138.2 464.6L1141.4 460.0L1144.5 458.9L1147.7 455.1L1150.8 453.3L1153.9 451.1L1157.1 448.0L1160.2 447.7L1163.4 446.1L1166.5 446.7L1169.7 450.3L1172.8 450.0L1176.0 441.1L1179.1 439.8L1182.3 440.2L1185.4 436.7L1188.6 431.4L1191.7 449.5L1194.9 437.4L1198.0 426.3"/>
+<path class="focus" d="M1150.8 459.0L1153.9 452.0L1157.1 446.3L1160.2 447.0"/>
+<path class="focus" d="M1166.5 445.5L1169.7 450.7L1172.8 454.9L1176.0 450.0"/>
+<path class="focus estimated" d="M1182.3 449.8L1185.4 446.3L1188.6 441.9"/>
+<path class="focus" d="M1188.6 441.9L1191.7 461.4"/>
+<path class="focus estimated" d="M1191.7 461.4L1194.9 450.5"/>
+<circle class="dot" cx="1194.9" cy="450.5" r="3"/>
+<circle class="hit" cx="1150.8" cy="459.0" r="5"><title>Egypt 2010: 1,168 eggs/month</title></circle>
+<circle class="hit" cx="1153.9" cy="452.0" r="5"><title>Egypt 2011: 1,601 eggs/month</title></circle>
+<circle class="hit" cx="1157.1" cy="446.3" r="5"><title>Egypt 2012: 2,064 eggs/month</title></circle>
+<circle class="hit" cx="1160.2" cy="447.0" r="5"><title>Egypt 2013: 1,998 eggs/month</title></circle>
+<circle class="hit" cx="1166.5" cy="445.5" r="5"><title>Egypt 2015: 2,139 eggs/month</title></circle>
+<circle class="hit" cx="1169.7" cy="450.7" r="5"><title>Egypt 2016: 1,697 eggs/month</title></circle>
+<circle class="hit" cx="1172.8" cy="454.9" r="5"><title>Egypt 2017: 1,404 eggs/month</title></circle>
+<circle class="hit" cx="1176.0" cy="450.0" r="5"><title>Egypt 2018: 1,748 eggs/month</title></circle>
+<circle class="hit" cx="1182.3" cy="449.8" r="5"><title>Egypt 2020: 1,767 eggs/month</title></circle>
+<circle class="hit" cx="1185.4" cy="446.3" r="5"><title>Egypt 2021: 2,065 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="1188.6" cy="441.9" r="5"><title>Egypt 2022: 2,510 eggs/month</title></circle>
+<circle class="hit" cx="1191.7" cy="461.4" r="5"><title>Egypt 2023: 1,052 eggs/month</title></circle>
+<circle class="hit" cx="1194.9" cy="450.5" r="5"><title>Egypt 2024: 1,711 eggs/month (estimated)</title></circle>
+</g>
+<g aria-label="India">
+<text class="ink" x="24.0" y="566.0" font-size="13" font-weight="bold">India</text>
+<text class="muted" x="304.0" y="566.0" font-size="11" text-anchor="end">2025: 5.8k</text>
+<line class="grid" x1="68.0" y1="744.0" x2="304.0" y2="744.0"/>
+<text class="muted" x="64.0" y="747.5" font-size="10" text-anchor="end">100</text>
+<line class="grid" x1="68.0" y1="692.5" x2="304.0" y2="692.5"/>
+<text class="muted" x="64.0" y="696.0" font-size="10" text-anchor="end">1k</text>
+<line class="grid" x1="68.0" y1="641.0" x2="304.0" y2="641.0"/>
+<text class="muted" x="64.0" y="644.5" font-size="10" text-anchor="end">10k</text>
+<line class="grid" x1="68.0" y1="589.5" x2="304.0" y2="589.5"/>
+<text class="muted" x="64.0" y="593.0" font-size="10" text-anchor="end">100k</text>
+<line class="axis" x1="68.0" y1="744.0" x2="304.0" y2="744.0"/>
+<text class="muted" x="68.0" y="758.0" font-size="10" text-anchor="middle">1950</text>
+<text class="muted" x="146.7" y="758.0" font-size="10" text-anchor="middle">1975</text>
+<text class="muted" x="225.3" y="758.0" font-size="10" text-anchor="middle">2000</text>
+<text class="muted" x="304.0" y="758.0" font-size="10" text-anchor="middle">2025</text>
+<path class="context" d="M206.5 602.5L209.6 602.3L212.7 602.4L215.9 599.6L219.0 595.4L222.2 591.1L225.3 589.9L228.5 589.5L231.6 586.9L234.8 594.0L237.9 592.8L241.1 581.6L244.2 584.3L247.4 600.5L250.5 605.4L253.7 599.0L256.8 595.2L259.9 602.2L263.1 602.5L266.2 604.2L269.4 607.1L272.5 612.8L275.7 595.0L278.8 597.2L282.0 603.1L285.1 595.2L288.3 596.1L291.4 597.4L294.6 614.5L297.7 610.2L300.9 612.7L304.0 615.8"/>
+<path class="context" d="M222.2 603.1L225.3 603.4L228.5 602.6L231.6 602.9L234.8 596.8"/>
+<path class="context" d="M241.1 593.6L244.2 594.0L247.4 596.5L250.5 599.5L253.7 600.0L256.8 598.7L259.9 598.4L263.1 603.6L266.2 604.5L269.4 602.8L272.5 601.9L275.7 598.4L278.8 597.3L282.0 596.7"/>
+<path class="context" d="M288.3 595.1L291.4 595.1L294.6 594.1L297.7 593.1L300.9 593.3L304.0 592.7"/>
+<path class="context" d="M241.1 603.4L244.2 606.1L247.4 611.2L250.5 611.2L253.7 612.8L256.8 607.6L259.9 609.7L263.1 618.5L266.2 609.3L269.4 612.0L272.5 613.1L275.7 612.3L278.8 618.8L282.0 617.2L285.1 615.2L288.3 613.1L291.4 614.9L294.6 620.8L297.7 621.7L300.9 619.0L304.0 619.4"/>
+<path class="context" d="M241.1 603.7L244.2 609.6L247.4 611.3L250.5 612.1L253.7 612.9L256.8 615.1L259.9 616.0L263.1 611.9L266.2 605.0L269.4 603.0L272.5 603.3L275.7 601.2L278.8 608.9L282.0 606.7L285.1 604.2L288.3 594.0L291.4 591.8L294.6 601.6"/>
+<path class="context" d="M256.8 689.0L259.9 682.0L263.1 676.3L266.2 677.0"/>
+<path class="context" d="M272.5 675.5L275.7 680.7L278.8 684.9L282.0 680.0"/>
+<path class="context" d="M288.3 679.8L291.4 676.3L294.6 671.9L297.7 691.4L300.9 680.5"/>
+<path class="context" d="M250.5 620.5L253.7 621.9L256.8 622.1L259.9 622.1L263.1 628.4L266.2 627.5L269.4 626.0L272.5 623.9L275.7 620.5L278.8 624.3L282.0 625.9L285.1 625.3L288.3 625.2"/>
+<path class="context" d="M237.9 640.2L241.1 637.8L244.2 633.4"/>
+<path class="context" d="M250.5 638.1L253.7 631.3L256.8 625.8L259.9 621.6L263.1 625.1L266.2 626.3L269.4 624.7"/>
+<path class="context" d="M278.8 622.7L282.0 637.3L285.1 637.6L288.3 642.8L291.4 623.4L294.6 631.0L297.7 635.9L300.9 645.4L304.0 647.5"/>
+<path class="context" d="M231.6 628.1L234.8 630.8L237.9 633.3L241.1 628.9L244.2 629.0L247.4 630.2L250.5 635.4L253.7 636.7L256.8 636.2L259.9 636.7L263.1 641.1L266.2 644.9L269.4 645.1L272.5 641.9L275.7 640.7L278.8 641.9L282.0 642.2L285.1 642.8L288.3 642.4L291.4 642.3L294.6 644.7L297.7 644.0L300.9 643.4L304.0 643.5"/>
+<path class="context" d="M269.4 643.7L272.5 646.1L275.7 641.8L278.8 639.8L282.0 640.0L285.1 640.6L288.3 640.4L291.4 642.0L294.6 642.0L297.7 642.0L300.9 641.5L304.0 641.2"/>
+<path class="context" d="M241.1 634.7L244.2 632.7L247.4 628.5L250.5 627.1L253.7 625.7L256.8 626.2L259.9 621.8L263.1 634.3L266.2 627.6L269.4 627.2L272.5 625.9L275.7 621.6L278.8 628.9L282.0 623.3L285.1 621.9L288.3 619.7L291.4 622.5L294.6 631.3L297.7 633.2L300.9 625.8L304.0 623.9"/>
+<path class="context" d="M247.4 620.9L250.5 623.9L253.7 625.0L256.8 625.8L259.9 628.0L263.1 632.6L266.2 633.6L269.4 633.9"/>
+<path class="context" d="M291.4 634.7L294.6 637.0L297.7 640.3L300.9 641.0L304.0 643.1"/>
+<path class="context" d="M209.6 627.8L212.7 630.9L215.9 630.5L219.0 628.6L222.2 630.7"/>
+<path class="context" d="M228.5 631.1L231.6 617.8L234.8 625.9L237.9 625.6L241.1 625.7L244.2 622.8L247.4 624.0L250.5 625.0L253.7 626.2"/>
+<path class="context" d="M237.9 604.2L241.1 605.8L244.2 605.9L247.4 604.1L250.5 602.2L253.7 601.9L256.8 604.7L259.9 603.9L263.1 605.3L266.2 601.8L269.4 599.4L272.5 598.8L275.7 599.0L278.8 600.6L282.0 599.2L285.1 598.2L288.3 597.4L291.4 602.0L294.6 602.3L297.7 600.2L300.9 603.4L304.0 604.8"/>
+<path class="reference" d="M121.5 730.1L124.6 730.1L127.8 728.4L130.9 727.1L134.1 726.5L137.2 725.4L140.4 724.6L143.5 725.2L146.7 729.8L149.8 728.6L153.0 726.4L156.1 725.1L159.3 723.5L162.4 720.1L165.5 717.1L168.7 715.2L171.8 712.3L175.0 710.3L178.1 708.1L181.3 706.1L184.4 703.8L187.6 700.6L190.7 698.0L193.9 695.1L197.0 692.5L200.2 689.8L203.3 687.1L206.5 695.7L209.6 697.3L212.7 688.6L215.9 693.1L219.0 690.4L222.2 689.4L225.3 688.7L228.5 687.6L231.6 686.4L234.8 686.1L237.9 684.8L241.1 684.2L244.2 682.4L247.4 684.1L250.5 681.5L253.7 680.9L256.8 680.9L259.9 680.1L263.1 679.4L266.2 676.0L269.4 675.7L272.5 675.1L275.7 673.9L278.8 672.8L282.0 670.7L285.1 671.3L288.3 670.8L291.4 670.3L294.6 669.8L297.7 668.2L300.9 667.7L304.0 667.3"/>
+<path class="focus estimated" d="M282.0 652.2L285.1 654.0L288.3 650.7L291.4 653.8L294.6 653.4L297.7 652.8L300.9 653.5L304.0 653.4"/>
+<circle class="dot" cx="304.0" cy="653.4" r="3"/>
+<circle class="hit" cx="282.0" cy="652.2" r="5"><title>India 2018: 6,062 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="285.1" cy="654.0" r="5"><title>India 2019: 5,600 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="288.3" cy="650.7" r="5"><title>India 2020: 6,483 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="291.4" cy="653.8" r="5"><title>India 2021: 5,649 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="294.6" cy="653.4" r="5"><title>India 2022: 5,756 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="297.7" cy="652.8" r="5"><title>India 2023: 5,913 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="300.9" cy="653.5" r="5"><title>India 2024: 5,724 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="304.0" cy="653.4" r="5"><title>India 2025: 5,754 eggs/month (estimated)</title></circle>
+</g>
+<g aria-label="Italy">
+<text class="ink" x="322.0" y="566.0" font-size="13" font-weight="bold">Italy</text>
+<text class="muted" x="602.0" y="566.0" font-size="11" text-anchor="end">2020: 20.3k</text>
+<line class="grid" x1="366.0" y1="744.0" x2="602.0" y2="744.0"/>
+<text class="muted" x="362.0" y="747.5" font-size="10" text-anchor="end">100</text>
+<line class="grid" x1="366.0" y1="692.5" x2="602.0" y2="692.5"/>
+<text class="muted" x="362.0" y="696.0" font-size="10" text-anchor="end">1k</text>
+<line class="grid" x1="366.0" y1="641.0" x2="602.0" y2="641.0"/>
+<text class="muted" x="362.0" y="644.5" font-size="10" text-anchor="end">10k</text>
+<line class="grid" x1="366.0" y1="589.5" x2="602.0" y2="589.5"/>
+<text class="muted" x="362.0" y="593.0" font-size="10" text-anchor="end">100k</text>
+<line class="axis" x1="366.0" y1="744.0" x2="602.0" y2="744.0"/>
+<text class="muted" x="366.0" y="758.0" font-size="10" text-anchor="middle">1950</text>
+<text class="muted" x="444.7" y="758.0" font-size="10" text-anchor="middle">1975</text>
+<text class="muted" x="523.3" y="758.0" font-size="10" text-anchor="middle">2000</text>
+<text class="muted" x="602.0" y="758.0" font-size="10" text-anchor="middle">2025</text>
+<path class="context" d="M504.5 602.5L507.6 602.3L510.7 602.4L513.9 599.6L517.0 595.4L520.2 591.1L523.3 589.9L526.5 589.5L529.6 586.9L532.8 594.0L535.9 592.8L539.1 581.6L542.2 584.3L545.4 600.5L548.5 605.4L551.7 599.0L554.8 595.2L557.9 602.2L561.1 602.5L564.2 604.2L567.4 607.1L570.5 612.8L573.7 595.0L576.8 597.2L580.0 603.1L583.1 595.2L586.3 596.1L589.4 597.4L592.6 614.5L595.7 610.2L598.9 612.7L602.0 615.8"/>
+<path class="context" d="M520.2 603.1L523.3 603.4L526.5 602.6L529.6 602.9L532.8 596.8"/>
+<path class="context" d="M539.1 593.6L542.2 594.0L545.4 596.5L548.5 599.5L551.7 600.0L554.8 598.7L557.9 598.4L561.1 603.6L564.2 604.5L567.4 602.8L570.5 601.9L573.7 598.4L576.8 597.3L580.0 596.7"/>
+<path class="context" d="M586.3 595.1L589.4 595.1L592.6 594.1L595.7 593.1L598.9 593.3L602.0 592.7"/>
+<path class="context" d="M539.1 603.4L542.2 606.1L545.4 611.2L548.5 611.2L551.7 612.8L554.8 607.6L557.9 609.7L561.1 618.5L564.2 609.3L567.4 612.0L570.5 613.1L573.7 612.3L576.8 618.8L580.0 617.2L583.1 615.2L586.3 613.1L589.4 614.9L592.6 620.8L595.7 621.7L598.9 619.0L602.0 619.4"/>
+<path class="context" d="M539.1 603.7L542.2 609.6L545.4 611.3L548.5 612.1L551.7 612.9L554.8 615.1L557.9 616.0L561.1 611.9L564.2 605.0L567.4 603.0L570.5 603.3L573.7 601.2L576.8 608.9L580.0 606.7L583.1 604.2L586.3 594.0L589.4 591.8L592.6 601.6"/>
+<path class="context" d="M554.8 689.0L557.9 682.0L561.1 676.3L564.2 677.0"/>
+<path class="context" d="M570.5 675.5L573.7 680.7L576.8 684.9L580.0 680.0"/>
+<path class="context" d="M586.3 679.8L589.4 676.3L592.6 671.9L595.7 691.4L598.9 680.5"/>
+<path class="context" d="M580.0 652.2L583.1 654.0L586.3 650.7L589.4 653.8L592.6 653.4L595.7 652.8L598.9 653.5L602.0 653.4"/>
+<path class="context" d="M535.9 640.2L539.1 637.8L542.2 633.4"/>
+<path class="context" d="M548.5 638.1L551.7 631.3L554.8 625.8L557.9 621.6L561.1 625.1L564.2 626.3L567.4 624.7"/>
+<path class="context" d="M576.8 622.7L580.0 637.3L583.1 637.6L586.3 642.8L589.4 623.4L592.6 631.0L595.7 635.9L598.9 645.4L602.0 647.5"/>
+<path class="context" d="M529.6 628.1L532.8 630.8L535.9 633.3L539.1 628.9L542.2 629.0L545.4 630.2L548.5 635.4L551.7 636.7L554.8 636.2L557.9 636.7L561.1 641.1L564.2 644.9L567.4 645.1L570.5 641.9L573.7 640.7L576.8 641.9L580.0 642.2L583.1 642.8L586.3 642.4L589.4 642.3L592.6 644.7L595.7 644.0L598.9 643.4L602.0 643.5"/>
+<path class="context" d="M567.4 643.7L570.5 646.1L573.7 641.8L576.8 639.8L580.0 640.0L583.1 640.6L586.3 640.4L589.4 642.0L592.6 642.0L595.7 642.0L598.9 641.5L602.0 641.2"/>
+<path class="context" d="M539.1 634.7L542.2 632.7L545.4 628.5L548.5 627.1L551.7 625.7L554.8 626.2L557.9 621.8L561.1 634.3L564.2 627.6L567.4 627.2L570.5 625.9L573.7 621.6L576.8 628.9L580.0 623.3L583.1 621.9L586.3 619.7L589.4 622.5L592.6 631.3L595.7 633.2L598.9 625.8L602.0 623.9"/>
+<path class="context" d="M545.4 620.9L548.5 623.9L551.7 625.0L554.8 625.8L557.9 628.0L561.1 632.6L564.2 633.6L567.4 633.9"/>
+<path class="context" d="M589.4 634.7L592.6 637.0L595.7 640.3L598.9 641.0L602.0 643.1"/>
+<path class="context" d="M507.6 627.8L510.7 630.9L513.9 630.5L517.0 628.6L520.2 630.7"/>
+<path class="context" d="M526.5 631.1L529.6 617.8L532.8 625.9L535.9 625.6L539.1 625.7L542.2 622.8L545.4 624.0L548.5 625.0L551.7 626.2"/>
+<path class="context" d="M535.9 604.2L539.1 605.8L542.2 605.9L545.4 604.1L548.5 602.2L551.7 601.9L554.8 604.7L557.9 603.9L561.1 605.3L564.2 601.8L567.4 599.4L570.5 598.8L573.7 599.0L576.8 600.6L580.0 599.2L583.1 598.2L586.3 597.4L589.4 602.0L592.6 602.3L595.7 600.2L598.9 603.4L602.0 604.8"/>
+<path class="reference" d="M416.3 668.2L419.5 666.0L422.6 665.1L425.8 664.3L428.9 659.4L432.1 660.7L435.2 659.0L438.4 659.7L441.5 656.2L444.7 655.5L447.8 654.7L451.0 652.5L454.1 651.5L457.3 647.8L460.4 648.3L463.5 645.9L466.7 643.8L469.8 643.0L473.0 643.7L476.1 640.6L479.3 637.5L482.4 637.7L485.6 633.8L488.7 634.6L491.9 630.6L495.0 629.8L498.2 628.9L501.3 629.7L504.5 629.2L507.6 627.6L510.7 629.8L513.9 627.6L517.0 626.6L520.2 622.8L523.3 625.0L526.5 622.7L529.6 622.8L532.8 624.0L535.9 623.2L539.1 621.2L542.2 621.6L545.4 611.2L548.5 611.3L551.7 613.6L554.8 613.9L557.9 614.0L561.1 620.4L564.2 619.9L567.4 618.3L570.5 616.2L573.7 612.1L576.8 615.1L580.0 616.1L583.1 615.5L586.3 617.2L589.4 614.9L592.6 617.9L595.7 619.4L598.9 613.7L602.0 614.3"/>
+<path class="focus" d="M548.5 620.5L551.7 621.9L554.8 622.1L557.9 622.1L561.1 628.4L564.2 627.5L567.4 626.0L570.5 623.9L573.7 620.5L576.8 624.3L580.0 625.9L583.1 625.3L586.3 625.2"/>
+<circle class="dot" cx="586.3" cy="625.2" r="3"/>
+<circle class="hit" cx="548.5" cy="620.5" r="5"><title>Italy 2008: 24,955 eggs/month</title></circle>
+<circle class="hit" cx="551.7" cy="621.9" r="5"><title>Italy 2009: 23,519 eggs/month</title></circle>
+<circle class="hit" cx="554.8" cy="622.1" r="5"><title>Italy 2010: 23,295 eggs/month</title></circle>
+<circle class="hit" cx="557.9" cy="622.1" r="5"><title>Italy 2011: 23,268 eggs/month</title></circle>
+<circle class="hit" cx="561.1" cy="628.4" r="5"><title>Italy 2012: 17,605 eggs/month</title></circle>
+<circle class="hit" cx="564.2" cy="627.5" r="5"><title>Italy 2013: 18,266 eggs/month</title></circle>
+<circle class="hit" cx="567.4" cy="626.0" r="5"><title>Italy 2014: 19,582 eggs/month</title></circle>
+<circle class="hit" cx="570.5" cy="623.9" r="5"><title>Italy 2015: 21,498 eggs/month</title></circle>
+<circle class="hit" cx="573.7" cy="620.5" r="5"><title>Italy 2016: 25,052 eggs/month</title></circle>
+<circle class="hit" cx="576.8" cy="624.3" r="5"><title>Italy 2017: 21,107 eggs/month</title></circle>
+<circle class="hit" cx="580.0" cy="625.9" r="5"><title>Italy 2018: 19,645 eggs/month</title></circle>
+<circle class="hit" cx="583.1" cy="625.3" r="5"><title>Italy 2019: 20,205 eggs/month</title></circle>
+<circle class="hit" cx="586.3" cy="625.2" r="5"><title>Italy 2020: 20,297 eggs/month</title></circle>
+</g>
+<g aria-label="Argentina">
+<text class="ink" x="620.0" y="566.0" font-size="13" font-weight="bold">Argentina</text>
+<text class="muted" x="900.0" y="566.0" font-size="11" text-anchor="end">2025: 7.5k</text>
+<line class="grid" x1="664.0" y1="744.0" x2="900.0" y2="744.0"/>
+<text class="muted" x="660.0" y="747.5" font-size="10" text-anchor="end">100</text>
+<line class="grid" x1="664.0" y1="692.5" x2="900.0" y2="692.5"/>
+<text class="muted" x="660.0" y="696.0" font-size="10" text-anchor="end">1k</text>
+<line class="grid" x1="664.0" y1="641.0" x2="900.0" y2="641.0"/>
+<text class="muted" x="660.0" y="644.5" font-size="10" text-anchor="end">10k</text>
+<line class="grid" x1="664.0" y1="589.5" x2="900.0" y2="589.5"/>
+<text class="muted" x="660.0" y="593.0" font-size="10" text-anchor="end">100k</text>
+<line class="axis" x1="664.0" y1="744.0" x2="900.0" y2="744.0"/>
+<text class="muted" x="664.0" y="758.0" font-size="10" text-anchor="middle">1950</text>
+<text class="muted" x="742.7" y="758.0" font-size="10" text-anchor="middle">1975</text>
+<text class="muted" x="821.3" y="758.0" font-size="10" text-anchor="middle">2000</text>
+<text class="muted" x="900.0" y="758.0" font-size="10" text-anchor="middle">2025</text>
+<path class="context" d="M802.5 602.5L805.6 602.3L808.7 602.4L811.9 599.6L815.0 595.4L818.2 591.1L821.3 589.9L824.5 589.5L827.6 586.9L830.8 594.0L833.9 592.8L837.1 581.6L840.2 584.3L843.4 600.5L846.5 605.4L849.7 599.0L852.8 595.2L855.9 602.2L859.1 602.5L862.2 604.2L865.4 607.1L868.5 612.8L871.7 595.0L874.8 597.2L878.0 603.1L881.1 595.2L884.3 596.1L887.4 597.4L890.6 614.5L893.7 610.2L896.9 612.7L900.0 615.8"/>
+<path class="context" d="M818.2 603.1L821.3 603.4L824.5 602.6L827.6 602.9L830.8 596.8"/>
+<path class="context" d="M837.1 593.6L840.2 594.0L843.4 596.5L846.5 599.5L849.7 600.0L852.8 598.7L855.9 598.4L859.1 603.6L862.2 604.5L865.4 602.8L868.5 601.9L871.7 598.4L874.8 597.3L878.0 596.7"/>
+<path class="context" d="M884.3 595.1L887.4 595.1L890.6 594.1L893.7 593.1L896.9 593.3L900.0 592.7"/>
+<path class="context" d="M837.1 603.4L840.2 606.1L843.4 611.2L846.5 611.2L849.7 612.8L852.8 607.6L855.9 609.7L859.1 618.5L862.2 609.3L865.4 612.0L868.5 613.1L871.7 612.3L874.8 618.8L878.0 617.2L881.1 615.2L884.3 613.1L887.4 614.9L890.6 620.8L893.7 621.7L896.9 619.0L900.0 619.4"/>
+<path class="context" d="M837.1 603.7L840.2 609.6L843.4 611.3L846.5 612.1L849.7 612.9L852.8 615.1L855.9 616.0L859.1 611.9L862.2 605.0L865.4 603.0L868.5 603.3L871.7 601.2L874.8 608.9L878.0 606.7L881.1 604.2L884.3 594.0L887.4 591.8L890.6 601.6"/>
+<path class="context" d="M852.8 689.0L855.9 682.0L859.1 676.3L862.2 677.0"/>
+<path class="context" d="M868.5 675.5L871.7 680.7L874.8 684.9L878.0 680.0"/>
+<path class="context" d="M884.3 679.8L887.4 676.3L890.6 671.9L893.7 691.4L896.9 680.5"/>
+<path class="context" d="M878.0 652.2L881.1 654.0L884.3 650.7L887.4 653.8L890.6 653.4L893.7 652.8L896.9 653.5L900.0 653.4"/>
+<path class="context" d="M846.5 620.5L849.7 621.9L852.8 622.1L855.9 622.1L859.1 628.4L862.2 627.5L865.4 626.0L868.5 623.9L871.7 620.5L874.8 624.3L878.0 625.9L881.1 625.3L884.3 625.2"/>
+<path class="context" d="M827.6 628.1L830.8 630.8L833.9 633.3L837.1 628.9L840.2 629.0L843.4 630.2L846.5 635.4L849.7 636.7L852.8 636.2L855.9 636.7L859.1 641.1L862.2 644.9L865.4 645.1L868.5 641.9L871.7 640.7L874.8 641.9L878.0 642.2L881.1 642.8L884.3 642.4L887.4 642.3L890.6 644.7L893.7 644.0L896.9 643.4L900.0 643.5"/>
+<path class="context" d="M865.4 643.7L868.5 646.1L871.7 641.8L874.8 639.8L878.0 640.0L881.1 640.6L884.3 640.4L887.4 642.0L890.6 642.0L893.7 642.0L896.9 641.5L900.0 641.2"/>
+<path class="context" d="M837.1 634.7L840.2 632.7L843.4 628.5L846.5 627.1L849.7 625.7L852.8 626.2L855.9 621.8L859.1 634.3L862.2 627.6L865.4 627.2L868.5 625.9L871.7 621.6L874.8 628.9L878.0 623.3L881.1 621.9L884.3 619.7L887.4 622.5L890.6 631.3L893.7 633.2L896.9 625.8L900.0 623.9"/>
+<path class="context" d="M843.4 620.9L846.5 623.9L849.7 625.0L852.8 625.8L855.9 628.0L859.1 632.6L862.2 633.6L865.4 633.9"/>
+<path class="context" d="M887.4 634.7L890.6 637.0L893.7 640.3L896.9 641.0L900.0 643.1"/>
+<path class="context" d="M805.6 627.8L808.7 630.9L811.9 630.5L815.0 628.6L818.2 630.7"/>
+<path class="context" d="M824.5 631.1L827.6 617.8L830.8 625.9L833.9 625.6L837.1 625.7L840.2 622.8L843.4 624.0L846.5 625.0L849.7 626.2"/>
+<path class="context" d="M833.9 604.2L837.1 605.8L840.2 605.9L843.4 604.1L846.5 602.2L849.7 601.9L852.8 604.7L855.9 603.9L859.1 605.3L862.2 601.8L865.4 599.4L868.5 598.8L871.7 599.0L874.8 600.6L878.0 599.2L881.1 598.2L884.3 597.4L887.4 602.0L890.6 602.3L893.7 600.2L896.9 603.4L900.0 604.8"/>
+<path class="reference" d="M745.8 654.7L749.0 663.5L752.1 655.8L755.3 657.3L758.4 650.6L761.5 652.3L764.7 661.6L767.8 653.9L771.0 652.5L774.1 653.8L777.3 653.9L780.4 653.8L783.6 655.5L786.7 660.6L789.9 650.3L793.0 643.5L796.2 638.2L799.3 640.7L802.5 641.2L805.6 639.1L808.7 642.5L811.9 635.7L815.0 636.2L818.2 633.8L821.3 633.7L824.5 637.7L827.6 646.1L830.8 649.5L833.9 645.9L837.1 643.0L840.2 636.2L843.4 636.2L846.5 639.8L849.7 635.8L852.8 628.0L855.9 623.6L859.1 627.2L862.2 628.3L865.4 625.7L868.5 632.0L871.7 631.7L874.8 624.3L878.0 637.5L881.1 636.8L884.3 644.0L887.4 620.6L890.6 626.3L893.7 631.4L896.9 641.8L900.0 646.6"/>
+<path class="focus estimated" d="M833.9 640.2L837.1 637.8L840.2 633.4"/>
+<path class="focus" d="M846.5 638.1L849.7 631.3L852.8 625.8L855.9 621.6L859.1 625.1L862.2 626.3L865.4 624.7"/>
+<path class="focus" d="M874.8 622.7L878.0 637.3L881.1 637.6L884.3 642.8L887.4 623.4L890.6 631.0L893.7 635.9L896.9 645.4"/>
+<path class="focus estimated" d="M896.9 645.4L900.0 647.5"/>
+<circle class="dot" cx="900.0" cy="647.5" r="3"/>
+<circle class="hit" cx="833.9" cy="640.2" r="5"><title>Argentina 2004: 10,352 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="837.1" cy="637.8" r="5"><title>Argentina 2005: 11,516 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="840.2" cy="633.4" r="5"><title>Argentina 2006: 14,078 eggs/month</title></circle>
+<circle class="hit" cx="846.5" cy="638.1" r="5"><title>Argentina 2008: 11,401 eggs/month</title></circle>
+<circle class="hit" cx="849.7" cy="631.3" r="5"><title>Argentina 2009: 15,399 eggs/month</title></circle>
+<circle class="hit" cx="852.8" cy="625.8" r="5"><title>Argentina 2010: 19,739 eggs/month</title></circle>
+<circle class="hit" cx="855.9" cy="621.6" r="5"><title>Argentina 2011: 23,839 eggs/month</title></circle>
+<circle class="hit" cx="859.1" cy="625.1" r="5"><title>Argentina 2012: 20,330 eggs/month</title></circle>
+<circle class="hit" cx="862.2" cy="626.3" r="5"><title>Argentina 2013: 19,330 eggs/month</title></circle>
+<circle class="hit" cx="865.4" cy="624.7" r="5"><title>Argentina 2014: 20,740 eggs/month</title></circle>
+<circle class="hit" cx="874.8" cy="622.7" r="5"><title>Argentina 2017: 22,619 eggs/month</title></circle>
+<circle class="hit" cx="878.0" cy="637.3" r="5"><title>Argentina 2018: 11,801 eggs/month</title></circle>
+<circle class="hit" cx="881.1" cy="637.6" r="5"><title>Argentina 2019: 11,636 eggs/month</title></circle>
+<circle class="hit" cx="884.3" cy="642.8" r="5"><title>Argentina 2020: 9,234 eggs/month</title></circle>
+<circle class="hit" cx="887.4" cy="623.4" r="5"><title>Argentina 2021: 21,974 eggs/month</title></circle>
+<circle class="hit" cx="890.6" cy="631.0" r="5"><title>Argentina 2022: 15,646 eggs/month</title></circle>
+<circle class="hit" cx="893.7" cy="635.9" r="5"><title>Argentina 2023: 12,565 eggs/month</title></circle>
+<circle class="hit" cx="896.9" cy="645.4" r="5"><title>Argentina 2024: 8,217 eggs/month</title></circle>
+<circle class="hit" cx="900.0" cy="647.5" r="5"><title>Argentina 2025: 7,479 eggs/month (estimated)</title></circle>
+</g>
+<g aria-label="Mexico">
+<text class="ink" x="918.0" y="566.0" font-size="13" font-weight="bold">Mexico</text>
+<text class="muted" x="1198.0" y="566.0" font-size="11" text-anchor="end">2025: 8.9k</text>
+<line class="grid" x1="962.0" y1="744.0" x2="1198.0" y2="744.0"/>
+<text class="muted" x="958.0" y="747.5" font-size="10" text-anchor="end">100</text>
+<line class="grid" x1="962.0" y1="692.5" x2="1198.0" y2="692.5"/>
+<text class="muted" x="958.0" y="696.0" font-size="10" text-anchor="end">1k</text>
+<line class="grid" x1="962.0" y1="641.0" x2="1198.0" y2="641.0"/>
+<text class="muted" x="958.0" y="644.5" font-size="10" text-anchor="end">10k</text>
+<line class="grid" x1="962.0" y1="589.5" x2="1198.0" y2="589.5"/>
+<text class="muted" x="958.0" y="593.0" font-size="10" text-anchor="end">100k</text>
+<line class="axis" x1="962.0" y1="744.0" x2="1198.0" y2="744.0"/>
+<text class="muted" x="962.0" y="758.0" font-size="10" text-anchor="middle">1950</text>
+<text class="muted" x="1040.7" y="758.0" font-size="10" text-anchor="middle">1975</text>
+<text class="muted" x="1119.3" y="758.0" font-size="10" text-anchor="middle">2000</text>
+<text class="muted" x="1198.0" y="758.0" font-size="10" text-anchor="middle">2025</text>
+<path class="context" d="M1100.5 602.5L1103.6 602.3L1106.7 602.4L1109.9 599.6L1113.0 595.4L1116.2 591.1L1119.3 589.9L1122.5 589.5L1125.6 586.9L1128.8 594.0L1131.9 592.8L1135.1 581.6L1138.2 584.3L1141.4 600.5L1144.5 605.4L1147.7 599.0L1150.8 595.2L1153.9 602.2L1157.1 602.5L1160.2 604.2L1163.4 607.1L1166.5 612.8L1169.7 595.0L1172.8 597.2L1176.0 603.1L1179.1 595.2L1182.3 596.1L1185.4 597.4L1188.6 614.5L1191.7 610.2L1194.9 612.7L1198.0 615.8"/>
+<path class="context" d="M1116.2 603.1L1119.3 603.4L1122.5 602.6L1125.6 602.9L1128.8 596.8"/>
+<path class="context" d="M1135.1 593.6L1138.2 594.0L1141.4 596.5L1144.5 599.5L1147.7 600.0L1150.8 598.7L1153.9 598.4L1157.1 603.6L1160.2 604.5L1163.4 602.8L1166.5 601.9L1169.7 598.4L1172.8 597.3L1176.0 596.7"/>
+<path class="context" d="M1182.3 595.1L1185.4 595.1L1188.6 594.1L1191.7 593.1L1194.9 593.3L1198.0 592.7"/>
+<path class="context" d="M1135.1 603.4L1138.2 606.1L1141.4 611.2L1144.5 611.2L1147.7 612.8L1150.8 607.6L1153.9 609.7L1157.1 618.5L1160.2 609.3L1163.4 612.0L1166.5 613.1L1169.7 612.3L1172.8 618.8L1176.0 617.2L1179.1 615.2L1182.3 613.1L1185.4 614.9L1188.6 620.8L1191.7 621.7L1194.9 619.0L1198.0 619.4"/>
+<path class="context" d="M1135.1 603.7L1138.2 609.6L1141.4 611.3L1144.5 612.1L1147.7 612.9L1150.8 615.1L1153.9 616.0L1157.1 611.9L1160.2 605.0L1163.4 603.0L1166.5 603.3L1169.7 601.2L1172.8 608.9L1176.0 606.7L1179.1 604.2L1182.3 594.0L1185.4 591.8L1188.6 601.6"/>
+<path class="context" d="M1150.8 689.0L1153.9 682.0L1157.1 676.3L1160.2 677.0"/>
+<path class="context" d="M1166.5 675.5L1169.7 680.7L1172.8 684.9L1176.0 680.0"/>
+<path class="context" d="M1182.3 679.8L1185.4 676.3L1188.6 671.9L1191.7 691.4L1194.9 680.5"/>
+<path class="context" d="M1176.0 652.2L1179.1 654.0L1182.3 650.7L1185.4 653.8L1188.6 653.4L1191.7 652.8L1194.9 653.5L1198.0 653.4"/>
+<path class="context" d="M1144.5 620.5L1147.7 621.9L1150.8 622.1L1153.9 622.1L1157.1 628.4L1160.2 627.5L1163.4 626.0L1166.5 623.9L1169.7 620.5L1172.8 624.3L1176.0 625.9L1179.1 625.3L1182.3 625.2"/>
+<path class="context" d="M1131.9 640.2L1135.1 637.8L1138.2 633.4"/>
+<path class="context" d="M1144.5 638.1L1147.7 631.3L1150.8 625.8L1153.9 621.6L1157.1 625.1L1160.2 626.3L1163.4 624.7"/>
+<path class="context" d="M1172.8 622.7L1176.0 637.3L1179.1 637.6L1182.3 642.8L1185.4 623.4L1188.6 631.0L1191.7 635.9L1194.9 645.4L1198.0 647.5"/>
+<path class="context" d="M1163.4 643.7L1166.5 646.1L1169.7 641.8L1172.8 639.8L1176.0 640.0L1179.1 640.6L1182.3 640.4L1185.4 642.0L1188.6 642.0L1191.7 642.0L1194.9 641.5L1198.0 641.2"/>
+<path class="context" d="M1135.1 634.7L1138.2 632.7L1141.4 628.5L1144.5 627.1L1147.7 625.7L1150.8 626.2L1153.9 621.8L1157.1 634.3L1160.2 627.6L1163.4 627.2L1166.5 625.9L1169.7 621.6L1172.8 628.9L1176.0 623.3L1179.1 621.9L1182.3 619.7L1185.4 622.5L1188.6 631.3L1191.7 633.2L1194.9 625.8L1198.0 623.9"/>
+<path class="context" d="M1141.4 620.9L1144.5 623.9L1147.7 625.0L1150.8 625.8L1153.9 628.0L1157.1 632.6L1160.2 633.6L1163.4 633.9"/>
+<path class="context" d="M1185.4 634.7L1188.6 637.0L1191.7 640.3L1194.9 641.0L1198.0 643.1"/>
+<path class="context" d="M1103.6 627.8L1106.7 630.9L1109.9 630.5L1113.0 628.6L1116.2 630.7"/>
+<path class="context" d="M1122.5 631.1L1125.6 617.8L1128.8 625.9L1131.9 625.6L1135.1 625.7L1138.2 622.8L1141.4 624.0L1144.5 625.0L1147.7 626.2"/>
+<path class="context" d="M1131.9 604.2L1135.1 605.8L1138.2 605.9L1141.4 604.1L1144.5 602.2L1147.7 601.9L1150.8 604.7L1153.9 603.9L1157.1 605.3L1160.2 601.8L1163.4 599.4L1166.5 598.8L1169.7 599.0L1172.8 600.6L1176.0 599.2L1179.1 598.2L1182.3 597.4L1185.4 602.0L1188.6 602.3L1191.7 600.2L1194.9 603.4L1198.0 604.8"/>
+<path class="reference" d="M1012.3 686.2L1015.5 687.7L1018.6 682.8L1021.8 683.9L1024.9 680.1L1028.1 676.2L1031.2 678.3L1034.4 673.6L1037.5 674.1L1040.7 677.3L1043.8 673.7L1047.0 675.0L1050.1 673.5L1053.3 670.0L1056.4 662.5L1059.5 661.0L1062.7 660.6L1065.8 663.5L1069.0 661.5L1072.1 660.4L1075.3 668.5L1078.4 665.6L1081.6 663.0L1084.7 660.9L1087.9 658.5L1091.0 653.3L1094.2 649.6L1097.3 644.4L1100.5 643.6L1103.6 646.8L1106.7 651.3L1109.9 647.3L1113.0 640.9L1116.2 635.6L1119.3 634.7L1122.5 635.4L1125.6 633.3L1128.8 636.0L1131.9 636.3L1135.1 631.3L1138.2 630.3L1141.4 631.0L1144.5 635.3L1147.7 637.0L1150.8 635.1L1153.9 633.9L1157.1 637.5L1160.2 641.8L1163.4 640.9L1166.5 637.6L1169.7 635.5L1172.8 635.1L1176.0 634.8L1179.1 635.2L1182.3 637.6L1185.4 635.9L1188.6 636.6L1191.7 636.9L1194.9 637.5L1198.0 638.0"/>
+<path class="focus" d="M1125.6 628.1L1128.8 630.8L1131.9 633.3L1135.1 628.9L1138.2 629.0L1141.4 630.2L1144.5 635.4L1147.7 636.7L1150.8 636.2L1153.9 636.7L1157.1 641.1L1160.2 644.9L1163.4 645.1L1166.5 641.9L1169.7 640.7L1172.8 641.9L1176.0 642.2L1179.1 642.8L1182.3 642.4L1185.4 642.3L1188.6 644.7L1191.7 644.0L1194.9 643.4"/>
+<path class="focus estimated" d="M1194.9 643.4L1198.0 643.5"/>
+<circle class="dot" cx="1198.0" cy="643.5" r="3"/>
+<circle class="hit" cx="1125.6" cy="628.1" r="5"><title>Mexico 2002: 17,775 eggs/month</title></circle>
+<circle class="hit" cx="1128.8" cy="630.8" r="5"><title>Mexico 2003: 15,767 eggs/month</title></circle>
+<circle class="hit" cx="1131.9" cy="633.3" r="5"><title>Mexico 2004: 14,134 eggs/month</title></circle>
+<circle class="hit" cx="1135.1" cy="628.9" r="5"><title>Mexico 2005: 17,144 eggs/month</title></circle>
+<circle class="hit" cx="1138.2" cy="629.0" r="5"><title>Mexico 2006: 17,102 eggs/month</title></circle>
+<circle class="hit" cx="1141.4" cy="630.2" r="5"><title>Mexico 2007: 16,240 eggs/month</title></circle>
+<circle class="hit" cx="1144.5" cy="635.4" r="5"><title>Mexico 2008: 12,849 eggs/month</title></circle>
+<circle class="hit" cx="1147.7" cy="636.7" r="5"><title>Mexico 2009: 12,096 eggs/month</title></circle>
+<circle class="hit" cx="1150.8" cy="636.2" r="5"><title>Mexico 2010: 12,392 eggs/month</title></circle>
+<circle class="hit" cx="1153.9" cy="636.7" r="5"><title>Mexico 2011: 12,111 eggs/month</title></circle>
+<circle class="hit" cx="1157.1" cy="641.1" r="5"><title>Mexico 2012: 9,960 eggs/month</title></circle>
+<circle class="hit" cx="1160.2" cy="644.9" r="5"><title>Mexico 2013: 8,388 eggs/month</title></circle>
+<circle class="hit" cx="1163.4" cy="645.1" r="5"><title>Mexico 2014: 8,316 eggs/month</title></circle>
+<circle class="hit" cx="1166.5" cy="641.9" r="5"><title>Mexico 2015: 9,616 eggs/month</title></circle>
+<circle class="hit" cx="1169.7" cy="640.7" r="5"><title>Mexico 2016: 10,135 eggs/month</title></circle>
+<circle class="hit" cx="1172.8" cy="641.9" r="5"><title>Mexico 2017: 9,620 eggs/month</title></circle>
+<circle class="hit" cx="1176.0" cy="642.2" r="5"><title>Mexico 2018: 9,458 eggs/month</title></circle>
+<circle class="hit" cx="1179.1" cy="642.8" r="5"><title>Mexico 2019: 9,238 eggs/month</title></circle>
+<circle class="hit" cx="1182.3" cy="642.4" r="5"><title>Mexico 2020: 9,382 eggs/month</title></circle>
+<circle class="hit" cx="1185.4" cy="642.3" r="5"><title>Mexico 2021: 9,426 eggs/month</title></circle>
+<circle class="hit" cx="1188.6" cy="644.7" r="5"><title>Mexico 2022: 8,485 eggs/month</title></circle>
+<circle class="hit" cx="1191.7" cy="644.0" r="5"><title>Mexico 2023: 8,744 eggs/month</title></circle>
+<circle class="hit" cx="1194.9" cy="643.4" r="5"><title>Mexico 2024: 8,976 eggs/month</title></circle>
+<circle class="hit" cx="1198.0" cy="643.5" r="5"><title>Mexico 2025: 8,938 eggs/month (estimated)</title></circle>
+</g>
+<g aria-label="Thailand">
+<text class="ink" x="24.0" y="796.0" font-size="13" font-weight="bold">Thailand</text>
+<text class="muted" x="304.0" y="796.0" font-size="11" text-anchor="end">2025: 9.9k</text>
+<line class="grid" x1="68.0" y1="974.0" x2="304.0" y2="974.0"/>
+<text class="muted" x="64.0" y="977.5" font-size="10" text-anchor="end">100</text>
+<line class="grid" x1="68.0" y1="922.5" x2="304.0" y2="922.5"/>
+<text class="muted" x="64.0" y="926.0" font-size="10" text-anchor="end">1k</text>
+<line class="grid" x1="68.0" y1="871.0" x2="304.0" y2="871.0"/>
+<text class="muted" x="64.0" y="874.5" font-size="10" text-anchor="end">10k</text>
+<line class="grid" x1="68.0" y1="819.5" x2="304.0" y2="819.5"/>
+<text class="muted" x="64.0" y="823.0" font-size="10" text-anchor="end">100k</text>
+<line class="axis" x1="68.0" y1="974.0" x2="304.0" y2="974.0"/>
+<text class="muted" x="68.0" y="988.0" font-size="10" text-anchor="middle">1950</text>
+<text class="muted" x="146.7" y="988.0" font-size="10" text-anchor="middle">1975</text>
+<text class="muted" x="225.3" y="988.0" font-size="10" text-anchor="middle">2000</text>
+<text class="muted" x="304.0" y="988.0" font-size="10" text-anchor="middle">2025</text>
+<path class="context" d="M206.5 832.5L209.6 832.3L212.7 832.4L215.9 829.6L219.0 825.4L222.2 821.1L225.3 819.9L228.5 819.5L231.6 816.9L234.8 824.0L237.9 822.8L241.1 811.6L244.2 814.3L247.4 830.5L250.5 835.4L253.7 829.0L256.8 825.2L259.9 832.2L263.1 832.5L266.2 834.2L269.4 837.1L272.5 842.8L275.7 825.0L278.8 827.2L282.0 833.1L285.1 825.2L288.3 826.1L291.4 827.4L294.6 844.5L297.7 840.2L300.9 842.7L304.0 845.8"/>
+<path class="context" d="M222.2 833.1L225.3 833.4L228.5 832.6L231.6 832.9L234.8 826.8"/>
+<path class="context" d="M241.1 823.6L244.2 824.0L247.4 826.5L250.5 829.5L253.7 830.0L256.8 828.7L259.9 828.4L263.1 833.6L266.2 834.5L269.4 832.8L272.5 831.9L275.7 828.4L278.8 827.3L282.0 826.7"/>
+<path class="context" d="M288.3 825.1L291.4 825.1L294.6 824.1L297.7 823.1L300.9 823.3L304.0 822.7"/>
+<path class="context" d="M241.1 833.4L244.2 836.1L247.4 841.2L250.5 841.2L253.7 842.8L256.8 837.6L259.9 839.7L263.1 848.5L266.2 839.3L269.4 842.0L272.5 843.1L275.7 842.3L278.8 848.8L282.0 847.2L285.1 845.2L288.3 843.1L291.4 844.9L294.6 850.8L297.7 851.7L300.9 849.0L304.0 849.4"/>
+<path class="context" d="M241.1 833.7L244.2 839.6L247.4 841.3L250.5 842.1L253.7 842.9L256.8 845.1L259.9 846.0L263.1 841.9L266.2 835.0L269.4 833.0L272.5 833.3L275.7 831.2L278.8 838.9L282.0 836.7L285.1 834.2L288.3 824.0L291.4 821.8L294.6 831.6"/>
+<path class="context" d="M256.8 919.0L259.9 912.0L263.1 906.3L266.2 907.0"/>
+<path class="context" d="M272.5 905.5L275.7 910.7L278.8 914.9L282.0 910.0"/>
+<path class="context" d="M288.3 909.8L291.4 906.3L294.6 901.9L297.7 921.4L300.9 910.5"/>
+<path class="context" d="M282.0 882.2L285.1 884.0L288.3 880.7L291.4 883.8L294.6 883.4L297.7 882.8L300.9 883.5L304.0 883.4"/>
+<path class="context" d="M250.5 850.5L253.7 851.9L256.8 852.1L259.9 852.1L263.1 858.4L266.2 857.5L269.4 856.0L272.5 853.9L275.7 850.5L278.8 854.3L282.0 855.9L285.1 855.3L288.3 855.2"/>
+<path class="context" d="M237.9 870.2L241.1 867.8L244.2 863.4"/>
+<path class="context" d="M250.5 868.1L253.7 861.3L256.8 855.8L259.9 851.6L263.1 855.1L266.2 856.3L269.4 854.7"/>
+<path class="context" d="M278.8 852.7L282.0 867.3L285.1 867.6L288.3 872.8L291.4 853.4L294.6 861.0L297.7 865.9L300.9 875.4L304.0 877.5"/>
+<path class="context" d="M231.6 858.1L234.8 860.8L237.9 863.3L241.1 858.9L244.2 859.0L247.4 860.2L250.5 865.4L253.7 866.7L256.8 866.2L259.9 866.7L263.1 871.1L266.2 874.9L269.4 875.1L272.5 871.9L275.7 870.7L278.8 871.9L282.0 872.2L285.1 872.8L288.3 872.4L291.4 872.3L294.6 874.7L297.7 874.0L300.9 873.4L304.0 873.5"/>
+<path class="context" d="M241.1 864.7L244.2 862.7L247.4 858.5L250.5 857.1L253.7 855.7L256.8 856.2L259.9 851.8L263.1 864.3L266.2 857.6L269.4 857.2L272.5 855.9L275.7 851.6L278.8 858.9L282.0 853.3L285.1 851.9L288.3 849.7L291.4 852.5L294.6 861.3L297.7 863.2L300.9 855.8L304.0 853.9"/>
+<path class="context" d="M247.4 850.9L250.5 853.9L253.7 855.0L256.8 855.8L259.9 858.0L263.1 862.6L266.2 863.6L269.4 863.9"/>
+<path class="context" d="M291.4 864.7L294.6 867.0L297.7 870.3L300.9 871.0L304.0 873.1"/>
+<path class="context" d="M209.6 857.8L212.7 860.9L215.9 860.5L219.0 858.6L222.2 860.7"/>
+<path class="context" d="M228.5 861.1L231.6 847.8L234.8 855.9L237.9 855.6L241.1 855.7L244.2 852.8L247.4 854.0L250.5 855.0L253.7 856.2"/>
+<path class="context" d="M237.9 834.2L241.1 835.8L244.2 835.9L247.4 834.1L250.5 832.2L253.7 831.9L256.8 834.7L259.9 833.9L263.1 835.3L266.2 831.8L269.4 829.4L272.5 828.8L275.7 829.0L278.8 830.6L282.0 829.2L285.1 828.2L288.3 827.4L291.4 832.0L294.6 832.3L297.7 830.2L300.9 833.4L304.0 834.8"/>
+<path class="reference" d="M118.3 934.8L121.5 936.3L124.6 934.8L127.8 933.1L130.9 931.3L134.1 931.4L137.2 927.2L140.4 929.2L143.5 933.2L146.7 930.9L149.8 933.3L153.0 930.4L156.1 928.6L159.3 929.2L162.4 928.0L165.5 925.7L168.7 924.1L171.8 922.1L175.0 919.1L178.1 919.2L181.3 915.7L184.4 911.7L187.6 906.9L190.7 898.5L193.9 897.1L197.0 893.8L200.2 890.0L203.3 887.6L206.5 886.1L209.6 885.3L212.7 894.0L215.9 893.2L219.0 897.3L222.2 896.6L225.3 890.2L228.5 892.6L231.6 890.8L234.8 886.9L237.9 894.0L241.1 895.1L244.2 888.2L247.4 887.2L250.5 888.7L253.7 889.3L256.8 886.7L259.9 888.3L263.1 883.3L266.2 886.9L269.4 886.4L272.5 882.6L275.7 883.3L278.8 879.6L282.0 878.8L285.1 878.7L288.3 880.3L291.4 880.6L294.6 879.3L297.7 878.2L300.9 877.1L304.0 876.3"/>
+<path class="focus" d="M269.4 873.7L272.5 876.1L275.7 871.8L278.8 869.8L282.0 870.0L285.1 870.6L288.3 870.4"/>
+<path class="focus estimated" d="M288.3 870.4L291.4 872.0L294.6 872.0L297.7 872.0L300.9 871.5L304.0 871.2"/>
+<circle class="dot" cx="304.0" cy="871.2" r="3"/>
+<circle class="hit" cx="269.4" cy="873.7" r="5"><title>Thailand 2014: 8,863 eggs/month</title></circle>
+<circle class="hit" cx="272.5" cy="876.1" r="5"><title>Thailand 2015: 7,962 eggs/month</title></circle>
+<circle class="hit" cx="275.7" cy="871.8" r="5"><title>Thailand 2016: 9,645 eggs/month</title></circle>
+<circle class="hit" cx="278.8" cy="869.8" r="5"><title>Thailand 2017: 10,531 eggs/month</title></circle>
+<circle class="hit" cx="282.0" cy="870.0" r="5"><title>Thailand 2018: 10,454 eggs/month</title></circle>
+<circle class="hit" cx="285.1" cy="870.6" r="5"><title>Thailand 2019: 10,170 eggs/month</title></circle>
+<circle class="hit" cx="288.3" cy="870.4" r="5"><title>Thailand 2020: 10,255 eggs/month</title></circle>
+<circle class="hit" cx="291.4" cy="872.0" r="5"><title>Thailand 2021: 9,573 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="294.6" cy="872.0" r="5"><title>Thailand 2022: 9,583 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="297.7" cy="872.0" r="5"><title>Thailand 2023: 9,578 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="300.9" cy="871.5" r="5"><title>Thailand 2024: 9,781 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="304.0" cy="871.2" r="5"><title>Thailand 2025: 9,898 eggs/month (estimated)</title></circle>
+</g>
+<g aria-label="Poland">
+<text class="ink" x="322.0" y="796.0" font-size="13" font-weight="bold">Poland</text>
+<text class="muted" x="602.0" y="796.0" font-size="11" text-anchor="end">2025: 21.4k</text>
+<line class="grid" x1="366.0" y1="974.0" x2="602.0" y2="974.0"/>
+<text class="muted" x="362.0" y="977.5" font-size="10" text-anchor="end">100</text>
+<line class="grid" x1="366.0" y1="922.5" x2="602.0" y2="922.5"/>
+<text class="muted" x="362.0" y="926.0" font-size="10" text-anchor="end">1k</text>
+<line class="grid" x1="366.0" y1="871.0" x2="602.0" y2="871.0"/>
+<text class="muted" x="362.0" y="874.5" font-size="10" text-anchor="end">10k</text>
+<line class="grid" x1="366.0" y1="819.5" x2="602.0" y2="819.5"/>
+<text class="muted" x="362.0" y="823.0" font-size="10" text-anchor="end">100k</text>
+<line class="axis" x1="366.0" y1="974.0" x2="602.0" y2="974.0"/>
+<text class="muted" x="366.0" y="988.0" font-size="10" text-anchor="middle">1950</text>
+<text class="muted" x="444.7" y="988.0" font-size="10" text-anchor="middle">1975</text>
+<text class="muted" x="523.3" y="988.0" font-size="10" text-anchor="middle">2000</text>
+<text class="muted" x="602.0" y="988.0" font-size="10" text-anchor="middle">2025</text>
+<path class="context" d="M504.5 832.5L507.6 832.3L510.7 832.4L513.9 829.6L517.0 825.4L520.2 821.1L523.3 819.9L526.5 819.5L529.6 816.9L532.8 824.0L535.9 822.8L539.1 811.6L542.2 814.3L545.4 830.5L548.5 835.4L551.7 829.0L554.8 825.2L557.9 832.2L561.1 832.5L564.2 834.2L567.4 837.1L570.5 842.8L573.7 825.0L576.8 827.2L580.0 833.1L583.1 825.2L586.3 826.1L589.4 827.4L592.6 844.5L595.7 840.2L598.9 842.7L602.0 845.8"/>
+<path class="context" d="M520.2 833.1L523.3 833.4L526.5 832.6L529.6 832.9L532.8 826.8"/>
+<path class="context" d="M539.1 823.6L542.2 824.0L545.4 826.5L548.5 829.5L551.7 830.0L554.8 828.7L557.9 828.4L561.1 833.6L564.2 834.5L567.4 832.8L570.5 831.9L573.7 828.4L576.8 827.3L580.0 826.7"/>
+<path class="context" d="M586.3 825.1L589.4 825.1L592.6 824.1L595.7 823.1L598.9 823.3L602.0 822.7"/>
+<path class="context" d="M539.1 833.4L542.2 836.1L545.4 841.2L548.5 841.2L551.7 842.8L554.8 837.6L557.9 839.7L561.1 848.5L564.2 839.3L567.4 842.0L570.5 843.1L573.7 842.3L576.8 848.8L580.0 847.2L583.1 845.2L586.3 843.1L589.4 844.9L592.6 850.8L595.7 851.7L598.9 849.0L602.0 849.4"/>
+<path class="context" d="M539.1 833.7L542.2 839.6L545.4 841.3L548.5 842.1L551.7 842.9L554.8 845.1L557.9 846.0L561.1 841.9L564.2 835.0L567.4 833.0L570.5 833.3L573.7 831.2L576.8 838.9L580.0 836.7L583.1 834.2L586.3 824.0L589.4 821.8L592.6 831.6"/>
+<path class="context" d="M554.8 919.0L557.9 912.0L561.1 906.3L564.2 907.0"/>
+<path class="context" d="M570.5 905.5L573.7 910.7L576.8 914.9L580.0 910.0"/>
+<path class="context" d="M586.3 909.8L589.4 906.3L592.6 901.9L595.7 921.4L598.9 910.5"/>
+<path class="context" d="M580.0 882.2L583.1 884.0L586.3 880.7L589.4 883.8L592.6 883.4L595.7 882.8L598.9 883.5L602.0 883.4"/>
+<path class="context" d="M548.5 850.5L551.7 851.9L554.8 852.1L557.9 852.1L561.1 858.4L564.2 857.5L567.4 856.0L570.5 853.9L573.7 850.5L576.8 854.3L580.0 855.9L583.1 855.3L586.3 855.2"/>
+<path class="context" d="M535.9 870.2L539.1 867.8L542.2 863.4"/>
+<path class="context" d="M548.5 868.1L551.7 861.3L554.8 855.8L557.9 851.6L561.1 855.1L564.2 856.3L567.4 854.7"/>
+<path class="context" d="M576.8 852.7L580.0 867.3L583.1 867.6L586.3 872.8L589.4 853.4L592.6 861.0L595.7 865.9L598.9 875.4L602.0 877.5"/>
+<path class="context" d="M529.6 858.1L532.8 860.8L535.9 863.3L539.1 858.9L542.2 859.0L545.4 860.2L548.5 865.4L551.7 866.7L554.8 866.2L557.9 866.7L561.1 871.1L564.2 874.9L567.4 875.1L570.5 871.9L573.7 870.7L576.8 871.9L580.0 872.2L583.1 872.8L586.3 872.4L589.4 872.3L592.6 874.7L595.7 874.0L598.9 873.4L602.0 873.5"/>
+<path class="context" d="M567.4 873.7L570.5 876.1L573.7 871.8L576.8 869.8L580.0 870.0L583.1 870.6L586.3 870.4L589.4 872.0L592.6 872.0L595.7 872.0L598.9 871.5L602.0 871.2"/>
+<path class="context" d="M545.4 850.9L548.5 853.9L551.7 855.0L554.8 855.8L557.9 858.0L561.1 862.6L564.2 863.6L567.4 863.9"/>
+<path class="context" d="M589.4 864.7L592.6 867.0L595.7 870.3L598.9 871.0L602.0 873.1"/>
+<path class="context" d="M507.6 857.8L510.7 860.9L513.9 860.5L517.0 858.6L520.2 860.7"/>
+<path class="context" d="M526.5 861.1L529.6 847.8L532.8 855.9L535.9 855.6L539.1 855.7L542.2 852.8L545.4 854.0L548.5 855.0L551.7 856.2"/>
+<path class="context" d="M535.9 834.2L539.1 835.8L542.2 835.9L545.4 834.1L548.5 832.2L551.7 831.9L554.8 834.7L557.9 833.9L561.1 835.3L564.2 831.8L567.4 829.4L570.5 828.8L573.7 829.0L576.8 830.6L580.0 829.2L583.1 828.2L586.3 827.4L589.4 832.0L592.6 832.3L595.7 830.2L598.9 833.4L602.0 834.8"/>
+<path class="reference" d="M491.9 895.2L495.0 895.9L498.2 891.5L501.3 898.9L504.5 896.6L507.6 887.5L510.7 890.5L513.9 885.4L517.0 881.0L520.2 875.9L523.3 878.9L526.5 874.7L529.6 872.7L532.8 874.1L535.9 872.0L539.1 869.2L542.2 869.7L545.4 866.8L548.5 864.5L551.7 869.7L554.8 862.6L557.9 859.2L561.1 871.5L564.2 864.7L567.4 864.1L570.5 861.4L573.7 858.1L576.8 862.9L580.0 856.7L583.1 856.1L586.3 855.3L589.4 855.6L592.6 863.4L595.7 864.2L598.9 857.9L602.0 858.2"/>
+<path class="focus" d="M539.1 864.7L542.2 862.7L545.4 858.5L548.5 857.1L551.7 855.7L554.8 856.2L557.9 851.8L561.1 864.3L564.2 857.6L567.4 857.2L570.5 855.9L573.7 851.6L576.8 858.9L580.0 853.3L583.1 851.9L586.3 849.7L589.4 852.5L592.6 861.3L595.7 863.2L598.9 855.8"/>
+<path class="focus estimated" d="M598.9 855.8L602.0 853.9"/>
+<circle class="dot" cx="602.0" cy="853.9" r="3"/>
+<circle class="hit" cx="539.1" cy="864.7" r="5"><title>Poland 2005: 13,237 eggs/month</title></circle>
+<circle class="hit" cx="542.2" cy="862.7" r="5"><title>Poland 2006: 14,473 eggs/month</title></circle>
+<circle class="hit" cx="545.4" cy="858.5" r="5"><title>Poland 2007: 17,501 eggs/month</title></circle>
+<circle class="hit" cx="548.5" cy="857.1" r="5"><title>Poland 2008: 18,644 eggs/month</title></circle>
+<circle class="hit" cx="551.7" cy="855.7" r="5"><title>Poland 2009: 19,843 eggs/month</title></circle>
+<circle class="hit" cx="554.8" cy="856.2" r="5"><title>Poland 2010: 19,415 eggs/month</title></circle>
+<circle class="hit" cx="557.9" cy="851.8" r="5"><title>Poland 2011: 23,606 eggs/month</title></circle>
+<circle class="hit" cx="561.1" cy="864.3" r="5"><title>Poland 2012: 13,512 eggs/month</title></circle>
+<circle class="hit" cx="564.2" cy="857.6" r="5"><title>Poland 2013: 18,226 eggs/month</title></circle>
+<circle class="hit" cx="567.4" cy="857.2" r="5"><title>Poland 2014: 18,552 eggs/month</title></circle>
+<circle class="hit" cx="570.5" cy="855.9" r="5"><title>Poland 2015: 19,643 eggs/month</title></circle>
+<circle class="hit" cx="573.7" cy="851.6" r="5"><title>Poland 2016: 23,791 eggs/month</title></circle>
+<circle class="hit" cx="576.8" cy="858.9" r="5"><title>Poland 2017: 17,184 eggs/month</title></circle>
+<circle class="hit" cx="580.0" cy="853.3" r="5"><title>Poland 2018: 22,102 eggs/month</title></circle>
+<circle class="hit" cx="583.1" cy="851.9" r="5"><title>Poland 2019: 23,468 eggs/month</title></circle>
+<circle class="hit" cx="586.3" cy="849.7" r="5"><title>Poland 2020: 25,876 eggs/month</title></circle>
+<circle class="hit" cx="589.4" cy="852.5" r="5"><title>Poland 2021: 22,865 eggs/month</title></circle>
+<circle class="hit" cx="592.6" cy="861.3" r="5"><title>Poland 2022: 15,463 eggs/month</title></circle>
+<circle class="hit" cx="595.7" cy="863.2" r="5"><title>Poland 2023: 14,151 eggs/month</title></circle>
+<circle class="hit" cx="598.9" cy="855.8" r="5"><title>Poland 2024: 19,693 eggs/month</title></circle>
+<circle class="hit" cx="602.0" cy="853.9" r="5"><title>Poland 2025: 21,444 eggs/month (estimated)</title></circle>
+</g>
+<g aria-label="Greece">
+<text class="ink" x="620.0" y="796.0" font-size="13" font-weight="bold">Greece</text>
+<text class="muted" x="900.0" y="796.0" font-size="11" text-anchor="end">2025: 9.1k</text>
+<line class="grid" x1="664.0" y1="974.0" x2="900.0" y2="974.0"/>
+<text class="muted" x="660.0" y="977.5" font-size="10" text-anchor="end">100</text>
+<line class="grid" x1="664.0" y1="922.5" x2="900.0" y2="922.5"/>
+<text class="muted" x="660.0" y="926.0" font-size="10" text-anchor="end">1k</text>
+<line class="grid" x1="664.0" y1="871.0" x2="900.0" y2="871.0"/>
+<text class="muted" x="660.0" y="874.5" font-size="10" text-anchor="end">10k</text>
+<line class="grid" x1="664.0" y1="819.5" x2="900.0" y2="819.5"/>
+<text class="muted" x="660.0" y="823.0" font-size="10" text-anchor="end">100k</text>
+<line class="axis" x1="664.0" y1="974.0" x2="900.0" y2="974.0"/>
+<text class="muted" x="664.0" y="988.0" font-size="10" text-anchor="middle">1950</text>
+<text class="muted" x="742.7" y="988.0" font-size="10" text-anchor="middle">1975</text>
+<text class="muted" x="821.3" y="988.0" font-size="10" text-anchor="middle">2000</text>
+<text class="muted" x="900.0" y="988.0" font-size="10" text-anchor="middle">2025</text>
+<path class="context" d="M802.5 832.5L805.6 832.3L808.7 832.4L811.9 829.6L815.0 825.4L818.2 821.1L821.3 819.9L824.5 819.5L827.6 816.9L830.8 824.0L833.9 822.8L837.1 811.6L840.2 814.3L843.4 830.5L846.5 835.4L849.7 829.0L852.8 825.2L855.9 832.2L859.1 832.5L862.2 834.2L865.4 837.1L868.5 842.8L871.7 825.0L874.8 827.2L878.0 833.1L881.1 825.2L884.3 826.1L887.4 827.4L890.6 844.5L893.7 840.2L896.9 842.7L900.0 845.8"/>
+<path class="context" d="M818.2 833.1L821.3 833.4L824.5 832.6L827.6 832.9L830.8 826.8"/>
+<path class="context" d="M837.1 823.6L840.2 824.0L843.4 826.5L846.5 829.5L849.7 830.0L852.8 828.7L855.9 828.4L859.1 833.6L862.2 834.5L865.4 832.8L868.5 831.9L871.7 828.4L874.8 827.3L878.0 826.7"/>
+<path class="context" d="M884.3 825.1L887.4 825.1L890.6 824.1L893.7 823.1L896.9 823.3L900.0 822.7"/>
+<path class="context" d="M837.1 833.4L840.2 836.1L843.4 841.2L846.5 841.2L849.7 842.8L852.8 837.6L855.9 839.7L859.1 848.5L862.2 839.3L865.4 842.0L868.5 843.1L871.7 842.3L874.8 848.8L878.0 847.2L881.1 845.2L884.3 843.1L887.4 844.9L890.6 850.8L893.7 851.7L896.9 849.0L900.0 849.4"/>
+<path class="context" d="M837.1 833.7L840.2 839.6L843.4 841.3L846.5 842.1L849.7 842.9L852.8 845.1L855.9 846.0L859.1 841.9L862.2 835.0L865.4 833.0L868.5 833.3L871.7 831.2L874.8 838.9L878.0 836.7L881.1 834.2L884.3 824.0L887.4 821.8L890.6 831.6"/>
+<path class="context" d="M852.8 919.0L855.9 912.0L859.1 906.3L862.2 907.0"/>
+<path class="context" d="M868.5 905.5L871.7 910.7L874.8 914.9L878.0 910.0"/>
+<path class="context" d="M884.3 909.8L887.4 906.3L890.6 901.9L893.7 921.4L896.9 910.5"/>
+<path class="context" d="M878.0 882.2L881.1 884.0L884.3 880.7L887.4 883.8L890.6 883.4L893.7 882.8L896.9 883.5L900.0 883.4"/>
+<path class="context" d="M846.5 850.5L849.7 851.9L852.8 852.1L855.9 852.1L859.1 858.4L862.2 857.5L865.4 856.0L868.5 853.9L871.7 850.5L874.8 854.3L878.0 855.9L881.1 855.3L884.3 855.2"/>
+<path class="context" d="M833.9 870.2L837.1 867.8L840.2 863.4"/>
+<path class="context" d="M846.5 868.1L849.7 861.3L852.8 855.8L855.9 851.6L859.1 855.1L862.2 856.3L865.4 854.7"/>
+<path class="context" d="M874.8 852.7L878.0 867.3L881.1 867.6L884.3 872.8L887.4 853.4L890.6 861.0L893.7 865.9L896.9 875.4L900.0 877.5"/>
+<path class="context" d="M827.6 858.1L830.8 860.8L833.9 863.3L837.1 858.9L840.2 859.0L843.4 860.2L846.5 865.4L849.7 866.7L852.8 866.2L855.9 866.7L859.1 871.1L862.2 874.9L865.4 875.1L868.5 871.9L871.7 870.7L874.8 871.9L878.0 872.2L881.1 872.8L884.3 872.4L887.4 872.3L890.6 874.7L893.7 874.0L896.9 873.4L900.0 873.5"/>
+<path class="context" d="M865.4 873.7L868.5 876.1L871.7 871.8L874.8 869.8L878.0 870.0L881.1 870.6L884.3 870.4L887.4 872.0L890.6 872.0L893.7 872.0L896.9 871.5L900.0 871.2"/>
+<path class="context" d="M837.1 864.7L840.2 862.7L843.4 858.5L846.5 857.1L849.7 855.7L852.8 856.2L855.9 851.8L859.1 864.3L862.2 857.6L865.4 857.2L868.5 855.9L871.7 851.6L874.8 858.9L878.0 853.3L881.1 851.9L884.3 849.7L887.4 852.5L890.6 861.3L893.7 863.2L896.9 855.8L900.0 853.9"/>
+<path class="context" d="M805.6 857.8L808.7 860.9L811.9 860.5L815.0 858.6L818.2 860.7"/>
+<path class="context" d="M824.5 861.1L827.6 847.8L830.8 855.9L833.9 855.6L837.1 855.7L840.2 852.8L843.4 854.0L846.5 855.0L849.7 856.2"/>
+<path class="context" d="M833.9 834.2L837.1 835.8L840.2 835.9L843.4 834.1L846.5 832.2L849.7 831.9L852.8 834.7L855.9 833.9L859.1 835.3L862.2 831.8L865.4 829.4L868.5 828.8L871.7 829.0L874.8 830.6L878.0 829.2L881.1 828.2L884.3 827.4L887.4 832.0L890.6 832.3L893.7 830.2L896.9 833.4L900.0 834.8"/>
+<path class="reference" d="M717.5 905.9L720.6 904.6L723.8 902.3L726.9 900.3L730.1 900.7L733.2 895.2L736.4 894.1L739.5 893.6L742.7 892.9L745.8 889.9L749.0 888.5L752.1 884.6L755.3 882.7L758.4 882.8L761.5 887.8L764.7 887.5L767.8 885.9L771.0 890.3L774.1 886.6L777.3 884.1L780.4 886.0L783.6 883.1L786.7 880.8L789.9 880.0L793.0 881.8L796.2 878.7L799.3 877.1L802.5 876.1L805.6 869.1L808.7 869.8L811.9 869.6L815.0 869.3L818.2 867.9L821.3 867.4L824.5 865.7L827.6 865.1L830.8 863.8L833.9 863.0L837.1 862.8L840.2 862.0L843.4 862.6L846.5 865.2L849.7 866.4L852.8 868.1L855.9 871.3L859.1 875.1L862.2 875.4L865.4 875.6L868.5 875.9L871.7 875.8L874.8 875.4L878.0 875.5L881.1 874.5L884.3 876.6L887.4 874.9L890.6 874.1L893.7 876.3L896.9 876.0L900.0 876.1"/>
+<path class="focus" d="M843.4 850.9L846.5 853.9L849.7 855.0L852.8 855.8L855.9 858.0L859.1 862.6L862.2 863.6L865.4 863.9"/>
+<path class="focus" d="M887.4 864.7L890.6 867.0L893.7 870.3L896.9 871.0"/>
+<path class="focus estimated" d="M896.9 871.0L900.0 873.1"/>
+<circle class="dot" cx="900.0" cy="873.1" r="3"/>
+<circle class="hit" cx="843.4" cy="850.9" r="5"><title>Greece 2007: 24,557 eggs/month</title></circle>
+<circle class="hit" cx="846.5" cy="853.9" r="5"><title>Greece 2008: 21,520 eggs/month</title></circle>
+<circle class="hit" cx="849.7" cy="855.0" r="5"><title>Greece 2009: 20,495 eggs/month</title></circle>
+<circle class="hit" cx="852.8" cy="855.8" r="5"><title>Greece 2010: 19,700 eggs/month</title></circle>
+<circle class="hit" cx="855.9" cy="858.0" r="5"><title>Greece 2011: 17,914 eggs/month</title></circle>
+<circle class="hit" cx="859.1" cy="862.6" r="5"><title>Greece 2012: 14,544 eggs/month</title></circle>
+<circle class="hit" cx="862.2" cy="863.6" r="5"><title>Greece 2013: 13,946 eggs/month</title></circle>
+<circle class="hit" cx="865.4" cy="863.9" r="5"><title>Greece 2014: 13,753 eggs/month</title></circle>
+<circle class="hit" cx="887.4" cy="864.7" r="5"><title>Greece 2021: 13,270 eggs/month</title></circle>
+<circle class="hit" cx="890.6" cy="867.0" r="5"><title>Greece 2022: 11,945 eggs/month</title></circle>
+<circle class="hit" cx="893.7" cy="870.3" r="5"><title>Greece 2023: 10,322 eggs/month</title></circle>
+<circle class="hit" cx="896.9" cy="871.0" r="5"><title>Greece 2024: 10,003 eggs/month</title></circle>
+<circle class="hit" cx="900.0" cy="873.1" r="5"><title>Greece 2025: 9,100 eggs/month (estimated)</title></circle>
+</g>
+<g aria-label="Israel">
+<text class="ink" x="918.0" y="796.0" font-size="13" font-weight="bold">Israel</text>
+<line class="grid" x1="962.0" y1="974.0" x2="1198.0" y2="974.0"/>
+<text class="muted" x="958.0" y="977.5" font-size="10" text-anchor="end">100</text>
+<line class="grid" x1="962.0" y1="922.5" x2="1198.0" y2="922.5"/>
+<text class="muted" x="958.0" y="926.0" font-size="10" text-anchor="end">1k</text>
+<line class="grid" x1="962.0" y1="871.0" x2="1198.0" y2="871.0"/>
+<text class="muted" x="958.0" y="874.5" font-size="10" text-anchor="end">10k</text>
+<line class="grid" x1="962.0" y1="819.5" x2="1198.0" y2="819.5"/>
+<text class="muted" x="958.0" y="823.0" font-size="10" text-anchor="end">100k</text>
+<line class="axis" x1="962.0" y1="974.0" x2="1198.0" y2="974.0"/>
+<text class="muted" x="962.0" y="988.0" font-size="10" text-anchor="middle">1950</text>
+<text class="muted" x="1040.7" y="988.0" font-size="10" text-anchor="middle">1975</text>
+<text class="muted" x="1119.3" y="988.0" font-size="10" text-anchor="middle">2000</text>
+<text class="muted" x="1198.0" y="988.0" font-size="10" text-anchor="middle">2025</text>
+<path class="context" d="M1100.5 832.5L1103.6 832.3L1106.7 832.4L1109.9 829.6L1113.0 825.4L1116.2 821.1L1119.3 819.9L1122.5 819.5L1125.6 816.9L1128.8 824.0L1131.9 822.8L1135.1 811.6L1138.2 814.3L1141.4 830.5L1144.5 835.4L1147.7 829.0L1150.8 825.2L1153.9 832.2L1157.1 832.5L1160.2 834.2L1163.4 837.1L1166.5 842.8L1169.7 825.0L1172.8 827.2L1176.0 833.1L1179.1 825.2L1182.3 826.1L1185.4 827.4L1188.6 844.5L1191.7 840.2L1194.9 842.7L1198.0 845.8"/>
+<path class="context" d="M1116.2 833.1L1119.3 833.4L1122.5 832.6L1125.6 832.9L1128.8 826.8"/>
+<path class="context" d="M1135.1 823.6L1138.2 824.0L1141.4 826.5L1144.5 829.5L1147.7 830.0L1150.8 828.7L1153.9 828.4L1157.1 833.6L1160.2 834.5L1163.4 832.8L1166.5 831.9L1169.7 828.4L1172.8 827.3L1176.0 826.7"/>
+<path class="context" d="M1182.3 825.1L1185.4 825.1L1188.6 824.1L1191.7 823.1L1194.9 823.3L1198.0 822.7"/>
+<path class="context" d="M1135.1 833.4L1138.2 836.1L1141.4 841.2L1144.5 841.2L1147.7 842.8L1150.8 837.6L1153.9 839.7L1157.1 848.5L1160.2 839.3L1163.4 842.0L1166.5 843.1L1169.7 842.3L1172.8 848.8L1176.0 847.2L1179.1 845.2L1182.3 843.1L1185.4 844.9L1188.6 850.8L1191.7 851.7L1194.9 849.0L1198.0 849.4"/>
+<path class="context" d="M1135.1 833.7L1138.2 839.6L1141.4 841.3L1144.5 842.1L1147.7 842.9L1150.8 845.1L1153.9 846.0L1157.1 841.9L1160.2 835.0L1163.4 833.0L1166.5 833.3L1169.7 831.2L1172.8 838.9L1176.0 836.7L1179.1 834.2L1182.3 824.0L1185.4 821.8L1188.6 831.6"/>
+<path class="context" d="M1150.8 919.0L1153.9 912.0L1157.1 906.3L1160.2 907.0"/>
+<path class="context" d="M1166.5 905.5L1169.7 910.7L1172.8 914.9L1176.0 910.0"/>
+<path class="context" d="M1182.3 909.8L1185.4 906.3L1188.6 901.9L1191.7 921.4L1194.9 910.5"/>
+<path class="context" d="M1176.0 882.2L1179.1 884.0L1182.3 880.7L1185.4 883.8L1188.6 883.4L1191.7 882.8L1194.9 883.5L1198.0 883.4"/>
+<path class="context" d="M1144.5 850.5L1147.7 851.9L1150.8 852.1L1153.9 852.1L1157.1 858.4L1160.2 857.5L1163.4 856.0L1166.5 853.9L1169.7 850.5L1172.8 854.3L1176.0 855.9L1179.1 855.3L1182.3 855.2"/>
+<path class="context" d="M1131.9 870.2L1135.1 867.8L1138.2 863.4"/>
+<path class="context" d="M1144.5 868.1L1147.7 861.3L1150.8 855.8L1153.9 851.6L1157.1 855.1L1160.2 856.3L1163.4 854.7"/>
+<path class="context" d="M1172.8 852.7L1176.0 867.3L1179.1 867.6L1182.3 872.8L1185.4 853.4L1188.6 861.0L1191.7 865.9L1194.9 875.4L1198.0 877.5"/>
+<path class="context" d="M1125.6 858.1L1128.8 860.8L1131.9 863.3L1135.1 858.9L1138.2 859.0L1141.4 860.2L1144.5 865.4L1147.7 866.7L1150.8 866.2L1153.9 866.7L1157.1 871.1L1160.2 874.9L1163.4 875.1L1166.5 871.9L1169.7 870.7L1172.8 871.9L1176.0 872.2L1179.1 872.8L1182.3 872.4L1185.4 872.3L1188.6 874.7L1191.7 874.0L1194.9 873.4L1198.0 873.5"/>
+<path class="context" d="M1163.4 873.7L1166.5 876.1L1169.7 871.8L1172.8 869.8L1176.0 870.0L1179.1 870.6L1182.3 870.4L1185.4 872.0L1188.6 872.0L1191.7 872.0L1194.9 871.5L1198.0 871.2"/>
+<path class="context" d="M1135.1 864.7L1138.2 862.7L1141.4 858.5L1144.5 857.1L1147.7 855.7L1150.8 856.2L1153.9 851.8L1157.1 864.3L1160.2 857.6L1163.4 857.2L1166.5 855.9L1169.7 851.6L1172.8 858.9L1176.0 853.3L1179.1 851.9L1182.3 849.7L1185.4 852.5L1188.6 861.3L1191.7 863.2L1194.9 855.8L1198.0 853.9"/>
+<path class="context" d="M1141.4 850.9L1144.5 853.9L1147.7 855.0L1150.8 855.8L1153.9 858.0L1157.1 862.6L1160.2 863.6L1163.4 863.9"/>
+<path class="context" d="M1185.4 864.7L1188.6 867.0L1191.7 870.3L1194.9 871.0L1198.0 873.1"/>
+<path class="context" d="M1103.6 857.8L1106.7 860.9L1109.9 860.5L1113.0 858.6L1116.2 860.7"/>
+<path class="context" d="M1122.5 861.1L1125.6 847.8L1128.8 855.9L1131.9 855.6L1135.1 855.7L1138.2 852.8L1141.4 854.0L1144.5 855.0L1147.7 856.2"/>
+<path class="context" d="M1131.9 834.2L1135.1 835.8L1138.2 835.9L1141.4 834.1L1144.5 832.2L1147.7 831.9L1150.8 834.7L1153.9 833.9L1157.1 835.3L1160.2 831.8L1163.4 829.4L1166.5 828.8L1169.7 829.0L1172.8 830.6L1176.0 829.2L1179.1 828.2L1182.3 827.4L1185.4 832.0L1188.6 832.3L1191.7 830.2L1194.9 833.4L1198.0 834.8"/>
+<path class="reference" d="M1012.3 893.3L1015.5 894.1L1018.6 890.4L1021.8 892.1L1024.9 889.3L1028.1 885.4L1031.2 881.9L1034.4 880.3L1037.5 880.9L1040.7 885.2L1043.8 884.0L1047.0 880.2L1050.1 875.5L1053.3 871.5L1056.4 871.9L1059.5 874.0L1062.7 872.8L1065.8 873.7L1069.0 869.8L1072.1 873.7L1075.3 875.3L1078.4 871.8L1081.6 867.9L1084.7 865.2L1087.9 865.2L1091.0 865.8L1094.2 864.0L1097.3 861.2L1100.5 856.7L1103.6 853.6L1106.7 857.9L1109.9 857.2L1113.0 855.1L1116.2 850.6L1119.3 838.5L1122.5 840.2L1125.6 841.5L1128.8 841.7L1131.9 843.0L1135.1 840.7L1138.2 840.2L1141.4 840.1L1144.5 842.3L1147.7 840.8L1150.8 839.0L1153.9 839.8L1157.1 840.2L1160.2 840.7L1163.4 838.0L1166.5 836.6L1169.7 835.3L1172.8 834.7L1176.0 834.8L1179.1 835.6L1182.3 836.4L1185.4 834.4L1188.6 832.3L1191.7 832.2L1194.9 831.1L1198.0 830.5"/>
+<rect class="surface" x="969.6" y="876.0" width="220.8" height="20" rx="4"/>
+<text class="muted" x="1080.0" y="890.0" font-size="12" text-anchor="middle">no ILOSTAT earnings by education</text>
+</g>
+<g aria-label="Iran">
+<text class="ink" x="24.0" y="1026.0" font-size="13" font-weight="bold">Iran</text>
+<line class="grid" x1="68.0" y1="1204.0" x2="304.0" y2="1204.0"/>
+<text class="muted" x="64.0" y="1207.5" font-size="10" text-anchor="end">100</text>
+<line class="grid" x1="68.0" y1="1152.5" x2="304.0" y2="1152.5"/>
+<text class="muted" x="64.0" y="1156.0" font-size="10" text-anchor="end">1k</text>
+<line class="grid" x1="68.0" y1="1101.0" x2="304.0" y2="1101.0"/>
+<text class="muted" x="64.0" y="1104.5" font-size="10" text-anchor="end">10k</text>
+<line class="grid" x1="68.0" y1="1049.5" x2="304.0" y2="1049.5"/>
+<text class="muted" x="64.0" y="1053.0" font-size="10" text-anchor="end">100k</text>
+<line class="axis" x1="68.0" y1="1204.0" x2="304.0" y2="1204.0"/>
+<text class="muted" x="68.0" y="1218.0" font-size="10" text-anchor="middle">1950</text>
+<text class="muted" x="146.7" y="1218.0" font-size="10" text-anchor="middle">1975</text>
+<text class="muted" x="225.3" y="1218.0" font-size="10" text-anchor="middle">2000</text>
+<text class="muted" x="304.0" y="1218.0" font-size="10" text-anchor="middle">2025</text>
+<path class="context" d="M206.5 1062.5L209.6 1062.3L212.7 1062.4L215.9 1059.6L219.0 1055.4L222.2 1051.1L225.3 1049.9L228.5 1049.5L231.6 1046.9L234.8 1054.0L237.9 1052.8L241.1 1041.6L244.2 1044.3L247.4 1060.5L250.5 1065.4L253.7 1059.0L256.8 1055.2L259.9 1062.2L263.1 1062.5L266.2 1064.2L269.4 1067.1L272.5 1072.8L275.7 1055.0L278.8 1057.2L282.0 1063.1L285.1 1055.2L288.3 1056.1L291.4 1057.4L294.6 1074.5L297.7 1070.2L300.9 1072.7L304.0 1075.8"/>
+<path class="context" d="M222.2 1063.1L225.3 1063.4L228.5 1062.6L231.6 1062.9L234.8 1056.8"/>
+<path class="context" d="M241.1 1053.6L244.2 1054.0L247.4 1056.5L250.5 1059.5L253.7 1060.0L256.8 1058.7L259.9 1058.4L263.1 1063.6L266.2 1064.5L269.4 1062.8L272.5 1061.9L275.7 1058.4L278.8 1057.3L282.0 1056.7"/>
+<path class="context" d="M288.3 1055.1L291.4 1055.1L294.6 1054.1L297.7 1053.1L300.9 1053.3L304.0 1052.7"/>
+<path class="context" d="M241.1 1063.4L244.2 1066.1L247.4 1071.2L250.5 1071.2L253.7 1072.8L256.8 1067.6L259.9 1069.7L263.1 1078.5L266.2 1069.3L269.4 1072.0L272.5 1073.1L275.7 1072.3L278.8 1078.8L282.0 1077.2L285.1 1075.2L288.3 1073.1L291.4 1074.9L294.6 1080.8L297.7 1081.7L300.9 1079.0L304.0 1079.4"/>
+<path class="context" d="M241.1 1063.7L244.2 1069.6L247.4 1071.3L250.5 1072.1L253.7 1072.9L256.8 1075.1L259.9 1076.0L263.1 1071.9L266.2 1065.0L269.4 1063.0L272.5 1063.3L275.7 1061.2L278.8 1068.9L282.0 1066.7L285.1 1064.2L288.3 1054.0L291.4 1051.8L294.6 1061.6"/>
+<path class="context" d="M256.8 1149.0L259.9 1142.0L263.1 1136.3L266.2 1137.0"/>
+<path class="context" d="M272.5 1135.5L275.7 1140.7L278.8 1144.9L282.0 1140.0"/>
+<path class="context" d="M288.3 1139.8L291.4 1136.3L294.6 1131.9L297.7 1151.4L300.9 1140.5"/>
+<path class="context" d="M282.0 1112.2L285.1 1114.0L288.3 1110.7L291.4 1113.8L294.6 1113.4L297.7 1112.8L300.9 1113.5L304.0 1113.4"/>
+<path class="context" d="M250.5 1080.5L253.7 1081.9L256.8 1082.1L259.9 1082.1L263.1 1088.4L266.2 1087.5L269.4 1086.0L272.5 1083.9L275.7 1080.5L278.8 1084.3L282.0 1085.9L285.1 1085.3L288.3 1085.2"/>
+<path class="context" d="M237.9 1100.2L241.1 1097.8L244.2 1093.4"/>
+<path class="context" d="M250.5 1098.1L253.7 1091.3L256.8 1085.8L259.9 1081.6L263.1 1085.1L266.2 1086.3L269.4 1084.7"/>
+<path class="context" d="M278.8 1082.7L282.0 1097.3L285.1 1097.6L288.3 1102.8L291.4 1083.4L294.6 1091.0L297.7 1095.9L300.9 1105.4L304.0 1107.5"/>
+<path class="context" d="M231.6 1088.1L234.8 1090.8L237.9 1093.3L241.1 1088.9L244.2 1089.0L247.4 1090.2L250.5 1095.4L253.7 1096.7L256.8 1096.2L259.9 1096.7L263.1 1101.1L266.2 1104.9L269.4 1105.1L272.5 1101.9L275.7 1100.7L278.8 1101.9L282.0 1102.2L285.1 1102.8L288.3 1102.4L291.4 1102.3L294.6 1104.7L297.7 1104.0L300.9 1103.4L304.0 1103.5"/>
+<path class="context" d="M269.4 1103.7L272.5 1106.1L275.7 1101.8L278.8 1099.8L282.0 1100.0L285.1 1100.6L288.3 1100.4L291.4 1102.0L294.6 1102.0L297.7 1102.0L300.9 1101.5L304.0 1101.2"/>
+<path class="context" d="M241.1 1094.7L244.2 1092.7L247.4 1088.5L250.5 1087.1L253.7 1085.7L256.8 1086.2L259.9 1081.8L263.1 1094.3L266.2 1087.6L269.4 1087.2L272.5 1085.9L275.7 1081.6L278.8 1088.9L282.0 1083.3L285.1 1081.9L288.3 1079.7L291.4 1082.5L294.6 1091.3L297.7 1093.2L300.9 1085.8L304.0 1083.9"/>
+<path class="context" d="M247.4 1080.9L250.5 1083.9L253.7 1085.0L256.8 1085.8L259.9 1088.0L263.1 1092.6L266.2 1093.6L269.4 1093.9"/>
+<path class="context" d="M291.4 1094.7L294.6 1097.0L297.7 1100.3L300.9 1101.0L304.0 1103.1"/>
+<path class="context" d="M209.6 1087.8L212.7 1090.9L215.9 1090.5L219.0 1088.6L222.2 1090.7"/>
+<path class="context" d="M228.5 1091.1L231.6 1077.8L234.8 1085.9L237.9 1085.6L241.1 1085.7L244.2 1082.8L247.4 1084.0L250.5 1085.0L253.7 1086.2"/>
+<path class="context" d="M237.9 1064.2L241.1 1065.8L244.2 1065.9L247.4 1064.1L250.5 1062.2L253.7 1061.9L256.8 1064.7L259.9 1063.9L263.1 1065.3L266.2 1061.8L269.4 1059.4L272.5 1058.8L275.7 1059.0L278.8 1060.6L282.0 1059.2L285.1 1058.2L288.3 1057.4L291.4 1062.0L294.6 1062.3L297.7 1060.2L300.9 1063.4L304.0 1064.8"/>
+<path class="reference" d="M121.5 1158.3L124.6 1156.4L127.8 1155.5L130.9 1153.6L134.1 1152.3L137.2 1149.2L140.4 1140.9L143.5 1133.4L146.7 1132.5L149.8 1129.8L153.0 1126.8L156.1 1130.3L159.3 1135.8L162.4 1143.7L165.5 1145.5L168.7 1146.5L171.8 1144.1L175.0 1149.2L178.1 1148.8L181.3 1151.6L184.4 1154.9L187.6 1156.0L190.7 1152.3L193.9 1145.8"/>
+<rect class="surface" x="75.6" y="1106.0" width="220.8" height="20" rx="4"/>
+<text class="muted" x="186.0" y="1120.0" font-size="12" text-anchor="middle">no ILOSTAT earnings by education</text>
+</g>
+<g aria-label="Brazil">
+<text class="ink" x="322.0" y="1026.0" font-size="13" font-weight="bold">Brazil</text>
+<text class="muted" x="602.0" y="1026.0" font-size="11" text-anchor="end">2011: 13.2k</text>
+<line class="grid" x1="366.0" y1="1204.0" x2="602.0" y2="1204.0"/>
+<text class="muted" x="362.0" y="1207.5" font-size="10" text-anchor="end">100</text>
+<line class="grid" x1="366.0" y1="1152.5" x2="602.0" y2="1152.5"/>
+<text class="muted" x="362.0" y="1156.0" font-size="10" text-anchor="end">1k</text>
+<line class="grid" x1="366.0" y1="1101.0" x2="602.0" y2="1101.0"/>
+<text class="muted" x="362.0" y="1104.5" font-size="10" text-anchor="end">10k</text>
+<line class="grid" x1="366.0" y1="1049.5" x2="602.0" y2="1049.5"/>
+<text class="muted" x="362.0" y="1053.0" font-size="10" text-anchor="end">100k</text>
+<line class="axis" x1="366.0" y1="1204.0" x2="602.0" y2="1204.0"/>
+<text class="muted" x="366.0" y="1218.0" font-size="10" text-anchor="middle">1950</text>
+<text class="muted" x="444.7" y="1218.0" font-size="10" text-anchor="middle">1975</text>
+<text class="muted" x="523.3" y="1218.0" font-size="10" text-anchor="middle">2000</text>
+<text class="muted" x="602.0" y="1218.0" font-size="10" text-anchor="middle">2025</text>
+<path class="context" d="M504.5 1062.5L507.6 1062.3L510.7 1062.4L513.9 1059.6L517.0 1055.4L520.2 1051.1L523.3 1049.9L526.5 1049.5L529.6 1046.9L532.8 1054.0L535.9 1052.8L539.1 1041.6L542.2 1044.3L545.4 1060.5L548.5 1065.4L551.7 1059.0L554.8 1055.2L557.9 1062.2L561.1 1062.5L564.2 1064.2L567.4 1067.1L570.5 1072.8L573.7 1055.0L576.8 1057.2L580.0 1063.1L583.1 1055.2L586.3 1056.1L589.4 1057.4L592.6 1074.5L595.7 1070.2L598.9 1072.7L602.0 1075.8"/>
+<path class="context" d="M520.2 1063.1L523.3 1063.4L526.5 1062.6L529.6 1062.9L532.8 1056.8"/>
+<path class="context" d="M539.1 1053.6L542.2 1054.0L545.4 1056.5L548.5 1059.5L551.7 1060.0L554.8 1058.7L557.9 1058.4L561.1 1063.6L564.2 1064.5L567.4 1062.8L570.5 1061.9L573.7 1058.4L576.8 1057.3L580.0 1056.7"/>
+<path class="context" d="M586.3 1055.1L589.4 1055.1L592.6 1054.1L595.7 1053.1L598.9 1053.3L602.0 1052.7"/>
+<path class="context" d="M539.1 1063.4L542.2 1066.1L545.4 1071.2L548.5 1071.2L551.7 1072.8L554.8 1067.6L557.9 1069.7L561.1 1078.5L564.2 1069.3L567.4 1072.0L570.5 1073.1L573.7 1072.3L576.8 1078.8L580.0 1077.2L583.1 1075.2L586.3 1073.1L589.4 1074.9L592.6 1080.8L595.7 1081.7L598.9 1079.0L602.0 1079.4"/>
+<path class="context" d="M539.1 1063.7L542.2 1069.6L545.4 1071.3L548.5 1072.1L551.7 1072.9L554.8 1075.1L557.9 1076.0L561.1 1071.9L564.2 1065.0L567.4 1063.0L570.5 1063.3L573.7 1061.2L576.8 1068.9L580.0 1066.7L583.1 1064.2L586.3 1054.0L589.4 1051.8L592.6 1061.6"/>
+<path class="context" d="M554.8 1149.0L557.9 1142.0L561.1 1136.3L564.2 1137.0"/>
+<path class="context" d="M570.5 1135.5L573.7 1140.7L576.8 1144.9L580.0 1140.0"/>
+<path class="context" d="M586.3 1139.8L589.4 1136.3L592.6 1131.9L595.7 1151.4L598.9 1140.5"/>
+<path class="context" d="M580.0 1112.2L583.1 1114.0L586.3 1110.7L589.4 1113.8L592.6 1113.4L595.7 1112.8L598.9 1113.5L602.0 1113.4"/>
+<path class="context" d="M548.5 1080.5L551.7 1081.9L554.8 1082.1L557.9 1082.1L561.1 1088.4L564.2 1087.5L567.4 1086.0L570.5 1083.9L573.7 1080.5L576.8 1084.3L580.0 1085.9L583.1 1085.3L586.3 1085.2"/>
+<path class="context" d="M535.9 1100.2L539.1 1097.8L542.2 1093.4"/>
+<path class="context" d="M548.5 1098.1L551.7 1091.3L554.8 1085.8L557.9 1081.6L561.1 1085.1L564.2 1086.3L567.4 1084.7"/>
+<path class="context" d="M576.8 1082.7L580.0 1097.3L583.1 1097.6L586.3 1102.8L589.4 1083.4L592.6 1091.0L595.7 1095.9L598.9 1105.4L602.0 1107.5"/>
+<path class="context" d="M529.6 1088.1L532.8 1090.8L535.9 1093.3L539.1 1088.9L542.2 1089.0L545.4 1090.2L548.5 1095.4L551.7 1096.7L554.8 1096.2L557.9 1096.7L561.1 1101.1L564.2 1104.9L567.4 1105.1L570.5 1101.9L573.7 1100.7L576.8 1101.9L580.0 1102.2L583.1 1102.8L586.3 1102.4L589.4 1102.3L592.6 1104.7L595.7 1104.0L598.9 1103.4L602.0 1103.5"/>
+<path class="context" d="M567.4 1103.7L570.5 1106.1L573.7 1101.8L576.8 1099.8L580.0 1100.0L583.1 1100.6L586.3 1100.4L589.4 1102.0L592.6 1102.0L595.7 1102.0L598.9 1101.5L602.0 1101.2"/>
+<path class="context" d="M539.1 1094.7L542.2 1092.7L545.4 1088.5L548.5 1087.1L551.7 1085.7L554.8 1086.2L557.9 1081.8L561.1 1094.3L564.2 1087.6L567.4 1087.2L570.5 1085.9L573.7 1081.6L576.8 1088.9L580.0 1083.3L583.1 1081.9L586.3 1079.7L589.4 1082.5L592.6 1091.3L595.7 1093.2L598.9 1085.8L602.0 1083.9"/>
+<path class="context" d="M545.4 1080.9L548.5 1083.9L551.7 1085.0L554.8 1085.8L557.9 1088.0L561.1 1092.6L564.2 1093.6L567.4 1093.9"/>
+<path class="context" d="M589.4 1094.7L592.6 1097.0L595.7 1100.3L598.9 1101.0L602.0 1103.1"/>
+<path class="context" d="M535.9 1064.2L539.1 1065.8L542.2 1065.9L545.4 1064.1L548.5 1062.2L551.7 1061.9L554.8 1064.7L557.9 1063.9L561.1 1065.3L564.2 1061.8L567.4 1059.4L570.5 1058.8L573.7 1059.0L576.8 1060.6L580.0 1059.2L583.1 1058.2L586.3 1057.4L589.4 1062.0L592.6 1062.3L595.7 1060.2L598.9 1063.4L602.0 1064.8"/>
+<path class="reference" d="M469.8 1128.3L473.0 1132.2L476.1 1124.3L479.3 1126.5L482.4 1119.8L485.6 1118.7L488.7 1117.2L491.9 1119.1L495.0 1114.8L498.2 1119.6L501.3 1118.0L504.5 1126.9L507.6 1117.3L510.7 1117.9L513.9 1116.8L517.0 1116.0L520.2 1115.8L523.3 1115.9L526.5 1115.3L529.6 1099.4L532.8 1104.9L535.9 1103.3L539.1 1101.6L542.2 1097.6L545.4 1097.0L548.5 1097.2L551.7 1095.4L554.8 1092.0L557.9 1105.3L561.1 1107.6L564.2 1109.9L567.4 1111.4L570.5 1111.9L573.7 1113.7L576.8 1108.5L580.0 1101.2L583.1 1101.0L586.3 1103.2L589.4 1104.9L592.6 1096.8L595.7 1098.0L598.9 1095.7L602.0 1094.0"/>
+<path class="focus" d="M507.6 1087.8L510.7 1090.9L513.9 1090.5L517.0 1088.6L520.2 1090.7"/>
+<path class="focus" d="M526.5 1091.1L529.6 1077.8L532.8 1085.9L535.9 1085.6L539.1 1085.7L542.2 1082.8L545.4 1084.0L548.5 1085.0L551.7 1086.2"/>
+<circle class="dot" cx="557.9" cy="1094.8" r="3"/>
+<circle class="hit" cx="507.6" cy="1087.8" r="5"><title>Brazil 1995: 18,046 eggs/month</title></circle>
+<circle class="hit" cx="510.7" cy="1090.9" r="5"><title>Brazil 1996: 15,727 eggs/month</title></circle>
+<circle class="hit" cx="513.9" cy="1090.5" r="5"><title>Brazil 1997: 16,002 eggs/month</title></circle>
+<circle class="hit" cx="517.0" cy="1088.6" r="5"><title>Brazil 1998: 17,378 eggs/month</title></circle>
+<circle class="hit" cx="520.2" cy="1090.7" r="5"><title>Brazil 1999: 15,874 eggs/month</title></circle>
+<circle class="hit" cx="526.5" cy="1091.1" r="5"><title>Brazil 2001: 15,567 eggs/month</title></circle>
+<circle class="hit" cx="529.6" cy="1077.8" r="5"><title>Brazil 2002: 28,240 eggs/month</title></circle>
+<circle class="hit" cx="532.8" cy="1085.9" r="5"><title>Brazil 2003: 19,637 eggs/month</title></circle>
+<circle class="hit" cx="535.9" cy="1085.6" r="5"><title>Brazil 2004: 19,911 eggs/month</title></circle>
+<circle class="hit" cx="539.1" cy="1085.7" r="5"><title>Brazil 2005: 19,781 eggs/month</title></circle>
+<circle class="hit" cx="542.2" cy="1082.8" r="5"><title>Brazil 2006: 22,556 eggs/month</title></circle>
+<circle class="hit" cx="545.4" cy="1084.0" r="5"><title>Brazil 2007: 21,385 eggs/month</title></circle>
+<circle class="hit" cx="548.5" cy="1085.0" r="5"><title>Brazil 2008: 20,426 eggs/month</title></circle>
+<circle class="hit" cx="551.7" cy="1086.2" r="5"><title>Brazil 2009: 19,412 eggs/month</title></circle>
+<circle class="hit" cx="557.9" cy="1094.8" r="5"><title>Brazil 2011: 13,223 eggs/month</title></circle>
+</g>
+<g aria-label="Chile">
+<text class="ink" x="620.0" y="1026.0" font-size="13" font-weight="bold">Chile</text>
+<text class="muted" x="900.0" y="1026.0" font-size="11" text-anchor="end">2022: 25.7k</text>
+<line class="grid" x1="664.0" y1="1204.0" x2="900.0" y2="1204.0"/>
+<text class="muted" x="660.0" y="1207.5" font-size="10" text-anchor="end">100</text>
+<line class="grid" x1="664.0" y1="1152.5" x2="900.0" y2="1152.5"/>
+<text class="muted" x="660.0" y="1156.0" font-size="10" text-anchor="end">1k</text>
+<line class="grid" x1="664.0" y1="1101.0" x2="900.0" y2="1101.0"/>
+<text class="muted" x="660.0" y="1104.5" font-size="10" text-anchor="end">10k</text>
+<line class="grid" x1="664.0" y1="1049.5" x2="900.0" y2="1049.5"/>
+<text class="muted" x="660.0" y="1053.0" font-size="10" text-anchor="end">100k</text>
+<line class="axis" x1="664.0" y1="1204.0" x2="900.0" y2="1204.0"/>
+<text class="muted" x="664.0" y="1218.0" font-size="10" text-anchor="middle">1950</text>
+<text class="muted" x="742.7" y="1218.0" font-size="10" text-anchor="middle">1975</text>
+<text class="muted" x="821.3" y="1218.0" font-size="10" text-anchor="middle">2000</text>
+<text class="muted" x="900.0" y="1218.0" font-size="10" text-anchor="middle">2025</text>
+<path class="context" d="M802.5 1062.5L805.6 1062.3L808.7 1062.4L811.9 1059.6L815.0 1055.4L818.2 1051.1L821.3 1049.9L824.5 1049.5L827.6 1046.9L830.8 1054.0L833.9 1052.8L837.1 1041.6L840.2 1044.3L843.4 1060.5L846.5 1065.4L849.7 1059.0L852.8 1055.2L855.9 1062.2L859.1 1062.5L862.2 1064.2L865.4 1067.1L868.5 1072.8L871.7 1055.0L874.8 1057.2L878.0 1063.1L881.1 1055.2L884.3 1056.1L887.4 1057.4L890.6 1074.5L893.7 1070.2L896.9 1072.7L900.0 1075.8"/>
+<path class="context" d="M818.2 1063.1L821.3 1063.4L824.5 1062.6L827.6 1062.9L830.8 1056.8"/>
+<path class="context" d="M837.1 1053.6L840.2 1054.0L843.4 1056.5L846.5 1059.5L849.7 1060.0L852.8 1058.7L855.9 1058.4L859.1 1063.6L862.2 1064.5L865.4 1062.8L868.5 1061.9L871.7 1058.4L874.8 1057.3L878.0 1056.7"/>
+<path class="context" d="M884.3 1055.1L887.4 1055.1L890.6 1054.1L893.7 1053.1L896.9 1053.3L900.0 1052.7"/>
+<path class="context" d="M837.1 1063.4L840.2 1066.1L843.4 1071.2L846.5 1071.2L849.7 1072.8L852.8 1067.6L855.9 1069.7L859.1 1078.5L862.2 1069.3L865.4 1072.0L868.5 1073.1L871.7 1072.3L874.8 1078.8L878.0 1077.2L881.1 1075.2L884.3 1073.1L887.4 1074.9L890.6 1080.8L893.7 1081.7L896.9 1079.0L900.0 1079.4"/>
+<path class="context" d="M837.1 1063.7L840.2 1069.6L843.4 1071.3L846.5 1072.1L849.7 1072.9L852.8 1075.1L855.9 1076.0L859.1 1071.9L862.2 1065.0L865.4 1063.0L868.5 1063.3L871.7 1061.2L874.8 1068.9L878.0 1066.7L881.1 1064.2L884.3 1054.0L887.4 1051.8L890.6 1061.6"/>
+<path class="context" d="M852.8 1149.0L855.9 1142.0L859.1 1136.3L862.2 1137.0"/>
+<path class="context" d="M868.5 1135.5L871.7 1140.7L874.8 1144.9L878.0 1140.0"/>
+<path class="context" d="M884.3 1139.8L887.4 1136.3L890.6 1131.9L893.7 1151.4L896.9 1140.5"/>
+<path class="context" d="M878.0 1112.2L881.1 1114.0L884.3 1110.7L887.4 1113.8L890.6 1113.4L893.7 1112.8L896.9 1113.5L900.0 1113.4"/>
+<path class="context" d="M846.5 1080.5L849.7 1081.9L852.8 1082.1L855.9 1082.1L859.1 1088.4L862.2 1087.5L865.4 1086.0L868.5 1083.9L871.7 1080.5L874.8 1084.3L878.0 1085.9L881.1 1085.3L884.3 1085.2"/>
+<path class="context" d="M833.9 1100.2L837.1 1097.8L840.2 1093.4"/>
+<path class="context" d="M846.5 1098.1L849.7 1091.3L852.8 1085.8L855.9 1081.6L859.1 1085.1L862.2 1086.3L865.4 1084.7"/>
+<path class="context" d="M874.8 1082.7L878.0 1097.3L881.1 1097.6L884.3 1102.8L887.4 1083.4L890.6 1091.0L893.7 1095.9L896.9 1105.4L900.0 1107.5"/>
+<path class="context" d="M827.6 1088.1L830.8 1090.8L833.9 1093.3L837.1 1088.9L840.2 1089.0L843.4 1090.2L846.5 1095.4L849.7 1096.7L852.8 1096.2L855.9 1096.7L859.1 1101.1L862.2 1104.9L865.4 1105.1L868.5 1101.9L871.7 1100.7L874.8 1101.9L878.0 1102.2L881.1 1102.8L884.3 1102.4L887.4 1102.3L890.6 1104.7L893.7 1104.0L896.9 1103.4L900.0 1103.5"/>
+<path class="context" d="M865.4 1103.7L868.5 1106.1L871.7 1101.8L874.8 1099.8L878.0 1100.0L881.1 1100.6L884.3 1100.4L887.4 1102.0L890.6 1102.0L893.7 1102.0L896.9 1101.5L900.0 1101.2"/>
+<path class="context" d="M837.1 1094.7L840.2 1092.7L843.4 1088.5L846.5 1087.1L849.7 1085.7L852.8 1086.2L855.9 1081.8L859.1 1094.3L862.2 1087.6L865.4 1087.2L868.5 1085.9L871.7 1081.6L874.8 1088.9L878.0 1083.3L881.1 1081.9L884.3 1079.7L887.4 1082.5L890.6 1091.3L893.7 1093.2L896.9 1085.8L900.0 1083.9"/>
+<path class="context" d="M843.4 1080.9L846.5 1083.9L849.7 1085.0L852.8 1085.8L855.9 1088.0L859.1 1092.6L862.2 1093.6L865.4 1093.9"/>
+<path class="context" d="M887.4 1094.7L890.6 1097.0L893.7 1100.3L896.9 1101.0L900.0 1103.1"/>
+<path class="context" d="M805.6 1087.8L808.7 1090.9L811.9 1090.5L815.0 1088.6L818.2 1090.7"/>
+<path class="context" d="M824.5 1091.1L827.6 1077.8L830.8 1085.9L833.9 1085.6L837.1 1085.7L840.2 1082.8L843.4 1084.0L846.5 1085.0L849.7 1086.2"/>
+<path class="context" d="M833.9 1064.2L837.1 1065.8L840.2 1065.9L843.4 1064.1L846.5 1062.2L849.7 1061.9L852.8 1064.7L855.9 1063.9L859.1 1065.3L862.2 1061.8L865.4 1059.4L868.5 1058.8L871.7 1059.0L874.8 1060.6L878.0 1059.2L881.1 1058.2L884.3 1057.4L887.4 1062.0L890.6 1062.3L893.7 1060.2L896.9 1063.4L900.0 1064.8"/>
+<path class="reference" d="M717.5 1145.3L720.6 1144.5L723.8 1144.6L726.9 1160.8L730.1 1142.9L733.2 1150.7L736.4 1155.2L739.5 1138.7L742.7 1145.7L745.8 1147.4L749.0 1142.5L752.1 1135.4L755.3 1135.2L758.4 1129.1L761.5 1126.1L764.7 1132.1L767.8 1137.0L771.0 1136.0L774.1 1129.4L777.3 1131.3L780.4 1128.2L783.6 1129.1L786.7 1127.1L789.9 1124.8L793.0 1125.6L796.2 1120.5L799.3 1118.1L802.5 1116.7L805.6 1113.9L808.7 1115.5L811.9 1114.3L815.0 1110.3L818.2 1112.5L821.3 1113.2L824.5 1108.1L827.6 1109.7L830.8 1111.6L833.9 1109.1L837.1 1107.4L840.2 1102.7L843.4 1103.8L846.5 1105.7L849.7 1105.6L852.8 1104.1L855.9 1102.4L859.1 1100.5L862.2 1099.0L865.4 1097.5L868.5 1096.6L871.7 1097.2L874.8 1096.5L878.0 1096.2L881.1 1096.2L884.3 1096.8L887.4 1093.4L890.6 1091.7L893.7 1090.5L896.9 1088.9L900.0 1087.6"/>
+<circle class="dot" cx="815.0" cy="1090.4" r="2.5"/>
+<circle class="dot" cx="821.3" cy="1093.9" r="2.5"/>
+<circle class="dot" cx="830.8" cy="1094.4" r="2.5"/>
+<circle class="dot" cx="840.2" cy="1092.2" r="2.5"/>
+<circle class="dot" cx="849.7" cy="1095.0" r="2.5"/>
+<circle class="dot" cx="855.9" cy="1092.7" r="2.5"/>
+<circle class="dot" cx="862.2" cy="1090.9" r="2.5"/>
+<circle class="dot" cx="868.5" cy="1087.5" r="2.5"/>
+<circle class="dot" cx="874.8" cy="1086.9" r="2.5"/>
+<circle class="dot" cx="884.3" cy="1086.1" r="2.5"/>
+<circle class="dot" cx="890.6" cy="1079.9" r="3"/>
+<circle class="hit" cx="815.0" cy="1090.4" r="5"><title>Chile 1998: 16,054 eggs/month</title></circle>
+<circle class="hit" cx="821.3" cy="1093.9" r="5"><title>Chile 2000: 13,759 eggs/month</title></circle>
+<circle class="hit" cx="830.8" cy="1094.4" r="5"><title>Chile 2003: 13,431 eggs/month</title></circle>
+<circle class="hit" cx="840.2" cy="1092.2" r="5"><title>Chile 2006: 14,835 eggs/month</title></circle>
+<circle class="hit" cx="849.7" cy="1095.0" r="5"><title>Chile 2009: 13,058 eggs/month</title></circle>
+<circle class="hit" cx="855.9" cy="1092.7" r="5"><title>Chile 2011: 14,514 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="862.2" cy="1090.9" r="5"><title>Chile 2013: 15,691 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="868.5" cy="1087.5" r="5"><title>Chile 2015: 18,276 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="874.8" cy="1086.9" r="5"><title>Chile 2017: 18,749 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="884.3" cy="1086.1" r="5"><title>Chile 2020: 19,509 eggs/month (estimated)</title></circle>
+<circle class="hit" cx="890.6" cy="1079.9" r="5"><title>Chile 2022: 25,679 eggs/month (estimated)</title></circle>
+</g>
+<g aria-label="Norway">
+<text class="ink" x="918.0" y="1026.0" font-size="13" font-weight="bold">Norway</text>
+<text class="muted" x="1198.0" y="1026.0" font-size="11" text-anchor="end">2025: 50.4k</text>
+<line class="grid" x1="962.0" y1="1204.0" x2="1198.0" y2="1204.0"/>
+<text class="muted" x="958.0" y="1207.5" font-size="10" text-anchor="end">100</text>
+<line class="grid" x1="962.0" y1="1152.5" x2="1198.0" y2="1152.5"/>
+<text class="muted" x="958.0" y="1156.0" font-size="10" text-anchor="end">1k</text>
+<line class="grid" x1="962.0" y1="1101.0" x2="1198.0" y2="1101.0"/>
+<text class="muted" x="958.0" y="1104.5" font-size="10" text-anchor="end">10k</text>
+<line class="grid" x1="962.0" y1="1049.5" x2="1198.0" y2="1049.5"/>
+<text class="muted" x="958.0" y="1053.0" font-size="10" text-anchor="end">100k</text>
+<line class="axis" x1="962.0" y1="1204.0" x2="1198.0" y2="1204.0"/>
+<text class="muted" x="962.0" y="1218.0" font-size="10" text-anchor="middle">1950</text>
+<text class="muted" x="1040.7" y="1218.0" font-size="10" text-anchor="middle">1975</text>
+<text class="muted" x="1119.3" y="1218.0" font-size="10" text-anchor="middle">2000</text>
+<text class="muted" x="1198.0" y="1218.0" font-size="10" text-anchor="middle">2025</text>
+<path class="context" d="M1100.5 1062.5L1103.6 1062.3L1106.7 1062.4L1109.9 1059.6L1113.0 1055.4L1116.2 1051.1L1119.3 1049.9L1122.5 1049.5L1125.6 1046.9L1128.8 1054.0L1131.9 1052.8L1135.1 1041.6L1138.2 1044.3L1141.4 1060.5L1144.5 1065.4L1147.7 1059.0L1150.8 1055.2L1153.9 1062.2L1157.1 1062.5L1160.2 1064.2L1163.4 1067.1L1166.5 1072.8L1169.7 1055.0L1172.8 1057.2L1176.0 1063.1L1179.1 1055.2L1182.3 1056.1L1185.4 1057.4L1188.6 1074.5L1191.7 1070.2L1194.9 1072.7L1198.0 1075.8"/>
+<path class="context" d="M1116.2 1063.1L1119.3 1063.4L1122.5 1062.6L1125.6 1062.9L1128.8 1056.8"/>
+<path class="context" d="M1135.1 1053.6L1138.2 1054.0L1141.4 1056.5L1144.5 1059.5L1147.7 1060.0L1150.8 1058.7L1153.9 1058.4L1157.1 1063.6L1160.2 1064.5L1163.4 1062.8L1166.5 1061.9L1169.7 1058.4L1172.8 1057.3L1176.0 1056.7"/>
+<path class="context" d="M1182.3 1055.1L1185.4 1055.1L1188.6 1054.1L1191.7 1053.1L1194.9 1053.3L1198.0 1052.7"/>
+<path class="context" d="M1135.1 1063.4L1138.2 1066.1L1141.4 1071.2L1144.5 1071.2L1147.7 1072.8L1150.8 1067.6L1153.9 1069.7L1157.1 1078.5L1160.2 1069.3L1163.4 1072.0L1166.5 1073.1L1169.7 1072.3L1172.8 1078.8L1176.0 1077.2L1179.1 1075.2L1182.3 1073.1L1185.4 1074.9L1188.6 1080.8L1191.7 1081.7L1194.9 1079.0L1198.0 1079.4"/>
+<path class="context" d="M1135.1 1063.7L1138.2 1069.6L1141.4 1071.3L1144.5 1072.1L1147.7 1072.9L1150.8 1075.1L1153.9 1076.0L1157.1 1071.9L1160.2 1065.0L1163.4 1063.0L1166.5 1063.3L1169.7 1061.2L1172.8 1068.9L1176.0 1066.7L1179.1 1064.2L1182.3 1054.0L1185.4 1051.8L1188.6 1061.6"/>
+<path class="context" d="M1150.8 1149.0L1153.9 1142.0L1157.1 1136.3L1160.2 1137.0"/>
+<path class="context" d="M1166.5 1135.5L1169.7 1140.7L1172.8 1144.9L1176.0 1140.0"/>
+<path class="context" d="M1182.3 1139.8L1185.4 1136.3L1188.6 1131.9L1191.7 1151.4L1194.9 1140.5"/>
+<path class="context" d="M1176.0 1112.2L1179.1 1114.0L1182.3 1110.7L1185.4 1113.8L1188.6 1113.4L1191.7 1112.8L1194.9 1113.5L1198.0 1113.4"/>
+<path class="context" d="M1144.5 1080.5L1147.7 1081.9L1150.8 1082.1L1153.9 1082.1L1157.1 1088.4L1160.2 1087.5L1163.4 1086.0L1166.5 1083.9L1169.7 1080.5L1172.8 1084.3L1176.0 1085.9L1179.1 1085.3L1182.3 1085.2"/>
+<path class="context" d="M1131.9 1100.2L1135.1 1097.8L1138.2 1093.4"/>
+<path class="context" d="M1144.5 1098.1L1147.7 1091.3L1150.8 1085.8L1153.9 1081.6L1157.1 1085.1L1160.2 1086.3L1163.4 1084.7"/>
+<path class="context" d="M1172.8 1082.7L1176.0 1097.3L1179.1 1097.6L1182.3 1102.8L1185.4 1083.4L1188.6 1091.0L1191.7 1095.9L1194.9 1105.4L1198.0 1107.5"/>
+<path class="context" d="M1125.6 1088.1L1128.8 1090.8L1131.9 1093.3L1135.1 1088.9L1138.2 1089.0L1141.4 1090.2L1144.5 1095.4L1147.7 1096.7L1150.8 1096.2L1153.9 1096.7L1157.1 1101.1L1160.2 1104.9L1163.4 1105.1L1166.5 1101.9L1169.7 1100.7L1172.8 1101.9L1176.0 1102.2L1179.1 1102.8L1182.3 1102.4L1185.4 1102.3L1188.6 1104.7L1191.7 1104.0L1194.9 1103.4L1198.0 1103.5"/>
+<path class="context" d="M1163.4 1103.7L1166.5 1106.1L1169.7 1101.8L1172.8 1099.8L1176.0 1100.0L1179.1 1100.6L1182.3 1100.4L1185.4 1102.0L1188.6 1102.0L1191.7 1102.0L1194.9 1101.5L1198.0 1101.2"/>
+<path class="context" d="M1135.1 1094.7L1138.2 1092.7L1141.4 1088.5L1144.5 1087.1L1147.7 1085.7L1150.8 1086.2L1153.9 1081.8L1157.1 1094.3L1160.2 1087.6L1163.4 1087.2L1166.5 1085.9L1169.7 1081.6L1172.8 1088.9L1176.0 1083.3L1179.1 1081.9L1182.3 1079.7L1185.4 1082.5L1188.6 1091.3L1191.7 1093.2L1194.9 1085.8L1198.0 1083.9"/>
+<path class="context" d="M1141.4 1080.9L1144.5 1083.9L1147.7 1085.0L1150.8 1085.8L1153.9 1088.0L1157.1 1092.6L1160.2 1093.6L1163.4 1093.9"/>
+<path class="context" d="M1185.4 1094.7L1188.6 1097.0L1191.7 1100.3L1194.9 1101.0L1198.0 1103.1"/>
+<path class="context" d="M1103.6 1087.8L1106.7 1090.9L1109.9 1090.5L1113.0 1088.6L1116.2 1090.7"/>
+<path class="context" d="M1122.5 1091.1L1125.6 1077.8L1128.8 1085.9L1131.9 1085.6L1135.1 1085.7L1138.2 1082.8L1141.4 1084.0L1144.5 1085.0L1147.7 1086.2"/>
+<path class="reference" d="M1012.3 1119.5L1015.5 1117.6L1018.6 1117.5L1021.8 1115.1L1024.9 1112.6L1028.1 1110.2L1031.2 1108.1L1034.4 1105.3L1037.5 1102.9L1040.7 1102.8L1043.8 1104.4L1047.0 1105.3L1050.1 1105.6L1053.3 1103.8L1056.4 1101.0L1059.5 1100.4L1062.7 1098.9L1065.8 1096.3L1069.0 1093.3L1072.1 1092.4L1075.3 1094.0L1078.4 1091.2L1081.6 1090.9L1084.7 1088.9L1087.9 1086.7L1091.0 1086.4L1094.2 1085.9L1097.3 1083.3L1100.5 1081.4L1103.6 1077.4L1106.7 1074.4L1109.9 1074.1L1113.0 1073.9L1116.2 1072.8L1119.3 1067.2L1122.5 1066.3L1125.6 1067.4L1128.8 1067.8L1131.9 1064.7L1135.1 1061.3L1138.2 1061.0L1141.4 1062.2L1144.5 1060.6L1147.7 1064.0L1150.8 1063.3L1153.9 1063.0L1157.1 1063.8L1160.2 1062.1L1163.4 1061.5L1166.5 1061.8L1169.7 1062.2L1172.8 1062.0L1176.0 1060.3L1179.1 1060.1L1182.3 1062.5L1185.4 1059.1L1188.6 1054.6L1191.7 1059.5L1194.9 1061.0L1198.0 1062.6"/>
+<path class="focus" d="M1131.9 1064.2L1135.1 1065.8L1138.2 1065.9L1141.4 1064.1L1144.5 1062.2L1147.7 1061.9L1150.8 1064.7L1153.9 1063.9L1157.1 1065.3L1160.2 1061.8L1163.4 1059.4L1166.5 1058.8L1169.7 1059.0L1172.8 1060.6L1176.0 1059.2L1179.1 1058.2L1182.3 1057.4L1185.4 1062.0L1188.6 1062.3L1191.7 1060.2L1194.9 1063.4"/>
+<path class="focus estimated" d="M1194.9 1063.4L1198.0 1064.8"/>
+<circle class="dot" cx="1198.0" cy="1064.8" r="3"/>
+<circle class="hit" cx="1131.9" cy="1064.2" r="5"><title>Norway 2004: 51,768 eggs/month</title></circle>
+<circle class="hit" cx="1135.1" cy="1065.8" r="5"><title>Norway 2005: 48,162 eggs/month</title></circle>
+<circle class="hit" cx="1138.2" cy="1065.9" r="5"><title>Norway 2006: 47,953 eggs/month</title></circle>
+<circle class="hit" cx="1141.4" cy="1064.1" r="5"><title>Norway 2007: 52,169 eggs/month</title></circle>
+<circle class="hit" cx="1144.5" cy="1062.2" r="5"><title>Norway 2008: 56,575 eggs/month</title></circle>
+<circle class="hit" cx="1147.7" cy="1061.9" r="5"><title>Norway 2009: 57,550 eggs/month</title></circle>
+<circle class="hit" cx="1150.8" cy="1064.7" r="5"><title>Norway 2010: 50,685 eggs/month</title></circle>
+<circle class="hit" cx="1153.9" cy="1063.9" r="5"><title>Norway 2011: 52,607 eggs/month</title></circle>
+<circle class="hit" cx="1157.1" cy="1065.3" r="5"><title>Norway 2012: 49,384 eggs/month</title></circle>
+<circle class="hit" cx="1160.2" cy="1061.8" r="5"><title>Norway 2013: 57,740 eggs/month</title></circle>
+<circle class="hit" cx="1163.4" cy="1059.4" r="5"><title>Norway 2014: 64,171 eggs/month</title></circle>
+<circle class="hit" cx="1166.5" cy="1058.8" r="5"><title>Norway 2015: 65,985 eggs/month</title></circle>
+<circle class="hit" cx="1169.7" cy="1059.0" r="5"><title>Norway 2016: 65,295 eggs/month</title></circle>
+<circle class="hit" cx="1172.8" cy="1060.6" r="5"><title>Norway 2017: 61,004 eggs/month</title></circle>
+<circle class="hit" cx="1176.0" cy="1059.2" r="5"><title>Norway 2018: 64,685 eggs/month</title></circle>
+<circle class="hit" cx="1179.1" cy="1058.2" r="5"><title>Norway 2019: 67,934 eggs/month</title></circle>
+<circle class="hit" cx="1182.3" cy="1057.4" r="5"><title>Norway 2020: 70,264 eggs/month</title></circle>
+<circle class="hit" cx="1185.4" cy="1062.0" r="5"><title>Norway 2021: 57,171 eggs/month</title></circle>
+<circle class="hit" cx="1188.6" cy="1062.3" r="5"><title>Norway 2022: 56,407 eggs/month</title></circle>
+<circle class="hit" cx="1191.7" cy="1060.2" r="5"><title>Norway 2023: 62,055 eggs/month</title></circle>
+<circle class="hit" cx="1194.9" cy="1063.4" r="5"><title>Norway 2024: 53,699 eggs/month</title></circle>
+<circle class="hit" cx="1198.0" cy="1064.8" r="5"><title>Norway 2025: 50,448 eggs/month (estimated)</title></circle>
+</g>
+<text class="muted" x="24.0" y="1248.0" font-size="11">Data: ILOSTAT EAR_EMTA_SEX_EDU_CUR_NB (advanced education, both sexes, USD × World Bank PA.NUS.FCRF); FAOSTAT Producer Prices; World Bank NY.GNP.PCAP.CN</text>
+<text class="muted" x="24.0" y="1266.0" font-size="11">Graduates nationwide: no source splits earnings by education AND urban/rural. Farm-gate prices (retail ≈ 1.5–3× higher).</text>
+</svg>

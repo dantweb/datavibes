@@ -124,6 +124,7 @@ CITY_MIN_POPULATION=500000 CITY_OVERPOPULATED_PER_KM2=5000 datavibes run world-c
 | `OVERPOPULATED_PER_KM2` | `world-population-density`, `-heat` | 1000 | CSV `overpopulated` flag; red end of the heat map |
 | `CITY_MIN_POPULATION` | `world-city-population-density`, `-heat` | 100000 | Smallest city fetched (inside the SPARQL query) |
 | `CITY_OVERPOPULATED_PER_KM2` | same | 10000 | City `overpopulated` flag; red end of the city heat map |
+| `EGG_WEIGHT_GRAMS` | `egg-purchasing-power` | 60 | Grams per egg: FAO prices are per tonne |
 
 To change a default permanently, edit the value after `:-` in `dataset.yaml`.
 
@@ -209,6 +210,7 @@ Generated from each `dataset.yaml`. "Env" lists secrets and tunable parameters.
 | `ai-model-performance` | infrastructure | daily | paged_http_json | csv | — | yes |
 | `air-quality-pollution` | environment | hourly | columnar_http_json | csv | — | yes |
 | `carbon-emissions-trajectory` | environment | annual | http_csv, worldbank-indicator | csv | — | yes |
+| `egg-purchasing-power` | economy | annual | worldbank-indicator, worldbank-pinksheet, bls-series, jsonstat, ilostat, bis-series, static, faostat-prices | csv, xlsx, 7 × svg-small-multiples | `EGG_WEIGHT_GRAMS` | yes |
 | `energy-renewable-share` | energy | annual | worldbank-indicator | csv | — | yes |
 | `eu-economic-demographic` | macro | annual | jsonstat | csv | — | yes |
 | `eu-tech-job-market` | infrastructure | annual | jsonstat | csv | — | yes |
