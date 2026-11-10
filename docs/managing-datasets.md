@@ -128,6 +128,16 @@ CITY_MIN_POPULATION=500000 CITY_OVERPOPULATED_PER_KM2=5000 datavibes run world-c
 
 To change a default permanently, edit the value after `:-` in `dataset.yaml`.
 
+The city heat maps (world and the nine regions) draw **population density between the
+cities** from the vendored GHSL 2025 grid (`datavibes/maps/rasters/`, about 1 MB):
+grey below 10 people/km², blue → red up to 2,000, red above. To refresh the grid from the
+JRC (a 484 MB download, needs `numpy`, `tifffile`, `imagecodecs`): `make population-grid`.
+
+The nine `cities-heat-rN-*` regional maps are **generated**: edit the region table in
+`scripts/make_region_city_maps.py` and run `python scripts/make_region_city_maps.py`
+(`--check` fails if a generated file is stale; a test runs it too). Do not edit their
+`dataset.yaml` files by hand.
+
 ---
 
 ## 5. Output
@@ -223,6 +233,15 @@ Generated from each `dataset.yaml`. "Env" lists secrets and tunable parameters.
 | `us-regional-weather` | environment | daily | ncei-climate (local `sources.py`) | csv | `NCDC_WEB_SERVICE_TOKEN` | yes |
 | `vehicle-production-ev-share` | mobility | annual | iea-ev (local `sources.py`) | csv | — | yes |
 | `world-bank-global-development` | macro | annual | worldbank-indicator | csv | — | yes |
+| `cities-heat-r1-north-america` | colored-geostats | monthly | sparql, worldbank-latest | csv, svg-dot-map (region: USA, Canada, Mexico) | `CITY_MIN_POPULATION`, `CITY_OVERPOPULATED_PER_KM2` | — |
+| `cities-heat-r2-europe` | colored-geostats | monthly | sparql, worldbank-latest | csv, svg-dot-map (region: Portugal to the Urals) | `CITY_MIN_POPULATION`, `CITY_OVERPOPULATED_PER_KM2` | — |
+| `cities-heat-r3-middle-east` | colored-geostats | monthly | sparql, worldbank-latest | csv, svg-dot-map (region: Turkey, Levant, Egypt, Iraq, Iran, Arabia) | `CITY_MIN_POPULATION`, `CITY_OVERPOPULATED_PER_KM2` | — |
+| `cities-heat-r4-south-asia` | colored-geostats | monthly | sparql, worldbank-latest | csv, svg-dot-map (region: Afghanistan to Bangladesh) | `CITY_MIN_POPULATION`, `CITY_OVERPOPULATED_PER_KM2` | — |
+| `cities-heat-r5-southeast-asia` | colored-geostats | monthly | sparql, worldbank-latest | csv, svg-dot-map (region: Myanmar to the Philippines) | `CITY_MIN_POPULATION`, `CITY_OVERPOPULATED_PER_KM2` | — |
+| `cities-heat-r6-east-asia` | colored-geostats | monthly | sparql, worldbank-latest | csv, svg-dot-map (region: China, Koreas, Japan, Taiwan) | `CITY_MIN_POPULATION`, `CITY_OVERPOPULATED_PER_KM2` | — |
+| `cities-heat-r7-former-ussr` | colored-geostats | monthly | sparql, worldbank-latest | csv, svg-dot-map (region: ex-USSR without the Baltics, + Mongolia) | `CITY_MIN_POPULATION`, `CITY_OVERPOPULATED_PER_KM2` | — |
+| `cities-heat-r8-africa` | colored-geostats | monthly | sparql, worldbank-latest | csv, svg-dot-map (region: Africa) | `CITY_MIN_POPULATION`, `CITY_OVERPOPULATED_PER_KM2` | — |
+| `cities-heat-r9-latin-america` | colored-geostats | monthly | sparql, worldbank-latest | csv, svg-dot-map (region: Mexico to Argentina) | `CITY_MIN_POPULATION`, `CITY_OVERPOPULATED_PER_KM2` | — |
 | `world-city-population-density` | colored-geostats | monthly | sparql, worldbank-latest | csv, svg-dot-map | `CITY_MIN_POPULATION`, `CITY_OVERPOPULATED_PER_KM2` | — |
 | `world-city-population-density-heat` | colored-geostats | monthly | sparql, worldbank-latest | csv, svg-dot-map | same | — |
 | `world-population-density` | colored-geostats | monthly | worldbank-latest | csv, svg-map | `OVERPOPULATED_PER_KM2` | — |
