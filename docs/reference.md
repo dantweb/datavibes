@@ -173,6 +173,7 @@ For more than about 8 series: each panel draws its entity as the one coloured li
 | `width` | 1000 | Canvas width in px (height follows) |
 | `background`, `no_data_color`, `border_color`, `border_width` | `#ffffff`, `#d9d9d9`, `#ffffff`, 0.3 | Styling |
 | `geometry_manifest` | packaged | Path to another manifest (custom geometry) |
+| `density_surface` | off | Population density drawn as a smooth surface under the dots, clipped to the drawn countries: `{grid: ghs-pop-2025, low: 10, high: 2000, colors: [...], opacity: 0.85, pixel_size: 1, label}`. Below `low` the grey basemap shows; `low`→`high` is a log blue→red ramp; above `high` is red. The grid is GHSL GHS-POP 2025 (CC BY 4.0), vendored at 0.1°/0.25°/0.5°; each map picks the level that fits its pixel size. Refresh with `make population-grid` |
 
 Writes `<ts>.svg` and `<ts>.join.json` (`features_without_rows`,
 `features_with_missing_values`, `rows_not_drawn`, `duplicate_row_keys`, `excluded`).

@@ -77,7 +77,7 @@ class SvgDotMapWriter(SvgMapWriter):
         # Largest first so small dots stay on top; row index breaks ties (determinism).
         ordered = sorted(points, key=lambda point: (-point[5], point[0]))
 
-        def layer(to_canvas) -> list[str]:
+        def layer(to_canvas, underlay=()) -> list[str]:
             basemap = [
                 self._feature_path(feature, to_canvas, self.basemap_color, feature.name)
                 for feature in features
@@ -90,7 +90,11 @@ class SvgDotMapWriter(SvgMapWriter):
                     f'fill="{fill or self.no_data_color}" fill-opacity="{self.dot_opacity}" '
                     f'stroke="{self.dot_stroke}" stroke-width="0.3"><title>{svg.text(self._dot_tooltip(row))}</title></circle>'
                 )
-            return basemap + dots
+            if underlay:
+                # The density surface shows only on land the map draws (the region's countries).
+                mask = ["<defs><clipPath id=\"surface-land\">", *basemap, "</clipPath></defs>"]
+                underlay = mask + ['<g clip-path="url(#surface-land)">', *underlay, "</g>"]
+            return basemap + list(underlay) + dots
 
         def extra_legend(left: float, top: float) -> tuple[list[str], float]:
             values = [value for value in self.size_legend if value > 0]

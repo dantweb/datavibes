@@ -9,6 +9,7 @@ writes ``<stem>.join.json`` so unmatched keys are visible, never silent.
 from __future__ import annotations
 
 import json
+import math
 from pathlib import Path
 from typing import Sequence
 
@@ -23,8 +24,11 @@ from datavibes.maps.geometry import (
     bounds,
     select_features,
 )
-from datavibes.maps.painting import LegendSwatch, Painting
-from datavibes.maps.projection import resolve_projection
+import base64
+
+from datavibes.maps import raster
+from datavibes.maps.painting import Legend, LegendBar, LegendSwatch, LegendTick, Painting
+from datavibes.maps.projection import INVERSES, resolve_projection
 from datavibes.provenance import Provenance
 from datavibes.registry import register_writer, resolve_color_scale
 from datavibes.schema.field import Schema
@@ -33,6 +37,16 @@ MARGIN = 20.0
 TITLE_HEIGHT = 44.0
 BBOX_EDGE_SAMPLES = 24
 DEFAULT_DISCLAIMER = "Boundaries are de facto (Natural Earth) and imply no endorsement."
+# Population density between the dots: grey basemap below `low`, blue → red up to `high`.
+SURFACE_DEFAULTS = {
+    "grid": "ghs-pop-2025",
+    "low": 10.0,
+    "high": 2000.0,
+    "colors": ["#2f6db5", "#7d5bb0", "#c2457d", "#d63a2f"],
+    "opacity": 0.85,
+    "pixel_size": 1.0,
+    "label": "Between the cities: population density (people/km², log scale)",
+}
 
 
 @register_writer("svg-map")
@@ -64,6 +78,7 @@ class SvgMapWriter(Writer):
         border_width: float = 0.3,
         geometry_manifest: str | None = None,
         item_label: str = "areas",
+        density_surface: dict | None = None,
     ):
         if scope not in SCOPES:
             raise ConfigError(f"unknown map scope '{scope}' (expected one of {', '.join(SCOPES)})")
@@ -72,9 +87,8 @@ class SvgMapWriter(Writer):
         self.catalog = GeometryCatalog(geometry_manifest or DEFAULT_MANIFEST)
         self.entry = self.catalog.entry(geometry)
         self.scale = resolve_color_scale(color_scale)
-        self.projection = resolve_projection(
-            projection or ("equal-earth" if scope == "world" else "equirectangular")
-        )
+        self.projection_name = projection or ("equal-earth" if scope == "world" else "equirectangular")
+        self.projection = resolve_projection(self.projection_name)
         self.scope = scope
         self.region = region
         self.country = country
@@ -94,6 +108,24 @@ class SvgMapWriter(Writer):
         # What one drawn thing is called in the coverage legend ("countries", "cities").
         self.item_label = item_label
         self.provenance = Provenance()
+        self.surface = self._surface_options(density_surface) if density_surface is not None else None
+        self._surface_report: dict | None = None
+
+    @staticmethod
+    def _surface_options(options: dict) -> dict:
+        unknown = set(options) - set(SURFACE_DEFAULTS) - {"raster_manifest"}
+        if unknown:
+            raise ConfigError(f"density_surface: unknown option(s) {sorted(unknown)}")
+        merged = {**SURFACE_DEFAULTS, **(options or {})}
+        merged["low"], merged["high"] = float(merged["low"]), float(merged["high"])
+        if not 0 < merged["low"] < merged["high"]:
+            raise ConfigError("density_surface needs 0 < low < high")
+        if len(merged["colors"]) < 2:
+            raise ConfigError("density_surface needs at least two colours")
+        manifest = merged.pop("raster_manifest", None)
+        merged["entry"] = raster.load_entry(merged["grid"], Path(manifest) if manifest else raster.MANIFEST)
+        merged["directory"] = Path(manifest).parent if manifest else raster.RASTER_DIR
+        return merged
 
     def attach_provenance(self, provenance: Provenance) -> None:
         self.provenance = provenance
@@ -129,6 +161,8 @@ class SvgMapWriter(Writer):
             ),
             encoding="utf-8",
         )
+        if self._surface_report:
+            report["density_surface"] = self._surface_report
         dest.with_suffix(".join.json").write_text(
             json.dumps(report, indent=2, sort_keys=True, ensure_ascii=False) + "\n", encoding="utf-8"
         )
@@ -145,7 +179,7 @@ class SvgMapWriter(Writer):
         """
         rows_by_key, fills_by_key, duplicates = self._index(rows, painting.fills)
 
-        def layer(to_canvas) -> list[str]:
+        def layer(to_canvas, underlay=()) -> list[str]:
             return [
                 self._feature_path(
                     feature,
@@ -253,7 +287,18 @@ class SvgMapWriter(Writer):
             x, y = project(lon, lat)
             return MARGIN + (x - x_min) * scale, map_top + (y_max - y) * scale
 
-        paths = layer(to_canvas)
+        underlay, legend = [], legend
+        if self.surface is not None:
+            inverse = INVERSES[self.projection_name]
+
+            def to_lonlat(px: float, py: float):
+                x = x_min + (px - MARGIN) / scale
+                y = y_max - (py - map_top) / scale
+                return inverse(x, y, standard_parallel)
+
+            underlay = self._surface_image(to_lonlat, map_top, inner_width, map_height)
+            legend = self._with_surface_legend(legend)
+        paths = layer(to_canvas, underlay)
 
         legend_top = map_top + map_height + 16
         no_data = [LegendSwatch(label="No data", color=self.no_data_color)] if show_no_data else []
@@ -263,7 +308,8 @@ class SvgMapWriter(Writer):
             coverage, MARGIN, legend_top + legend_height + extra_height
         )
         legend_body = legend_body + extra_body + coverage_body
-        footer_lines = [line for line in (self.footer, self.entry.attribution, self.disclaimer) if line]
+        surface_credit = self.surface["entry"].attribution if self.surface else ""
+        footer_lines = [line for line in (self.footer, surface_credit, self.entry.attribution, self.disclaimer) if line]
         footer_top = legend_top + legend_height + extra_height + coverage_height + 14
         height = footer_top + 14 * len(footer_lines) + MARGIN / 2
 
@@ -297,6 +343,41 @@ class SvgMapWriter(Writer):
             )
         parts.append("</svg>")
         return "\n".join(parts) + "\n"
+
+    def _surface_image(self, to_lonlat, top: float, width: float, height: float) -> list[str]:
+        """The density grid rendered as one PNG covering the map area."""
+        options = self.surface
+        step = options["pixel_size"]
+        columns, rows = max(1, round(width / step)), max(1, round(height / step))
+
+        def locate(px: float, py: float):
+            return to_lonlat(MARGIN + px * width / columns, top + py * height / rows)
+
+        # Degrees per image pixel at the map centre picks the grid level.
+        centre = [locate(columns / 2 + offset, rows / 2) for offset in (0, 1)]
+        pixel_deg = abs(centre[1][0] - centre[0][0]) if all(centre) else 1.0
+        level = raster.pick_level(options["entry"], pixel_deg)
+        grid = raster.DensityGrid(options["entry"], level, options["directory"])
+        paint = raster.density_color(options["low"], options["high"], options["colors"], options["opacity"])
+        image = raster.png(columns, rows, raster.render_rgba(columns, rows, locate, grid, paint))
+        self._surface_report = {"grid": options["entry"].name, "cell_deg": level.cell_deg,
+                                "image_px": [columns, rows], "low": options["low"], "high": options["high"]}
+        href = "data:image/png;base64," + base64.b64encode(image).decode("ascii")
+        return [f'<image x="{svg.number(MARGIN)}" y="{svg.number(top)}" width="{svg.number(width)}" '
+                f'height="{svg.number(height)}" preserveAspectRatio="none" href="{href}"/>']
+
+    def _with_surface_legend(self, legend: Legend) -> Legend:
+        options = self.surface
+        low, high, colors = options["low"], options["high"], options["colors"]
+        stops = tuple((index / (len(colors) - 1), color) for index, color in enumerate(colors))
+        span = math.log(high) - math.log(low)
+        ticks = [LegendTick(0.0, f"{low:g}")]
+        for value in (100.0, 1000.0):
+            if low < value < high:
+                ticks.append(LegendTick((math.log(value) - math.log(low)) / span, f"{value:,.0f}"))
+        ticks.append(LegendTick(1.0, f"≥ {high:,.0f}"))
+        bar = LegendBar(label=f"{options['label']} — grey: below {low:g}", stops=stops, ticks=tuple(ticks))
+        return Legend(title=legend.title, bars=legend.bars + (bar,), swatches=legend.swatches)
 
     def _extent(self, features, project) -> tuple[float, float, float, float]:
         if self.clip_bbox:

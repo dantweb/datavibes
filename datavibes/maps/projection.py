@@ -44,10 +44,42 @@ def equal_earth(lon: float, lat: float, standard_parallel: float = 0.0) -> tuple
     return x, y
 
 
+def equirectangular_inverse(x: float, y: float, standard_parallel: float = 0.0) -> tuple[float, float] | None:
+    lon, lat = math.degrees(x / math.cos(math.radians(standard_parallel))), math.degrees(y)
+    return (lon, lat) if -180.0 <= lon <= 180.0 and -90.0 <= lat <= 90.0 else None
+
+
+def equal_earth_inverse(x: float, y: float, standard_parallel: float = 0.0) -> tuple[float, float] | None:
+    """Inverse Equal Earth (Newton iteration on the parametric latitude); ``None`` off the globe."""
+    theta = y / _A1
+    for _ in range(12):
+        theta2 = theta * theta
+        theta6 = theta2 * theta2 * theta2
+        f = theta * (_A1 + _A2 * theta2 + theta6 * (_A3 + _A4 * theta2)) - y
+        derivative = _A1 + 3 * _A2 * theta2 + theta6 * (7 * _A3 + 9 * _A4 * theta2)
+        step = f / derivative
+        theta -= step
+        if abs(step) < 1e-10:
+            break
+    sine = math.sin(theta) / _M
+    if abs(sine) > 1.0:
+        return None
+    theta2 = theta * theta
+    theta6 = theta2 * theta2 * theta2
+    derivative = _A1 + 3 * _A2 * theta2 + theta6 * (7 * _A3 + 9 * _A4 * theta2)
+    lon = math.degrees(_M * x * derivative / math.cos(theta))
+    if not -180.0 <= lon <= 180.0:
+        return None
+    return lon, math.degrees(math.asin(sine))
+
+
 PROJECTIONS: dict[str, Projection] = {
     "equal-earth": equal_earth,
     "equirectangular": equirectangular,
 }
+
+
+INVERSES = {"equal-earth": equal_earth_inverse, "equirectangular": equirectangular_inverse}
 
 
 def resolve_projection(name: str) -> Projection:

@@ -1,0 +1,27 @@
+# Vendored population-density grids. Each file is verified against its sha256 on load.
+# Refresh with `make population-grid` (scripts/vendor_population_grid.py).
+ghs-pop-2025:
+  lon_min: -180.0
+  lat_max: 90.0
+  unit: people/km²
+  levels:
+  - file: ghs_pop_2025_density_0p1.u16.gz
+    cell_deg: 0.1
+    width: 3600
+    height: 1800
+    sha256: d581fcd837ee1ee99b88248ff6f57df0fd69fb77932725f4a34ec1dcd8162dfb
+  - file: ghs_pop_2025_density_0p25.u16.gz
+    cell_deg: 0.25
+    width: 1440
+    height: 720
+    sha256: 8db63534a863d7088e0ecc35cb0c1b7720077921660db5c1eb84f87a0ad4362a
+  - file: ghs_pop_2025_density_0p5.u16.gz
+    cell_deg: 0.5
+    width: 720
+    height: 360
+    sha256: a028780d63c391549d5954a7322ff9512200f4fd3cff860030f4e9dea564b5c8
+  source_url: https://ghsl.jrc.ec.europa.eu/download.php?ds=pop
+  version: GHS-POP R2023A, epoch 2025, 30 arc-seconds
+  license: CC BY 4.0 (European Commission, Joint Research Centre)
+  attribution: 'Density between cities: GHSL GHS-POP R2023A, 2025 (European Commission,
+    JRC), CC BY 4.0'

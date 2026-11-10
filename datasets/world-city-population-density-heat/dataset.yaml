@@ -1,4 +1,6 @@
 # colored-geostats #2b — every city of 100,000+ people as a dot, on the spectral heat scale.
+# Between the dots: population density of suburbs and countryside from the GHSL grid —
+#   grey below 10 people/km², then blue → red, red at 2,000 people/km² and above.
 # Same data as world-city-population-density, but it keeps cities that lack country
 # sex-ratio data (e.g. Taiwan); only a usable density is required. Dot colouring:
 #   dot area   → city population
@@ -120,6 +122,9 @@ outputs:
       basemap_color: "#d5d9de"
       border_color: "#ffffff"
       dot_stroke: "#ffffff"
+      density_surface:                         # population density between the cities (GHSL 2025)
+        low: 10                                  # below: grey basemap
+        high: 2000                               # blue → red up to here, red above
       color_scale:
         type: spectral-density
         value_column: density_per_km2

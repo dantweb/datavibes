@@ -11,7 +11,7 @@ STAGE_DIR ?= /tmp/dv
 EXCLUDES  := --exclude='./.venv' --exclude='./.git' --exclude='./output' \
              --exclude='./store' --exclude='./data_out' --exclude='./__pycache__'
 
-.PHONY: run generate process stage config list test geometry help
+.PHONY: run generate process stage config list test geometry population-grid help
 
 ## run: stage into the container and run the full generator (generate → process → export)
 run: stage
@@ -63,5 +63,12 @@ geometry:
 	  datavibes/maps/geometry/ne_110m_admin_0_countries.geojson
 
 ## help: list targets
+## population-grid: re-vendor the GHSL 2025 density pyramid (484 MB download; needs numpy, tifffile, imagecodecs)
+population-grid:
+	mkdir -p .cache/ghsl
+	curl -sSL -o .cache/ghsl/ghs_pop_2025_30ss.zip https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/GHSL/GHS_POP_GLOBE_R2023A/GHS_POP_E2025_GLOBE_R2023A_4326_30ss/V1-0/GHS_POP_E2025_GLOBE_R2023A_4326_30ss_V1_0.zip
+	unzip -o -q .cache/ghsl/ghs_pop_2025_30ss.zip -d .cache/ghsl
+	.venv/bin/python scripts/vendor_population_grid.py .cache/ghsl/GHS_POP_E2025_GLOBE_R2023A_4326_30ss_V1_0.tif
+
 help:
 	@grep -E '^## ' $(MAKEFILE_LIST) | sed 's/## //'
